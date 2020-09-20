@@ -1,31 +1,84 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <Header></Header>
+    <div class="container">
+      <transition appear enter-active-class="animate__animated animate__fadeIn" mode="out-in">
+        <router-view />
+      </transition>
     </div>
-    <router-view/>
   </div>
 </template>
 
+<script>
+import Header from "@/components/Header.vue";
+export default {
+  components: {
+    Header,
+  },
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.container {
+  width: 100%;
+  height: 100vh;
+  color: #3f414f;
+}
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #f5f5f5;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #eccd59;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
+  }
+}
+.vs__input {
+  margin-top: 20px;
+  position: relative;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 5px;
+  border: 2px solid white;
+  outline: none;
+  transition: 0.2s all ease-in-out;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.61);
+  &:focus {
+    border: 2px solid #eccd59;
+    box-shadow: 1px 1px 10px #eccd59;
+  }
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+.vue-suggestion {
+  .vs__loading {
+    position: absolute;
+  }
+  .vs__list {
+    width: 100%;
+    text-align: left;
+    border: none;
+    max-height: 400px;
+    overflow-y: auto;
+    border-bottom: 2px solid #eccd59;
+    position: relative;
+    .vs__list-item {
+      background-color: #fff;
+      cursor: pointer;
+      padding: 10px;
+      &:last-child {
+        border-bottom: none;
+      }
+      &:hover {
+        background-color: #eee !important;
+      }
+      .vs__item-active {
+        background-color: #f3f6fa;
+      }
     }
   }
 }
