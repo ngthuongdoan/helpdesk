@@ -140,6 +140,100 @@ export default {
           answer:
             "Double click the recycle bin icon on your desktop, here you will see all of the files within your bin. Select the files you wish to recover, right click and choose restore.",
         },
+        {
+          id: 16,
+          question: "I am unable to send or receive email?",
+          answer:
+            "Verify that your computer is able to see the Internet and/or other computers to ensure that your computer is not encountering a connection issue, which would be causing your e-mail issue. Ensure that your Internet e-mail server or your Network e-mail server is not encountering issues by contacting either your Internet Service Provider or your Network administrator.",
+        },
+        {
+          id: 17,
+          question: "I can't receive any email attachments?",
+          answer:
+            "If the e-mail box is full of other e-mail messages, and/or your storage space is only a few megabytes, it's possible that the attachment being sent cannot be received. Often if this problem is occurring the person sending the e-mail should get a response back from your e-mail server indicating that your mailbox is full and/or has exceeded its allocated size. Because computer viruses and other malware are best distributed through e-mail, many e-mail service providers, companies, and e-mail programs prevent certain types of file extensions from being distributed or received through e-mail. For example, Microsoft Outlook protect its users by automatically disabling certain file extension types from being received in e-mail.",
+        },
+        {
+          id: 18,
+          question: "Are spaces allowed in email addresses?",
+          answer:
+            "Just like an Internet URL no spaces are allowed in an e-mail address. However, names can be broken up using a period; for example, John Smith may have an e-mail address: john.smith@example.com or john.s@example.com because no spaces are allowed in the e-mail address.",
+        },
+        {
+          id: 19,
+          question:
+            "My printer is printing smudged/distorted pages, what can I do?",
+          answer:
+            "When printing on untraditional paper your printer may experience smudges, un-even or crooked text, and/or text that runs off the edges of the paper. Your printer may be printing fuzzy, blurry, and/or other faint text because of dirty print heads. All modern printers have some type of printer cleaning, self-test, and/or diagnose mode that can be performed to check and clean the printers print heads and other internal equipment used to print.",
+        },
+        {
+          id: 20,
+          question: "There is no display on the monitor, what do I do now?",
+          answer:
+            "Make sure the monitor is on. If no power light (green or orange light) is seen on the monitor display try pressing the power button until it comes on. If your computer monitor was on and you stepped away from the computer and upon returning it was black, it's likely that the computer is asleep. Try moving your mouse, clicking the mouse buttons, and/or pressing any key (space bar) on the keyboard to wake it up. Make sure that the monitor is connected properly to the back of the computer.",
+        },
+        {
+          id: 21,
+          question: "How do I fix a paper jam?",
+          answer:
+            "Turn off the printer. Inspect the location or tray the printed paper ejects to. If the stuck paper is visible manually remove it. Remove all paper trays and any paper that may be stuck between the tray and the printer. If the stuck paper is visible manually remove it. Open the printer door that allows you access to the printer ink cartridges or toner and look for any stuck paper. If the stuck paper is visible manually remove it. Turn the printer back on.",
+        },
+        {
+          id: 22,
+          question:
+            "I lost my printer installation disk, how can I install my printer?",
+          answer:
+            "Thankfully a missing printer installation disk is not the end of the world and will not require you to wait until a new disk can be sent to you. Today all printer and other hardware manufacturers are providing downloads on the Internet to their software programs and drivers that are included with their products.",
+        },
+        {
+          id: 23,
+          question:
+            "I can't connect to my network drive anymore, what can I do?",
+          answer:
+            "Verify that the network cable is properly connected to the back of the computer. In addition, when checking the connection of the network cable, ensure that the LED's on the network are properly illuminated. For example, a network card with a solid green LED or light usually indicates that the card is either connected or receiving a signal. Note: generally, when the green light is flashing, this is an indication of data being sent or received.",
+        },
+        {
+          id: 24,
+          question: "How do I map a network drive?",
+          answer:
+            'Open Microsoft Explorer. From Explorer, click the Tools drop down menu and click the option "Map Network Drive." Specify the network drive or network computer as the folder. If the computer\'s name was hope, to map to that computer, type \\hope If you wished to map to a shared folder on the hope computer such as a mp3 folder, you would type \\\\hope\\mp3. If a different username or login is required to connect to this computer or drive it must be specified in this window before clicking the finish.',
+        },
+        {
+          id: 25,
+          question: "How do I determine my computer's name?",
+          answer:
+            "Right-click My Computer. Click Properties. In the Properties window, click the Computer Name tab. Within this tab you'll be able to see the full computer name, workgroup and also a description. If you wish to change the name or workgroup, click the Change button.",
+        },
+        {
+          id: 26,
+          question: "What is a computer virus?",
+          answer:
+            "A computer virus is a software program that has been intentionally created to cause a user grief, spread to other computers, or destroy data on an individual's computer. To help prevent a computer from becoming infected by a virus, software developers have developed anti virus programs that stay active on the computer helping to protect it. It is important to realize that many computers do not come pre-loaded with these already installed and that if computers do come with these programs, the programs may expire within 90 days.",
+        },
+        {
+          id: 27,
+          question: "Does Windows come with a virus protection program?",
+          answer:
+            "All versions of Microsoft Windows do not come pre-installed with a virus protection program. This includes: Microsoft Windows 7 and Windows 10.",
+        },
+        {
+          id: 28,
+          question: "Can a virus damage computer hardware?",
+          answer:
+            "No. Computer viruses are software code designed to spread to computer files and other computers, delete files, and cause other problems with the data on the computer. So if you're experiencing an issue with a hardware device such as your printer, video card, sound card, etc. it is not due to a virus.",
+        },
+        {
+          id: 29,
+          question:
+            "If I format or erase my hard drive will it remove a virus?",
+          answer:
+            "If your computer is infected with a virus formatting or erasing the hard disk drive and starting over will almost always remove any type of virus. However, keep in mind if backups have been made that contain the virus, other media or drives connected to the computer have a virus, your computer is connected to another computer on a network with a virus, and/or the virus is stored on some other type of software you use with your computer it can become re-infected if not properly protected.",
+        },
+        {
+          id: 30,
+          question: "How do I delete Internet cookies?",
+          answer:
+            "Microsoft Internet Explorer users can go to 'Tools' (or the little cog icon in the top left), then go to 'Safety' and choose 'Delete browsing history...', you can then choose to delete your Internet cookies. In Google Chrome, go to 'More Tools' and choose 'Clear browsing data...'. Firefox users can go to 'History', then choose 'Clear recent history...'",
+        },
       ],
       itemTemplate,
     };

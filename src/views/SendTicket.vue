@@ -42,6 +42,15 @@ export default {
     };
   },
   methods: {
+    init() {
+      this.ticket = {
+        customerName: "",
+        idCustomer: "",
+        place: "",
+        detail: "",
+        image: null,
+      };
+    },
     uploadImage(e) {
       const image = e.target.files[0];
       const reader = new FileReader();
@@ -92,9 +101,9 @@ export default {
       transition: 0.2s all ease-in-out;
       outline: none;
       &:focus {
-      border: 2px solid #eccd59;
-      box-shadow: 1px 1px 10px #eccd59;
-    }
+        border: 2px solid #eccd59;
+        box-shadow: 1px 1px 10px #eccd59;
+      }
     }
     input[type="file"] {
       padding: 12px 20px;
