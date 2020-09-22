@@ -36,13 +36,17 @@ export default {
       };
     },
     submitForm() {
-      this.$http
-        .post("/login", this.login)
+        // if (this.login.username === "") throw new Error("Username blank");
+        // if (this.login.password === "") throw new Error("Password blank");
+        this.$store.dispatch("userModule/logIn", this.login)
+    //   this.$http
+    //     .post("/login", this.login)
         .then((res) => {
           this.$swal({
             title: "Success",
             icon: "success",
           });
+          this.$router.replace("/");
         })
         .catch((err) => {
           this.$swal({

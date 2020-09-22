@@ -1,20 +1,32 @@
 <template>
   <header>
     <h1 id="logo" @click="home">HelpCenter</h1>
-    <button id="sendBtn" @click="login">Log in</button>
+    <nav>
+      <ul>
+        <router-link to="/tickets" tag="li">Your Tickets</router-link>
+        <router-link to="/faq" tag="li">FAQ</router-link>
+      </ul>
+    </nav>
+    <div class="btn-group">
+      <button id="sendBtn" @click="send">Send Ticket</button>
+      <button id="logoutBtn" @click="logout">Log Out</button>
+    </div>
   </header>
 </template>
 
 <script>
 export default {
-  methods:{
-    home(){
+  methods: {
+    home() {
       this.$router.push("/");
     },
-    login(){
-      this.$router.push("/login")
+    send() {
+      this.$router.push("/send-ticket");
     },
-  }
+    logout() {
+      this.$store.dispatch("userModule/signOut");
+    },
+  },
 };
 </script>
 
@@ -38,14 +50,54 @@ header {
   font-size: 20px;
   font-family: "Sonsie One", cursive;
 }
-
-#sendBtn {
+nav {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  ul {
+    width: fit-content;
+    display: inline-flex;
+    list-style-type: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    li {
+      margin: auto 20px;
+      cursor: pointer;
+      font-weight: bold;
+      opacity: 0.6;
+      position: relative;
+      transition: 0.3s all ease-in-out;
+      &:hover,
+      &.router-link-active,
+      & .router-link-exact-active {
+        opacity: 1;
+        &::after {
+          position: absolute;
+          right: 0;
+          content: "";
+          height: 100%;
+          width: 80%;
+          border-bottom: 5px solid #47daad;
+          z-index: -1;
+        }
+      }
+    }
+  }
+}
+.btn-group {
   grid-column: 3/4;
-  width: fit-content;
-  height: fit-content;
-  padding: 10px 20px;
   justify-self: flex-end;
   align-self: center;
+  display: inline-flex;
+}
+#sendBtn,
+#logoutBtn {
+  width: 120px;
+  height: fit-content;
+  padding: 10px 20px;
+  margin: auto 10px;
   border: none;
   border-radius: 20px;
   background: #eccd59;
@@ -59,6 +111,12 @@ header {
   &:focus {
     border: none;
     outline: none;
+  }
+}
+#logoutBtn {
+  background: #ec5959;
+  &:hover {
+    background: #db3e3e;
   }
 }
 .hamburger-wrapper {

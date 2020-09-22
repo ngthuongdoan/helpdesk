@@ -1,3 +1,4 @@
+import router from '@/router';
 export const state = () => ({
   user: {
     loggedIn: false,
@@ -20,13 +21,13 @@ export const mutations = {
 };
 
 export const actions = {
-  fetchUser({ commit }, user) {
+  logIn({ commit }, user) {
     commit("SET_LOGGED_IN", user !== null);
     if (user) {
       commit("SET_USER", {
         displayName: user.displayName,
         token: user.token,
-        userName: user.userName,
+        username: user.username,
       });
     } else {
       commit("SET_USER", null);
@@ -34,7 +35,7 @@ export const actions = {
   },
   signOut({ commit }) {
     commit("SET_LOGGED_IN", false);
-    // commit("SET_USER", null);
+    router.push("/login");
   },
 }
 
