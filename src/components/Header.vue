@@ -1,7 +1,7 @@
 <template>
   <header>
     <h1 id="logo" @click="home">HelpCenter</h1>
-    <button id="sendBtn" @click="send">Send a Ticket</button>
+    <button id="sendBtn" @click="login">Log in</button>
   </header>
 </template>
 
@@ -11,8 +11,8 @@ export default {
     home(){
       this.$router.push("/");
     },
-    send(){
-      this.$router.push("/sendticket")
+    login(){
+      this.$router.push("/login")
     },
   }
 };

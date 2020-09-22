@@ -1,25 +1,54 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import store from "@/store";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: () => import("../views/LandingPage.vue")
+    path: "/",
+    name: "Master",
+    component: () => import("../views/Master.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("../views/index"),
+      },
+    ],
   },
+  // {
+  //   path: "/send-ticket",
+  //   name: "send-ticket",
+  //   component: () => import("../views/send-ticket"),
+  // },
   {
-    path: '/sendticket',
-    name: 'sendticket',
-    component: () => import("../views/SendTicket.vue")
+    path: "/login",
+    name: "login",
+    component: () => import("../views/login"),
   },
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+// router.beforeEach((to, from, next) => {
+//   let user = store.state.userModule.user;
+//   if (to.path !== "/login") {
+//     if (user.loggedIn) {
+//       next();
+//     } else {
+//       next("/login");
+//     }
+//   } else {
+//     if (!user.loggedIn) {
+//       next();
+//     } else {
+//       next(false);
+//     }
+//   }
+// });
+
+export default router;
