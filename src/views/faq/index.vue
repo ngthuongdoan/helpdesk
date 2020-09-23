@@ -239,6 +239,7 @@ export default {
     top: 10%;
     left: 10%;
     height: 80vh;
+    overflow: hidden;
   }
   &__inner-container {
     overflow: auto;

@@ -29,11 +29,6 @@ const routes = [
         name: "send-ticket",
         component: () => import("../views/send-ticket"),
       },
-      {
-        path: "/send-ticket",
-        name: "send-ticket",
-        component: () => import("../views/send-ticket"),
-      },
     ],
   },
   {
