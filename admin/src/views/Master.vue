@@ -1,0 +1,44 @@
+<template>
+  <div id="admin">
+    <SideBar :user="user.data"></SideBar>
+     <router-view ></router-view>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import SideBar from "@/components/SideBar";
+
+export default {
+  computed: {
+    ...mapGetters({
+      user: "userModule/getUser",
+    }),
+  },
+  components: {
+    SideBar,
+  },
+};
+</script>
+
+<style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&display=swap");
+.panel {
+  font-family: "Lora", serif;
+  color: black;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  overflow: auto;
+  form {
+    text-align: left;
+    justify-self: center;
+  }
+}
+#admin {
+  height: 100vh;
+  display: flex;
+}
+</style>
