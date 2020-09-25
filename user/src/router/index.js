@@ -12,29 +12,50 @@ const routes = [
     children: [
       {
         path: "",
-        component: () => import("../views/index"),
+        component: () => import("../views/User/index"),
       },
       {
         path: "/tickets",
         name: "tickets",
-        component: () => import("../views/tickets"),
+        component: () => import("../views/User/tickets"),
       },
       {
         path: "/faq",
         name: "faq",
-        component: () => import("../views/faq"),
+        component: () => import("../views/User/faq"),
       },
       {
         path: "/send-ticket",
         name: "send-ticket",
-        component: () => import("../views/send-ticket"),
+        component: () => import("../views/User/send-ticket"),
       },
     ],
   },
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/login"),
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/admin",
+    component:  () => import("../views/MasterAdmin.vue"),
+    children: [
+      {
+        path: "/",
+        name: "dashboard",
+        component: () => import("../views/Admin/index"),
+      },
+      {
+        path: "technicians",
+        name: "technicians",
+        component: () => import("../views/Admin/technicians"),
+      },
+      {
+        path: "tickets",
+        name: "tickets",
+        component: () => import("../views/Admin/tickets"),
+      },
+    ],
   },
 ];
 

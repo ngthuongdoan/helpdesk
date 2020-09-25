@@ -11,7 +11,7 @@ import VueSuggestion from "vue-suggestion";
 Vue.use(VueSuggestion);
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios);
-axios.defaults.baseURL = "http://10.3.65.133:8081/api";
+axios.defaults.baseURL = "http://localhost:8081/v1";
 
 Vue.config.productionTip = false;
 

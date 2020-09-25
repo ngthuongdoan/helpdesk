@@ -7,38 +7,23 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/mafa",
+    path: "/",
     component: Master,
     children: [
       {
         path: "/",
-        name: "mafaIndex",
+        name: "dashboard",
         component: () => import("../views/index"),
       },
       {
-        path: "info",
-        name: "mafaInfo",
-        component: () => import("../views/info"),
+        path: "technicians",
+        name: "technicians",
+        component: () => import("../views/technicians"),
       },
       {
-        path: "foods",
-        name: "mafaFoods",
-        component: () => import("../views/foods"),
-      },
-      {
-        path: "/employees",
-        name: "mafaEmployees",
-        component: () => import("../views/employees"),
-      },
-      {
-        path: "/posts",
-        name: "mafaPosts",
-        component: () => import("../views/posts"),
-      },
-      {
-        path: "/bills",
-        name: "mafaBills",
-        component: () => import("../views/bills"),
+        path: "tickets",
+        name: "tickets",
+        component: () => import("../views/tickets"),
       },
     ],
   },

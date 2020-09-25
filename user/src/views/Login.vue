@@ -35,27 +35,24 @@ export default {
         password: "",
       };
     },
-    submitForm() {
-      // if (this.login.username === "") throw new Error("Username blank");
-      // if (this.login.password === "") throw new Error("Password blank");
-      this.$store
-        .dispatch("userModule/fetchUser", this.login)
-        //   this.$http
-        //     .post("/login", this.login)
-        // .then((res) => {
-          this.$swal({
-            title: "Success",
-            icon: "success",
-          });
-          this.$router.replace("/");
-        // })
-        // .catch((err) => {
-        //   this.$swal({
-        //     title: "Error",
-        //     icon: "error",
-        //     text: err,
-        //   });
-        // });
+    async submitForm() {
+      try {
+        if (this.login.username === "") throw new Error("Username blank");
+        if (this.login.password === "") throw new Error("Password blank");
+        const user = await this.$http.post("/login", this.login);
+        await this.$swal({
+          title: "Success",
+          icon: "success",
+        });
+        await this.$store.dispatch("userModule/logIn", user.data);
+        await this.$router.replace("/");
+      } catch (err) {
+        this.$swal({
+          title: "Error",
+          icon: "error",
+          text: err,
+        });
+      }
     },
   },
   mounted() {
@@ -83,7 +80,7 @@ export default {
   z-index: 1;
   cursor: pointer;
   top: 50%;
-  transform: translate(-150%,10%);
+  transform: translate(-150%, -30%);
   opacity: 0.4;
   transition: 0.3s all ease-in-out;
   &:hover {

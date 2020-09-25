@@ -27,6 +27,7 @@ export const actions = {
         displayName: user.displayName,
         token: user.token,
         userName: user.userName,
+        role: "admin"
       });
     } else {
       commit("SET_USER", null);

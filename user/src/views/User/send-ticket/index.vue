@@ -1,17 +1,29 @@
 <template>
-  <div class="login__container">
-    <form class="login__form" @submit.prevent="submitForm">
-      <label for>Username</label>
-      <br />
-      <input type="text" v-model="login.username" required />
-      <br />
-      <label for>Password</label>
-      <br />
-      <input type="password" v-model="login.password" required />
-      <span id="eye">
-        <img src="https://img.icons8.com/android/24/000000/visible.png" />
-      </span>
-      <br />
+  <div class="ticket__container">
+    <form class="ticket__form" @submit.prevent="submitForm">
+      <div class="ticket__info">
+        <label for>Title</label>
+        <br />
+        <input type="text" v-model="ticket.title" required />
+        <br />
+        <label for>Place</label>
+        <br />
+        <input type="text" v-model="ticket.place" required />
+        <br />
+      </div>
+      <div class="ticket__detail">
+        <label for>Your problems</label>
+        <br />
+        <textarea rows="8" v-model="ticket.detail" required />
+        <br />
+        <input
+          type="file"
+          accept="image/*"
+          @change="uploadImage"
+          multiple
+          required
+        />
+      </div>
       <input type="submit" value="Submit" />
       <button @click="init">Clear</button>
     </form>
@@ -22,31 +34,46 @@
 export default {
   data() {
     return {
-      login: {
-        username: "",
-        password: "",
+      ticket: {
+        title: "",
+        userID: "",
+        place: "",
+        detail: "",
+        images: [],
       },
     };
   },
   methods: {
     init() {
-      this.login = {
-        username: "",
-        password: "",
+      this.ticket = {
+        title: "",
+        userID: "",
+        place: "",
+        detail: "",
+        images: [],
       };
     },
+    uploadImage(e) {
+      const images = e.target.files;
+      images.forEach((i) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(i);
+        reader.onload = (e) => {
+          let img = e.target.result;
+          this.ticket.images.push(img);
+        };
+      });
+    },
     submitForm() {
-        // if (this.login.username === "") throw new Error("Username blank");
-        // if (this.login.password === "") throw new Error("Password blank");
-        this.$store.dispatch("userModule/logIn", this.login)
-    //   this.$http
-    //     .post("/login", this.login)
+      const user = this.$store.getters["userModule/getUser"];
+      this.ticket.userID = user.data.username;
+      this.$http
+        .post("/ticket", this.ticket)
         .then((res) => {
           this.$swal({
             title: "Success",
             icon: "success",
           });
-          this.$router.replace("/");
         })
         .catch((err) => {
           this.$swal({
@@ -57,48 +84,21 @@ export default {
         });
     },
   },
-  mounted() {
-    const eye = document.getElementById("eye");
-    const password = document.querySelector("input[type='password']");
-    let wasShowed = false;
-    eye.addEventListener("click", () => {
-      if (wasShowed) {
-        wasShowed = false;
-        eye.style.opacity = "0.4";
-        password.type = "password";
-      } else {
-        wasShowed = true;
-        eye.style.opacity = "1";
-        password.type = "text";
-      }
-    });
-  },
 };
 </script>
 
 <style lang="scss" scoped>
-#eye {
-  position: absolute;
-  z-index: 1;
-  cursor: pointer;
-  top: 50%;
-  transform: translate(-150%, -25%);
-  opacity: 0.4;
-  transition: 0.3s all ease-in-out;
-  &:hover {
-    opacity: 1;
-  }
-}
-.login {
+.ticket {
   &__container {
     width: 100%;
     height: 100vh;
     label {
       color: white;
     }
-    input {
+    input[type="text"],
+    textarea {
       width: 500px;
-      padding: 10px 20px;
+      padding: 12px 20px;
       margin: 10px 0;
       display: inline-block;
       border: 2px solid #ccc;
@@ -112,19 +112,21 @@ export default {
         box-shadow: 1px 1px 10px #eccd59;
       }
     }
-    input[type="password"] {
-      position: relative;
+    input[type="file"] {
+      padding: 12px 20px;
+      color: white;
+      width: 100%;
     }
     input[type="submit"],
     button {
       align-self: center;
       justify-self: right;
-      width: 40%;
+      width: 50%;
       background-color: #eccd59;
       font-weight: bold;
       font-size: 14px;
       padding: 14px 20px;
-      margin: 20px;
+      margin: 30px 0;
       border: none;
       border-radius: 4px;
       transition: 0.2s all ease-in-out;
@@ -156,6 +158,10 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 80% 20%;
+    grid-column-gap: 50px;
   }
 }
 </style>
