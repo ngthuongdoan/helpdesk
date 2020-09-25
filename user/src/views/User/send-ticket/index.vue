@@ -58,8 +58,8 @@ export default {
       images.forEach((i) => {
         let reader = new FileReader();
         reader.readAsDataURL(i);
-        reader.onload = (e) => {
-          let img = e.target.result;
+        reader.onload = (evt) => {
+          let img = evt.target.result;
           this.ticket.images.push(img);
         };
       });
