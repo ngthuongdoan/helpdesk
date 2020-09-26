@@ -2,7 +2,7 @@
   <div class="sidebar">
     <nav>
       <div class="sidebar__header">
-        <h4>{{ user.username | ToUpperCase}}</h4>
+        <h4>{{ user.username | ToUpperCase }}</h4>
       </div>
       <transition enter-active-class="animate__animated animate__fadeInLeft">
         <ul class="nav flex-column sidebar__menu">
@@ -72,9 +72,9 @@ export default {
   color: white;
   position: relative;
   height: 100%;
-  min-width: 250px;
+  min-width: 200px;
   text-align: center;
-  background:rgb(49, 49, 49);
+  background: rgb(49, 49, 49);
   &__header {
     text-align: center;
     h4 {
@@ -91,7 +91,7 @@ export default {
     margin-top: 50px;
     li {
       &:hover {
-        background-color:rgb(66, 66, 66);
+        background-color: rgb(66, 66, 66);
       }
       a {
         margin-left: 30px;

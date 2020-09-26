@@ -1,41 +1,15 @@
 <template>
   <div class="ticket__container">
-    <nav>
-      <ul class="pagination">
-        <li class="page-item">
-          <button
-            type="button"
-            class="page-link"
-            v-if="page != 1"
-            @click="page--"
-          >
-            Previous
-          </button>
-        </li>
-        <li class="page-item">
-          <button
-            type="button"
-            class="page-link"
-            v-for="pageNumber in pages.slice(page - 1, page + 5)"
-            :key="pageNumber"
-            @click="page = pageNumber"
-          >
-            {{ pageNumber }}
-          </button>
-        </li>
-        <li class="page-item">
-          <button
-            type="button"
-            @click="page++"
-            v-if="page < pages.length"
-            class="page-link"
-          >
-            Next
-          </button>
-        </li>
-      </ul>
-    </nav>
-    <div v-if="displayedTickets.length === 0">Không có ticket nào</div>
+    <Pagination
+      :page="page"
+      :pages="pages"
+      @previous="page--"
+      @changePage="page = $event"
+      @next="page++"
+    ></Pagination>
+    <div v-if="displayedTickets.length === 0">
+      <p id="noTicket">Không có ticket nào</p>
+    </div>
     <table class="table" v-else>
       <thead>
         <tr>
@@ -58,17 +32,19 @@
 
 <script>
 import Ticket from "@/components/User/Ticket.vue";
-
+import Pagination from "@/components/Pagination.vue";
+import mockTickets from "@/mocks/ticket.js";
 export default {
   data() {
     return {
       page: 1,
-      perPage: 10,
+      perPage: 12,
       pages: [],
     };
   },
   components: {
     Ticket,
+    Pagination,
   },
   methods: {
     setPages() {
@@ -97,15 +73,17 @@ export default {
     },
   },
   created() {
-    this.$http
-      .get("/ticket")
-      .then((res) => {
-        this.tickets = res.data;
-        this.setPages();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // this.$http
+    //   .get("/ticket")
+    //   .then((res) => {
+    //     this.tickets = res.data;
+    //     this.setPages();
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    this.tickets = mockTickets;
+    this.setPages();
   },
   filters: {
     trimWords(value) {

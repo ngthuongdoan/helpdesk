@@ -1,10 +1,13 @@
 .ticket {
   &__container {
-    position: absolute;
-    top: 15%;
-    left: 10%;
     width: 80%;
     height: 80vh;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+  &__data {
+    padding: 0;
+    border: 1px solid rgb(139, 139, 139);
   }
 }
 .table {
@@ -15,6 +18,15 @@
     background: #ccc;
     border: 1px solid rgb(139, 139, 139);
     padding: 8px;
+  }
+  tr {
+    transition: 0.3s all ease-in-out;
+    &:nth-child(even) {
+      background: #efefef;
+    }
+    &:hover {
+      background: #d1d1d1;
+    }
   }
 }
 #noTicket {
