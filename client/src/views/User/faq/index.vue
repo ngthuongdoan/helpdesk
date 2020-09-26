@@ -46,27 +46,5 @@ export default {
 </script>
 
 <style lang="scss">
-.faq {
-  margin: 5px 20px;
-  border-radius: 10px 10px 0 0;
-  &__container {
-    width: 80%;
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    height: 80vh;
-    overflow: hidden;
-  }
-  &__inner-container {
-    overflow: auto;
-    width: 100%;
-    top: 15%;
-    left: 10%;
-    height: 70vh;
-  }
-}
-.custom-searchbar {
-  margin: 20px;
-  width: 95%;
-}
+@import "~@/assets/styles/User/FAQ.scss";
 </style>

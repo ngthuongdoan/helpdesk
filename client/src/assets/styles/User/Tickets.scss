@@ -1,0 +1,40 @@
+.pagination {
+  list-style-type: none;
+  display: inline-flex;
+  background: white;
+}
+
+button.page-link {
+  display: inline-block;
+  border: 0.2px solid #ccc;
+  background: none;
+  font-size: 14px;
+  color: rgb(90, 89, 89);
+  font-weight: 500;
+  padding: 5px;
+  transition: 0.3s all ease-in-out;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    background: rgb(158, 157, 157);
+  }
+}
+.ticket {
+  &__container {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    height: 80vh;
+  }
+}
+.table {
+  background: white;
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    background: #ccc;
+    border: 1px solid rgb(139, 139, 139);
+    padding: 8px;
+  }
+}

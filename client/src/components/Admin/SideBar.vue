@@ -2,7 +2,7 @@
   <div class="sidebar">
     <nav>
       <div class="sidebar__header">
-        <h4>{{ user.role | toUpperCase}}</h4>
+        <h4>{{ user.username | ToUpperCase}}</h4>
       </div>
       <transition enter-active-class="animate__animated animate__fadeInLeft">
         <ul class="nav flex-column sidebar__menu">
@@ -34,19 +34,19 @@ export default {
         {
           id: "dashboard",
           name: "Dashboard",
-          url: "/",
+          url: "/admin",
           check: true,
         },
         {
           id: "tickets",
           name: "Tickets",
-          url: "/tickets",
+          url: "/admin/tickets",
           check: true,
         },
         {
           id: "technicians",
           name: "Technicians",
-          url: "/technicians",
+          url: "/admin/technicians",
           check: true,
         },
       ],
@@ -60,7 +60,7 @@ export default {
     },
   },
   filters: {
-    toUpperCase(value) {
+    ToUpperCase(value) {
       return value.toUpperCase();
     },
   },
@@ -76,7 +76,6 @@ export default {
   text-align: center;
   background:rgb(49, 49, 49);
   &__header {
-    // padding: 40px 0;
     text-align: center;
     h4 {
       margin-top: 50px;
@@ -90,7 +89,6 @@ export default {
   &__menu {
     text-align: left;
     margin-top: 50px;
-
     li {
       &:hover {
         background-color:rgb(66, 66, 66);
