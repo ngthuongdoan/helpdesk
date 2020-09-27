@@ -7,11 +7,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Master",
     component: () => import("../views/Master.vue"),
     children: [
       {
         path: "",
+        name: "Master",
         component: () => import("../views/User/index"),
       },
       {
@@ -38,7 +38,7 @@ const routes = [
   },
   {
     path: "/admin",
-    component:  () => import("../views/MasterAdmin.vue"),
+    component: () => import("../views/MasterAdmin.vue"),
     children: [
       {
         path: "/",
@@ -51,9 +51,9 @@ const routes = [
         component: () => import("../views/Admin/technicians"),
       },
       {
-        path: "tickets",
-        name: "tickets",
-        component: () => import("../views/Admin/tickets"),
+        path: "request",
+        name: "request",
+        component: () => import("../views/Admin/requests"),
       },
     ],
   },

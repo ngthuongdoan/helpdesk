@@ -10,11 +10,12 @@
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">Không có ticket nào</p>
     </div>
-    <table class="table" v-else>
+    <table v-else>
       <thead>
         <tr>
-          <th>STT</th>
-          <th>Ticket name</th>
+          <th>ID</th>
+          <th>Employee ID</th>
+          <th>Ticket Tilte</th>
           <th>Technician ID</th>
           <th>Status</th>
           <th>Start Date</th>

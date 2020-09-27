@@ -9,7 +9,10 @@
       <br />
       <input type="password" v-model="login.password" required />
       <span id="eye">
-        <img src="https://img.icons8.com/android/24/000000/visible.png" />
+        <img
+          src="https://img.icons8.com/android/24/000000/visible.png"
+          alt="show-password"
+        />
       </span>
       <br />
       <input type="submit" value="Submit" />
@@ -40,12 +43,13 @@ export default {
         if (this.login.username === "") throw new Error("Username blank");
         if (this.login.password === "") throw new Error("Password blank");
         const user = await this.$http.post("/login", this.login);
+        console.log(user.data);
         await this.$swal({
           title: "Success",
           icon: "success",
         });
         await this.$store.dispatch("userModule/logIn", user.data);
-        switch (user.data.role) {
+        switch (user.data.role.toLowerCase()) {
           case "admin":
             this.$router.replace("/admin");
             break;

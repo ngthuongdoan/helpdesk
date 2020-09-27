@@ -1,5 +1,5 @@
 <template>
-  <div class="ticket__container">
+  <div class="technician__container">
     <Pagination
       :page="page"
       :pages="pages"
@@ -7,33 +7,31 @@
       @changePage="page = $event"
       @next="page++"
     ></Pagination>
-    <div v-if="displayedTickets.length === 0">
-      <p id="noTicket">Không có ticket nào</p>
+    <div v-if="displayedTechnicians.length === 0">
+      <p id="noTechnician">Không có technician nào</p>
     </div>
-    <table class="table" v-else>
+    <table v-else>
       <thead>
         <tr>
-          <th>STT</th>
-          <th>Ticket name</th>
-          <th>Technician ID</th>
+          <th>ID</th>
+          <th>Full name</th>
+          <th>Username</th>
           <th>Status</th>
-          <th>Start Date</th>
-          <th>End Date</th>
         </tr>
       </thead>
-      <Ticket
-        v-for="ticket in displayedTickets"
-        :key="ticket.id"
-        :ticket="ticket"
-      ></Ticket>
+      <Technician
+        v-for="technician in displayedTechnicians"
+        :key="technician.id"
+        :technician="technician"
+      ></Technician>
     </table>
   </div>
 </template>
 
 <script>
-import Ticket from "@/components/Admin/Ticket.vue";
+import Technician from "@/components/Admin/Technician.vue";
 import Pagination from "@/components/Pagination.vue";
-import mockTickets from "@/mocks/ticket.js";
+import mockTechnicians from "@/mocks/technician.js";
 export default {
   data() {
     return {
@@ -43,47 +41,49 @@ export default {
     };
   },
   components: {
-    Ticket,
+    Technician,
     Pagination,
   },
   methods: {
     setPages() {
-      if (this.tickets.length === 0) return;
-      let numberOfPages = Math.ceil(this.tickets.length / this.perPage);
+      if (this.technicians.length === 0) return;
+      let numberOfPages = Math.ceil(this.technicians.length / this.perPage);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
     },
-    paginate(tickets) {
+    paginate(technicians) {
       let page = this.page;
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
-      return tickets.slice(from, to);
+      return technicians.slice(from, to);
     },
   },
   computed: {
-    displayedTickets() {
-      return this.tickets.length !== 0 ? this.paginate(this.tickets) : [];
+    displayedTechnicians() {
+      return this.technicians.length !== 0
+        ? this.paginate(this.technicians)
+        : [];
     },
   },
   watch: {
-    tickets() {
+    technicians() {
       this.setPages();
     },
   },
   created() {
-    // this.tickets = [];
+    // this.technicians = [];
     // this.$http
-    //   .get("/ticket")
+    //   .get("/technician")
     //   .then((res) => {
-    //     this.tickets = res.data;
+    //     this.technicians = res.data;
     //     this.setPages();
     //   })
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    this.tickets = mockTickets;
+    this.technicians = mockTechnicians;
     this.setPages();
   },
   filters: {
@@ -95,5 +95,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/styles/Admin/Tickets.scss";
+@import "~@/assets/styles/Admin/Technicians.scss";
 </style>

@@ -6,11 +6,12 @@
       @previous="page--"
       @changePage="page = $event"
       @next="page++"
+      v-if="isOnePage"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">Không có ticket nào</p>
     </div>
-    <table class="table" v-else>
+    <table class="ticket__table" v-else>
       <thead>
         <tr>
           <th>STT</th>
@@ -66,6 +67,9 @@ export default {
     displayedTickets() {
       return this.tickets.length !== 0 ? this.paginate(this.tickets) : [];
     },
+    isOnePage() {
+      return this.pages.length > 1;
+    },
   },
   watch: {
     tickets() {
@@ -73,16 +77,17 @@ export default {
     },
   },
   created() {
-    // this.$http
-    //   .get("/ticket")
-    //   .then((res) => {
-    //     this.tickets = res.data;
-    //     this.setPages();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    this.tickets = mockTickets;
+    const uid = this.$store.getters["userModule/getUser"].data.id;
+    console.log(uid);
+    this.$http
+      .get("/ticket/user/" + uid)
+      .then((res) => {
+        this.tickets = res.data || mockTickets;
+        this.setPages();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     this.setPages();
   },
   filters: {

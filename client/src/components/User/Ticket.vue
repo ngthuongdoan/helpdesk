@@ -1,11 +1,11 @@
 <template>
-  <tr>
-    <td>{{ ticket.id }}</td>
-    <td>{{ ticket.title }}</td>
-    <td>{{ ticket.technicianID }}</td>
-    <td>{{ ticket.status }}</td>
-    <td>{{ ticket.startDate }}</td>
-    <td>{{ ticket.endDate }}</td>
+  <tr class="ticket__row">
+    <td class="ticket__data">{{ ticket.id }}</td>
+    <td class="ticket__data">{{ ticket.title }}</td>
+    <td class="ticket__data">{{ ticket.technicianID }}</td>
+    <td class="ticket__data">{{ ticket.status }}</td>
+    <td class="ticket__data">{{ ticket.startDate }}</td>
+    <td class="ticket__data">{{ ticket.endDate }}</td>
   </tr>
 </template>
 
@@ -21,17 +21,30 @@ export default {
 </script>
 
 <style lang="scss">
-tr {
-  transition: 0.3s all ease-in-out;
-  td {
+.ticket {
+  &__table {
+    background: white;
+    width: 100%;
+    border-collapse: collapse;
+    th {
+      background: #ccc;
+      border: 1px solid rgb(139, 139, 139);
+      padding: 8px;
+    }
+  }
+  &__row {
+    transition: 0.3s all ease-in-out;
+    cursor: pointer;
+    &:nth-child(even) {
+      background: #efefef;
+    }
+    &:hover {
+      background: #d1d1d1;
+    }
+  }
+  &__data {
     padding: 10px;
     border: 1px solid rgb(139, 139, 139);
-  }
-  &:nth-child(even) {
-    background: #efefef;
-  }
-  &:hover {
-    background: #d1d1d1;
   }
 }
 </style>

@@ -38,7 +38,16 @@
 
 <script>
 export default {
-  props: ["page", "pages"],
+  props: {
+    page: {
+      type: Number,
+      required: true,
+    },
+    pages: {
+      type: Array,
+      required: true,
+    },
+  },
   methods: {
     previous() {
       this.$emit("previous");
@@ -57,13 +66,12 @@ export default {
 .pagination {
   list-style-type: none;
   display: inline-flex;
-  background: white;
 }
 
 button.page-link {
   display: inline-block;
   border: 0.2px solid #ccc;
-  background: none;
+  background: white;
   font-size: 14px;
   color: rgb(90, 89, 89);
   font-weight: 500;

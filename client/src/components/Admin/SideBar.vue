@@ -38,9 +38,9 @@ export default {
           check: true,
         },
         {
-          id: "tickets",
-          name: "Tickets",
-          url: "/admin/tickets",
+          id: "request",
+          name: "Request",
+          url: "/admin/request",
           check: true,
         },
         {
@@ -56,7 +56,7 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch("userModule/signOut");
-      this.$router.push("/login");
+      this.$router.push("/login").catch(() => {});
     },
   },
   filters: {
@@ -76,9 +76,13 @@ export default {
   text-align: center;
   background: rgb(49, 49, 49);
   &__header {
+    background: rgb(31, 30, 30);
     text-align: center;
     h4 {
-      margin-top: 50px;
+      padding: 50px 0;
+      display: block;
+      width: 100%;
+      height: 100%;
       font-size: 20px;
     }
   }
@@ -88,7 +92,6 @@ export default {
   }
   &__menu {
     text-align: left;
-    margin-top: 50px;
     li {
       &:hover {
         background-color: rgb(66, 66, 66);
