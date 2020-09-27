@@ -1,13 +1,17 @@
 <template>
   <div id="admin">
     <SideBar :user="user.data"></SideBar>
-    <router-view></router-view>
+    <div class="content">
+      <Notification></Notification>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import SideBar from "@/components/Admin/SideBar";
+import Notification from "@/components/Admin/Notification";
 
 export default {
   computed: {
@@ -17,6 +21,7 @@ export default {
   },
   components: {
     SideBar,
+    Notification,
   },
   mounted() {
     let bootstrapStyle = document.createElement("link");

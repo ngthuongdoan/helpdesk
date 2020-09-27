@@ -20,9 +20,7 @@
         </ul>
       </transition>
     </nav>
-    <button @click="signOut" class="btn btn-danger" id="signoutBtn">
-      Sign Out
-    </button>
+    <h1 id="logo">HelpCenter</h1>
   </div>
 </template>
 
@@ -53,12 +51,6 @@ export default {
     };
   },
   props: ["user"],
-  methods: {
-    signOut() {
-      this.$store.dispatch("userModule/signOut");
-      this.$router.push("/login").catch(() => {});
-    },
-  },
   filters: {
     ToUpperCase(value) {
       return value.toUpperCase();
@@ -68,9 +60,10 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Sonsie+One&display=swap");
 .sidebar {
   color: white;
-  position: relative;
+  position: fixed;
   height: 100%;
   min-width: 200px;
   text-align: center;
@@ -87,8 +80,10 @@ export default {
     }
   }
   .active {
-    background-color: rgb(66, 66, 66);
-    color: #2b2d30;
+    background-color: rgb(250, 250, 122);
+    a {
+      color: black;
+    }
   }
   &__menu {
     text-align: left;
@@ -104,12 +99,16 @@ export default {
       }
     }
   }
-  button {
+  #logo {
     position: absolute;
-    width: 80%;
     bottom: 30px;
-    left: 10%;
-    padding: 10px;
+    text-align: center;
+    width: 100%;
+    justify-self: flex-start;
+    align-self: center;
+    font-size: 20px;
+    font-family: "Sonsie One", cursive;
+    font-style: italic;
   }
 }
 </style>
