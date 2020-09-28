@@ -8,6 +8,7 @@
         <img
           src="https://img.icons8.com/ios-filled/24/000000/appointment-reminders.png"
         />
+        <span class="badge">1</span>
       </div>
       <div class="button" id="signOutBtn" @click="signOut">
         <img
@@ -67,5 +68,16 @@ export default {
     transform: translate(35%, 35%);
     width: 20px;
   }
+}
+#notifyBtn {
+  position: relative;
+}
+.badge {
+  background: rgb(255, 72, 72);
+  display: block;
+  position: absolute;
+  right: 0;
+  transform: translate(25%, -25%);
+  border-radius: 50%;
 }
 </style>
