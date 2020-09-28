@@ -1,6 +1,8 @@
 <template>
   <header>
-    <h1 id="logo" @click="home">HelpCenter</h1>
+    <h1 id="logo" @click="home">
+      <img src="@/assets/logo.png" alt="" srcset="" width="50px" />
+    </h1>
     <nav>
       <ul>
         <router-link to="/tickets" tag="li">Your Tickets</router-link>
@@ -43,12 +45,10 @@ header {
   position: fixed;
 }
 #logo {
-  width: 50%;
   justify-self: flex-start;
+  margin-left: 80px;
   align-self: center;
   cursor: pointer;
-  font-size: 20px;
-  font-family: "Sonsie One", cursive;
 }
 nav {
   width: 100%;

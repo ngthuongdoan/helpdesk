@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="maincontent">
     <div class="header">
       <h1 class="title">
         How can we
