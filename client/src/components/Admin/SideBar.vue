@@ -26,36 +26,59 @@
 
 <script>
 export default {
+  props: ["user"],
   data() {
+    let menu;
+    switch (this.user.role) {
+      case "admin":
+        menu = [
+          {
+            id: "dashboard",
+            name: "Dashboard",
+            url: "/admin",
+            check: true,
+          },
+          {
+            id: "request",
+            name: "Request",
+            url: "/admin/request",
+            check: true,
+          },
+          {
+            id: "technicians",
+            name: "Technicians",
+            url: "/admin/technicians",
+            check: true,
+          },
+        ];
+        break;
+      case "technician":
+        menu = [
+          {
+            id: "dashboard",
+            name: "Dashboard",
+            url: "/technician",
+            check: true,
+          },
+          {
+            id: "request",
+            name: "Request",
+            url: "/technician/request",
+            check: true,
+          },
+        ];
+        break;
+    }
     return {
-      menu: [
-        {
-          id: "dashboard",
-          name: "Dashboard",
-          url: "/admin",
-          check: true,
-        },
-        {
-          id: "request",
-          name: "Request",
-          url: "/admin/request",
-          check: true,
-        },
-        {
-          id: "technicians",
-          name: "Technicians",
-          url: "/admin/technicians",
-          check: true,
-        },
-      ],
+      menu: menu,
     };
   },
-  props: ["user"],
   filters: {
     ToUpperCase(value) {
       return value.toUpperCase();
     },
   },
+  mounted() {},
 };
 </script>
 

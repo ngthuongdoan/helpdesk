@@ -57,6 +57,22 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/technician",
+    component: () => import("../views/MasterAdmin.vue"),
+    children: [
+      {
+        path: "/",
+        name: "dashboard",
+        component: () => import("../views/Admin/index"),
+      },
+      {
+        path: "request",
+        name: "request",
+        component: () => import("../views/Admin/requests"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
