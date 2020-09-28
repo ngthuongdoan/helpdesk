@@ -73,19 +73,19 @@ export default {
       this.setPages();
     },
   },
+
   created() {
     // this.tickets = [];
-    // this.$http
-    //   .get("/ticket")
-    //   .then((res) => {
-    //     this.tickets = res.data;
-    //     this.setPages();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    this.tickets = mockTickets;
-    this.setPages();
+    this.$http
+      .get("/ticket")
+      .then((res) => {
+        this.tickets = res.data;
+        this.setPages();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // this.tickets = mockTickets;
   },
   filters: {
     trimWords(value) {

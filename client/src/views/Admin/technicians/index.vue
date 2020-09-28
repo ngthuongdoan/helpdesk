@@ -74,17 +74,16 @@ export default {
   },
   created() {
     // this.technicians = [];
-    // this.$http
-    //   .get("/technician")
-    //   .then((res) => {
-    //     this.technicians = res.data;
-    //     this.setPages();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    this.technicians = mockTechnicians;
-    this.setPages();
+    this.$http
+      .get("/user/role/technician")
+      .then((res) => {
+        this.technicians = res.data;
+        this.setPages();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // this.technicians = mockTechnicians;
   },
   filters: {
     trimWords(value) {

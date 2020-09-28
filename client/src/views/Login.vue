@@ -51,10 +51,10 @@ export default {
         await this.$store.dispatch("userModule/logIn", user.data);
         switch (user.data.role.toLowerCase()) {
           case "admin":
-            this.$router.replace("/admin");
+            this.$router.replace("/admin/dashboard");
             break;
           case "technician":
-            this.$router.replace("/technician");
+            this.$router.replace("/technician/dashboard");
             break;
           case "user":
             this.$router.replace("/");

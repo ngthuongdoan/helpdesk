@@ -41,7 +41,7 @@ const routes = [
     component: () => import("../views/MasterAdmin.vue"),
     children: [
       {
-        path: "/",
+        path: "dashboard",
         name: "dashboard",
         component: () => import("../views/Admin/index"),
       },
@@ -51,9 +51,14 @@ const routes = [
         component: () => import("../views/Admin/technicians"),
       },
       {
-        path: "request",
+        path: "requests",
+        name: "admin-request",
+        component: () => import("../views/Admin/all-requests"),
+      },
+      {
+        path: "requests/:id",
         name: "request",
-        component: () => import("../views/Admin/requests"),
+        component: () => import("../views/Admin/request"),
       },
     ],
   },
@@ -62,14 +67,14 @@ const routes = [
     component: () => import("../views/MasterAdmin.vue"),
     children: [
       {
-        path: "/",
+        path: "dashboard",
         name: "dashboard",
         component: () => import("../views/Admin/index"),
       },
       {
         path: "request",
-        name: "request",
-        component: () => import("../views/Admin/requests"),
+        name: "technician-request",
+        component: () => import("../views/Admin/request"),
       },
     ],
   },

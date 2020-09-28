@@ -13,7 +13,6 @@
             class="nav-item"
             :to="value.url"
             active-class="active"
-            exact
           >
             <a class="nav-link">{{ value.name }}</a>
           </router-link>
@@ -35,13 +34,13 @@ export default {
           {
             id: "dashboard",
             name: "Dashboard",
-            url: "/admin",
+            url: "/admin/dashboard",
             check: true,
           },
           {
             id: "request",
             name: "Request",
-            url: "/admin/request",
+            url: "/admin/requests",
             check: true,
           },
           {
@@ -57,7 +56,7 @@ export default {
           {
             id: "dashboard",
             name: "Dashboard",
-            url: "/technician",
+            url: "/technician/dashboard",
             check: true,
           },
           {

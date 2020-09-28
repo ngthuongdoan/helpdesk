@@ -1,22 +1,50 @@
 <template>
-  <tr class="ticket-admin__row">
+  <tr class="ticket-admin__row" @click="showTicket" v-if="!isFetching">
     <td class="ticket-admin__data">{{ ticket.id }}</td>
-    <td class="ticket-admin__data">{{ ticket.employeeID }}</td>
+    <td class="ticket-admin__data">{{ ticket.username }}</td>
     <td class="ticket-admin__data">{{ ticket.title }}</td>
-    <td class="ticket-admin__data">{{ ticket.technicianID }}</td>
-    <td class="ticket-admin__data">{{ ticket.status }}</td>
-    <td class="ticket-admin__data">{{ ticket.startDate }}</td>
+    <td class="ticket-admin__data">{{ ticket.technicianName }}</td>
+    <td class="ticket-admin__data">
+      {{ ticket.status[ticket.status.length - 1].name }}
+    </td>
+    <td class="ticket-admin__data">
+      {{ new Date(ticket.startDate).toLocaleString() }}
+    </td>
     <td class="ticket-admin__data">{{ ticket.endDate }}</td>
   </tr>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      isFetching: true,
+    };
+  },
   props: {
     ticket: {
       type: Object,
       required: true,
     },
+  },
+  methods: {
+    showTicket() {
+      this.$router.push("/admin/requests/" + this.ticket.id);
+    },
+  },
+  mounted() {
+    console.log(this.ticket);
+  },
+  created() {
+    const ticket = this.$props.ticket;
+    const user = this.$http.get("/user/" + ticket.userId);
+    const technician = this.$http.get("/user/" + ticket.technicianIds);
+    Promise.all([user, technician]).then((res) => {
+      const [userData, technicianData] = res;
+      this.$props.ticket.username = userData.data.username;
+      this.$props.ticket.technicianName = technicianData.data.username;
+      this.isFetching = false;
+    });
   },
 };
 </script>

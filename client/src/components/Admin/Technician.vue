@@ -1,7 +1,7 @@
 <template>
   <tr class="technician-admin__row">
     <td class="technician-admin__data">{{ technician.id }}</td>
-    <td class="technician-admin__data">{{ technician.fullname }}</td>
+    <td class="technician-admin__data">{{ technician.fullName }}</td>
     <td class="technician-admin__data">{{ technician.username }}</td>
     <td class="technician-admin__data">{{ technician.status }}</td>
   </tr>
