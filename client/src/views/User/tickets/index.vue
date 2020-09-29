@@ -14,8 +14,8 @@
     <table class="ticket__table" v-else>
       <thead>
         <tr>
-          <th>STT</th>
-          <th>Ticket name</th>
+          <th>ID</th>
+          <th>Ticket Title</th>
           <th>Technician ID</th>
           <th>Status</th>
           <th>Start Date</th>
@@ -76,19 +76,17 @@ export default {
       this.setPages();
     },
   },
-  created() {
-    const uid = this.$store.getters["userModule/getUser"].data.id;
-    console.log(uid);
-    this.$http
-      .get("/ticket/user/" + uid)
-      .then((res) => {
-        this.tickets = res.data || mockTickets;
-        this.setPages();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    this.setPages();
+  async created() {
+    try {
+      const uid = this.$store.getters["userModule/getUser"].data.id;
+
+      const res = await this.$http.get("/ticket/user/" + uid);
+      this.tickets = res.data;
+      console.log(this.tickets);
+      console.log(this.displayedTickets);
+    } catch (err) {
+      console.log(err);
+    }
   },
   filters: {
     trimWords(value) {

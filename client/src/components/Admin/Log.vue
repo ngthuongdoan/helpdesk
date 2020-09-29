@@ -9,7 +9,12 @@
 
 <script>
 export default {
-  props: ["log"],
+  props: {
+    log: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
 

@@ -25,7 +25,12 @@
 
 <script>
 export default {
-  props: ["user"],
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     let menu;
     switch (this.user.role) {
@@ -77,7 +82,6 @@ export default {
       return value.toUpperCase();
     },
   },
-  mounted() {},
 };
 </script>
 

@@ -6,6 +6,7 @@
       @previous="page--"
       @changePage="page = $event"
       @next="page++"
+      v-if="isOnePage"
     ></Pagination>
     <div v-if="displayedTechnicians.length === 0">
       <p id="noTechnician">Không có technician nào</p>
@@ -65,6 +66,9 @@ export default {
       return this.technicians.length !== 0
         ? this.paginate(this.technicians)
         : [];
+    },
+    isOnePage() {
+      return this.pages.length > 1;
     },
   },
   watch: {

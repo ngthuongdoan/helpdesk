@@ -3,9 +3,15 @@
     <td class="ticket__data">{{ ticket.id }}</td>
     <td class="ticket__data">{{ ticket.title }}</td>
     <td class="ticket__data">{{ ticket.technicianID }}</td>
-    <td class="ticket__data">{{ ticket.status }}</td>
-    <td class="ticket__data">{{ ticket.startDate }}</td>
-    <td class="ticket__data">{{ ticket.endDate }}</td>
+    <td class="ticket__data">
+      {{ ticket.status[ticket.status.length - 1].name }}
+    </td>
+    <td class="ticket__data">
+      {{ new Date(ticket.startDate).toLocaleString() }}
+    </td>
+    <td class="ticket__data">
+      {{ ticket.endDate ? new Date(ticket.endDate).toLocaleString() : null }}
+    </td>
   </tr>
 </template>
 

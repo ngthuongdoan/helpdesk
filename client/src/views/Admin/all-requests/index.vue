@@ -6,6 +6,7 @@
       @previous="page--"
       @changePage="page = $event"
       @next="page++"
+      v-if="isOnePage"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">Không có ticket nào</p>
@@ -67,6 +68,9 @@ export default {
     displayedTickets() {
       return this.tickets.length !== 0 ? this.paginate(this.tickets) : [];
     },
+    isOnePage() {
+      return this.pages.length > 1;
+    },
   },
   watch: {
     tickets() {
@@ -75,7 +79,6 @@ export default {
   },
 
   created() {
-    // this.tickets = [];
     this.$http
       .get("/ticket")
       .then((res) => {
@@ -85,7 +88,6 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-    // this.tickets = mockTickets;
   },
   filters: {
     trimWords(value) {

@@ -11,12 +11,13 @@
         <input type="text" v-model="ticket.place" required />
         <br />
       </div>
-      <div class="ticket__detail">
+      <div class="ticket__description">
         <label for>Your problems</label>
         <br />
-        <textarea rows="8" v-model="ticket.detail" required />
+        <textarea rows="8" v-model="ticket.description" required />
         <br />
         <input
+          ref="fileInput"
           type="file"
           accept="image/*"
           @change="uploadImage"
@@ -36,9 +37,8 @@ export default {
     return {
       ticket: {
         title: "",
-        userID: "",
         place: "",
-        detail: "",
+        description: "",
         images: [],
       },
     };
@@ -47,11 +47,13 @@ export default {
     init() {
       this.ticket = {
         title: "",
-        userID: "",
         place: "",
-        detail: "",
+        description: "",
         images: [],
       };
+      const input = this.$refs.fileInput;
+      input.type = "text";
+      input.type = "file";
     },
     uploadImage(e) {
       const images = e.target.files;
@@ -64,9 +66,10 @@ export default {
         };
       });
     },
-    submitForm() {
+    submitForm(e) {
       const user = this.$store.getters["userModule/getUser"];
-      this.ticket.userID = user.data.username;
+      this.ticket.userId = user.data.id;
+      console.log(this.ticket);
       this.$http
         .post("/ticket", this.ticket)
         .then((res) => {
@@ -74,6 +77,7 @@ export default {
             title: "Success",
             icon: "success",
           });
+          this.init();
         })
         .catch((err) => {
           this.$swal({
