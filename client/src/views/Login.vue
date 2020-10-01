@@ -15,8 +15,10 @@
         />
       </span>
       <br />
-      <input type="submit" value="Submit" />
-      <button @click="init">Clear</button>
+      <div class="btn-group">
+        <input type="submit" value="Submit" />
+        <button @click="init">Clear</button>
+      </div>
     </form>
   </div>
 </template>
@@ -38,30 +40,35 @@ export default {
         password: "",
       };
     },
+    changeRoute(role) {
+      switch (role) {
+        case "admin":
+          this.$router.replace("/admin/dashboard");
+          break;
+        case "technician":
+          this.$router.replace("/technician/dashboard");
+          break;
+        case "user":
+          this.$router.replace("/");
+          this.$store.dispatch("userModule/fetchFaq");
+          break;
+        default:
+          break;
+      }
+    },
     async submitForm() {
       try {
         if (this.login.username === "") throw new Error("Username blank");
         if (this.login.password === "") throw new Error("Password blank");
         const user = await this.$http.post("/login", this.login);
-        console.log(user.data);
-        await this.$swal({
+        await this.$store.dispatch("userModule/logIn", user.data);
+
+        this.$swal({
           title: "Success",
           icon: "success",
         });
-        await this.$store.dispatch("userModule/logIn", user.data);
-        switch (user.data.role.toLowerCase()) {
-          case "admin":
-            this.$router.replace("/admin/dashboard");
-            break;
-          case "technician":
-            this.$router.replace("/technician/dashboard");
-            break;
-          case "user":
-            this.$router.replace("/");
-            break;
-          default:
-            break;
-        }
+
+        this.changeRoute(user.data.role.toLowerCase());
       } catch (err) {
         this.$swal({
           title: "Error",

@@ -41,6 +41,7 @@ export default {
       page: 1,
       perPage: 12,
       pages: [],
+      tickets: [],
     };
   },
   components: {
@@ -50,6 +51,7 @@ export default {
   methods: {
     setPages() {
       if (this.tickets.length === 0) return;
+      this.pages = [];
       let numberOfPages = Math.ceil(this.tickets.length / this.perPage);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
@@ -61,6 +63,21 @@ export default {
       let from = page * perPage - perPage;
       let to = page * perPage;
       return tickets.slice(from, to);
+    },
+    async getData() {
+      try {
+        let that = this;
+        this.interval = setInterval(async () => {
+          const uid = that.$store.getters["userModule/getUser"].data.id;
+          const res = await that.$http.get("/ticket/user/" + uid);
+          if (res.data.length !== that.tickets.length) that.tickets = res.data;
+        }, 1000);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    clearInterval(interval) {
+      clearInterval(interval);
     },
   },
   computed: {
@@ -76,17 +93,11 @@ export default {
       this.setPages();
     },
   },
-  async created() {
-    try {
-      const uid = this.$store.getters["userModule/getUser"].data.id;
-
-      const res = await this.$http.get("/ticket/user/" + uid);
-      this.tickets = res.data;
-      console.log(this.tickets);
-      console.log(this.displayedTickets);
-    } catch (err) {
-      console.log(err);
-    }
+  created() {
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval(this.interval);
   },
   filters: {
     trimWords(value) {

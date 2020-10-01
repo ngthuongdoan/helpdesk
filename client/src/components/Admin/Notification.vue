@@ -1,15 +1,14 @@
 <template>
   <div class="notification">
     <div class="btn-group">
-      <div class="button" id="accountBtn">
-        <img src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png" />
+      <div>
+        <div class="button" id="accountBtn" @click="changeInformation">
+          <img
+            src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png"
+          />
+        </div>
       </div>
-      <div class="button" id="notifyBtn">
-        <img
-          src="https://img.icons8.com/ios-filled/24/000000/appointment-reminders.png"
-        />
-        <span class="badge">1</span>
-      </div>
+
       <div class="button" id="signOutBtn" @click="signOut">
         <img
           src="https://img.icons8.com/metro/26/000000/export.png"
@@ -27,6 +26,9 @@ export default {
     signOut() {
       this.$store.dispatch("userModule/signOut");
       this.$router.push("/login").catch(() => {});
+    },
+    changeInformation() {
+      this.$emit("change-information");
     },
   },
 };
@@ -79,5 +81,31 @@ export default {
   right: 0;
   transform: translate(25%, -25%);
   border-radius: 50%;
+}
+.option {
+  position: absolute;
+  width: max-content;
+  left: -140%;
+  background: white;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
+  ul {
+    list-style-type: none;
+    padding: 0;
+    border-radius: 10px !important;
+    margin: 0;
+    li {
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s all ease-in-out;
+      a {
+        color: black;
+        text-decoration: none;
+      }
+      &:hover {
+        background: rgb(192, 191, 191);
+      }
+    }
+  }
 }
 </style>

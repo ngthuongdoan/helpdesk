@@ -2,7 +2,7 @@
   <div class="sidebar">
     <nav>
       <div class="sidebar__header">
-        <h4>{{ user.username | ToUpperCase }}</h4>
+        <h4>{{ user.role.toUpperCase() }}</h4>
       </div>
       <transition enter-active-class="animate__animated animate__fadeInLeft">
         <ul class="nav flex-column sidebar__menu">
@@ -76,11 +76,6 @@ export default {
     return {
       menu: menu,
     };
-  },
-  filters: {
-    ToUpperCase(value) {
-      return value.toUpperCase();
-    },
   },
 };
 </script>

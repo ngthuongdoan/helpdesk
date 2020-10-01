@@ -9,7 +9,7 @@
       v-if="isOnePage"
     ></Pagination>
     <div v-if="displayedLogs.length === 0">
-      <p id="noTechnician">Không có technician nào</p>
+      <p id="noLog">Không có log</p>
     </div>
     <Log v-for="log in displayedLogs" :key="log.id" :log="log"></Log>
   </div>
@@ -25,6 +25,7 @@ export default {
       page: 1,
       perPage: 9,
       pages: [],
+      logs: [],
     };
   },
   components: {
@@ -34,6 +35,7 @@ export default {
   methods: {
     setPages() {
       if (this.logs.length === 0) return;
+      this.pages = [];
       let numberOfPages = Math.ceil(this.logs.length / this.perPage);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
@@ -45,6 +47,20 @@ export default {
       let from = page * perPage - perPage;
       let to = page * perPage;
       return logs.slice(from, to);
+    },
+    async getData() {
+      try {
+        let that = this;
+        this.interval = setInterval(async () => {
+          const res = await that.$http.get("/log");
+          if (res.data.length !== that.logs.length) that.logs = res.data;
+        }, 1000);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    clearInterval(interval) {
+      clearInterval(interval);
     },
   },
   computed: {
@@ -61,8 +77,10 @@ export default {
     },
   },
   created() {
-    this.logs = mockLogs;
-    this.setPages();
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval(this.interval);
   },
   filters: {
     trimWords(value) {
@@ -76,5 +94,10 @@ export default {
 .logger__container {
   width: 100%;
   padding: 20px;
+}
+#noLog {
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
 }
 </style>

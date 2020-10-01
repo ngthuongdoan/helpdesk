@@ -1,14 +1,19 @@
-import router from '@/router';
+import router from "@/router";
+import axios from "axios";
 export const state = () => ({
   user: {
     loggedIn: false,
     data: null,
   },
+  faq: [],
 });
 
 export const getters = {
   getUser(state) {
     return state.user;
+  },
+  getFaq(state) {
+    return state.faq;
   },
 };
 export const mutations = {
@@ -17,6 +22,9 @@ export const mutations = {
   },
   SET_USER(state, payload) {
     state.user.data = payload;
+  },
+  SET_FAQ(state, faq) {
+    state.faq = faq;
   },
 };
 
@@ -33,6 +41,16 @@ export const actions = {
     commit("SET_LOGGED_IN", false);
     router.push("/login");
   },
-}
+  fetchFaq({ commit }) {
+    axios
+      .get("https://helpdesk-v2.herokuapp.com/v1/faq")
+      .then((res) => {
+        commit("SET_FAQ", res.data);
+      })
+      .catch((err) => {
+        console.err(err);
+      });
+  },
+};
 
 export const namespaced = true;

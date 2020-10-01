@@ -1,8 +1,48 @@
 <template>
   <div id="admin">
+    <div class="overlay" v-if="overlay">
+      <form>
+        <div class="form-group">
+          <label for="fullname">Full name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullname"
+            v-model="user.data.fullName"
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            v-model="user.data.email"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button
+          type="submit"
+          class="btn btn-secondary"
+          @click="overlay = false"
+        >
+          Cancel
+        </button>
+      </form>
+    </div>
     <SideBar :user="user.data"></SideBar>
     <div class="content">
-      <Notification></Notification>
+      <Notification @change-information="overlay = true"></Notification>
       <router-view></router-view>
     </div>
   </div>
@@ -14,6 +54,11 @@ import SideBar from "@/components/Admin/SideBar";
 import Notification from "@/components/Admin/Notification";
 
 export default {
+  data() {
+    return {
+      overlay: false,
+    };
+  },
   computed: {
     ...mapGetters({
       user: "userModule/getUser",

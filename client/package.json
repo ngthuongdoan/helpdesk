@@ -9,9 +9,11 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "global": "^4.4.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
+    "vue-intellisense": "^0.0.2",
     "vue-router": "^3.2.0",
     "vue-suggestion": "^1.1.0",
     "vue-sweetalert2": "^3.0.8",

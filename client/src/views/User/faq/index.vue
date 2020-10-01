@@ -31,16 +31,9 @@ export default {
       );
     },
   },
-  created() {
-    this.$http
-      .get("/faq")
-      .then((res) => {
-        this.faqs = res.data;
-        this.searchItems = this.faqs;
-      })
-      .catch((err) => {
-        console.err(err);
-      });
+  async created() {
+    this.faqs = await this.$store.getters["userModule/getFaq"];
+    this.searchItems = this.faqs;
   },
 };
 </script>

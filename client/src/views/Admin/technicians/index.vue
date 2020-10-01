@@ -37,8 +37,9 @@ export default {
   data() {
     return {
       page: 1,
-      perPage: 11,
+      perPage: 15,
       pages: [],
+      technicians: [],
     };
   },
   components: {
@@ -48,6 +49,7 @@ export default {
   methods: {
     setPages() {
       if (this.technicians.length === 0) return;
+      this.pages = [];
       let numberOfPages = Math.ceil(this.technicians.length / this.perPage);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
@@ -77,7 +79,6 @@ export default {
     },
   },
   created() {
-    // this.technicians = [];
     this.$http
       .get("/user/role/technician")
       .then((res) => {
@@ -87,7 +88,6 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-    // this.technicians = mockTechnicians;
   },
   filters: {
     trimWords(value) {

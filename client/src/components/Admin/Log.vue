@@ -3,7 +3,9 @@
     <div class="logger__icon">
       <img :src="log.icon" width="20px" />
     </div>
-    <p class="logger__content">{{ log.content }} at {{ log.time }}</p>
+    <p class="logger__content">
+      {{ log.content }} at {{ new Date(log.time).toLocaleString() }}
+    </p>
   </div>
 </template>
 

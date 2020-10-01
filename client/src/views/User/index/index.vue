@@ -68,14 +68,7 @@ export default {
     },
   },
   created() {
-    this.$http
-      .get("/faq")
-      .then((res) => {
-        this.items = res.data;
-      })
-      .catch((err) => {
-        console.err(err);
-      });
+    this.items = this.$store.getters["userModule/getFaq"];
   },
 };
 </script>

@@ -32,13 +32,10 @@ export default {
       this.$router.push("/admin/requests/" + this.ticket.id);
     },
   },
-  mounted() {
-    console.log(this.ticket);
-  },
   created() {
     const ticket = this.$props.ticket;
     const user = this.$http.get("/user/" + ticket.userId);
-    const technician = this.$http.get("/user/" + ticket.technicianIds);
+    const technician = this.$http.get("/user/" + ticket.technicianId);
     Promise.all([user, technician]).then((res) => {
       const [userData, technicianData] = res;
       this.$props.ticket.username = userData.data.username;

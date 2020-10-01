@@ -15,9 +15,9 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Employee ID</th>
+          <th>Employee</th>
           <th>Ticket Tilte</th>
-          <th>Technician ID</th>
+          <th>Technician</th>
           <th>Status</th>
           <th>Start Date</th>
           <th>End Date</th>
@@ -40,8 +40,9 @@ export default {
   data() {
     return {
       page: 1,
-      perPage: 11,
+      perPage: 15,
       pages: [],
+      tickets: [],
     };
   },
   components: {
@@ -63,6 +64,20 @@ export default {
       let to = page * perPage;
       return tickets.slice(from, to);
     },
+    async getData() {
+      try {
+        let that = this;
+        this.interval = setInterval(async () => {
+          const res = await that.$http.get("/ticket");
+          if (res.data.length !== that.tickets.length) that.tickets = res.data;
+        }, 1000);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    clearInterval(interval) {
+      clearInterval(interval);
+    },
   },
   computed: {
     displayedTickets() {
@@ -77,17 +92,11 @@ export default {
       this.setPages();
     },
   },
-
   created() {
-    this.$http
-      .get("/ticket")
-      .then((res) => {
-        this.tickets = res.data;
-        this.setPages();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval(this.interval);
   },
   filters: {
     trimWords(value) {
