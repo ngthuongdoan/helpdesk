@@ -1,7 +1,7 @@
 <template>
   <div id="admin">
     <div class="overlay" v-if="overlay">
-      <form>
+      <form @submit.prevent="updateInformation">
         <div class="form-group">
           <label for="fullname">Full name:</label>
           <input
@@ -30,6 +30,7 @@
             class="form-control"
             id="password"
             :disabled="isChangePassword"
+            required
           />
         </div>
         <div class="form-group">
@@ -39,6 +40,7 @@
             class="form-control"
             id="confirmpassword"
             :disabled="isChangePassword"
+            required
           />
         </div>
         <input type="submit" class="btn btn-primary" value="Update">
@@ -70,6 +72,18 @@ export default {
       overlay: false,
       isChangePassword: false
     };
+  },
+  methods:{
+    async updateInformation(){
+      try{
+        //Validate password
+        //Add new password
+        await this.$http.put("/user/"+this.user.data.id,this.user);
+        this.$swal() //Success
+      }catch(err){
+        //Error
+      }
+    },
   },
   computed: {
     ...mapGetters({
