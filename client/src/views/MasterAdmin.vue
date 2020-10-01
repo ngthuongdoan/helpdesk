@@ -22,12 +22,14 @@
             disabled
           />
         </div>
+        <button type="button" class="btn btn-light" @click="isChangePassword = !isChangePassword">Change Password</button>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">New Password</label>
           <input
             type="password"
             class="form-control"
             id="password"
+            :disabled="isChangePassword"
           />
         </div>
         <div class="form-group">
@@ -36,11 +38,12 @@
             type="password"
             class="form-control"
             id="confirmpassword"
+            :disabled="isChangePassword"
           />
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <input type="submit" class="btn btn-primary" value="Update">
         <button
-          type="submit"
+          type="button"
           class="btn btn-secondary"
           @click="overlay = false"
         >
@@ -65,6 +68,7 @@ export default {
   data() {
     return {
       overlay: false,
+      isChangePassword: false
     };
   },
   computed: {
