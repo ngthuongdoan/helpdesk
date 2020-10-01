@@ -52,6 +52,7 @@ export default {
   methods: {
     setPages() {
       if (this.tickets.length === 0) return;
+      this.pages = [];
       let numberOfPages = Math.ceil(this.tickets.length / this.perPage);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
@@ -66,10 +67,9 @@ export default {
     },
     async getData() {
       try {
-        let that = this;
         this.interval = setInterval(async () => {
-          const res = await that.$http.get("/ticket");
-          if (res.data.length !== that.tickets.length) that.tickets = res.data;
+          const res = await this.$http.get("/ticket");
+          if (res.data.length !== this.tickets.length) this.tickets = res.data;
         }, 1000);
       } catch (err) {
         console.log(err);

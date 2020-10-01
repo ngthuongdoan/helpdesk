@@ -1,7 +1,7 @@
 <template>
-  <tr class="ticket-admin__row" @click="showTicket" v-if="!isFetching">
+  <tr class="ticket-admin__row" @click="showTicket">
     <td class="ticket-admin__data">{{ ticket.id }}</td>
-    <td class="ticket-admin__data">{{ ticket.username }}</td>
+    <td class="ticket-admin__data">{{ ticket.fullName }}</td>
     <td class="ticket-admin__data">{{ ticket.title }}</td>
     <td class="ticket-admin__data">{{ ticket.technicianName }}</td>
     <td class="ticket-admin__data">
@@ -16,11 +16,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      isFetching: true,
-    };
-  },
   props: {
     ticket: {
       type: Object,
@@ -31,17 +26,6 @@ export default {
     showTicket() {
       this.$router.push("/admin/requests/" + this.ticket.id);
     },
-  },
-  created() {
-    const ticket = this.$props.ticket;
-    const user = this.$http.get("/user/" + ticket.userId);
-    const technician = this.$http.get("/user/" + ticket.technicianId);
-    Promise.all([user, technician]).then((res) => {
-      const [userData, technicianData] = res;
-      this.$props.ticket.username = userData.data.fullName;
-      this.$props.ticket.technicianName = technicianData.data.fullName;
-      this.isFetching = false;
-    });
   },
 };
 </script>

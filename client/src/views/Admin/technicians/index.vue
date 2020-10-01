@@ -1,5 +1,76 @@
 <template>
   <div class="technician__container">
+    <div class="overlay" v-if="overlay">
+      <form @submit.prevent="updateInformation">
+        <div class="form-group">
+          <label for="fullname">Full name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullname"
+            v-model="technician.fullName"
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            v-model="technician.email"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn btn-dark"
+          style="margin-bottom: 10px"
+          @click="isChangePassword = !isChangePassword"
+        >
+          Change Password
+        </button>
+        <div class="form-group">
+          <label for="password">New Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            :disabled="!isChangePassword"
+            v-model="newPass"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirmpassword">Confirm Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirmpassword"
+            :disabled="!isChangePassword"
+            ref="confirmPassword"
+            required
+          />
+        </div>
+        <input type="submit" class="btn btn-primary" value="Update" />
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          style="margin-left: 20px"
+          @click="overlay = false"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          style="margin-left: 20px"
+          @click="deleteTechnician"
+        >
+          Delete
+        </button>
+      </form>
+    </div>
     <Pagination
       :page="page"
       :pages="pages"
@@ -24,6 +95,7 @@
         v-for="technician in displayedTechnicians"
         :key="technician.id"
         :technician="technician"
+        @change-information="changeInformation"
       ></Technician>
     </table>
   </div>
@@ -40,6 +112,10 @@ export default {
       perPage: 15,
       pages: [],
       technicians: [],
+      overlay: false,
+      isChangePassword: false,
+      newPass: "",
+      technician: {},
     };
   },
   components: {
@@ -62,6 +138,93 @@ export default {
       let to = page * perPage;
       return technicians.slice(from, to);
     },
+    changeInformation(event) {
+      this.overlay = true;
+      this.technician = event;
+    },
+    validate() {
+      if (this.isChangePassword)
+        return this.$refs.confirmPassword.value === this.newPass;
+      return true;
+    },
+    async updateInformation() {
+      if (!this.validate()) {
+        this.$swal({
+          icon: "error",
+          title: "Password not match",
+        });
+        return;
+      }
+      try {
+        this.technician.password = this.newPass;
+        const chose = await this.$swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Update",
+        });
+        if (chose.isConfirmed) {
+          await this.$http.put("/user/" + this.technician.id, this.technician);
+          this.$forceUpdate();
+
+          this.$swal("Updated!", "", "success");
+          this.overlay = false;
+          this.technician = {};
+        }
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: "Sorry we busy right now",
+        });
+        console.log(err);
+      }
+    },
+    async deleteTechnician() {
+      try {
+        const chose = await this.$swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Delete",
+        });
+        if (chose.isConfirmed) {
+          await this.$http.delete("/user/" + this.technician.id);
+
+          this.$swal("Deleted!", "", "success");
+          this.overlay = false;
+          this.technician = {};
+          this.$forceUpdate();
+
+          this.getData();
+        }
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: "Sorry we busy right now",
+        });
+        console.log(err);
+      }
+    },
+    async getData() {
+      try {
+        this.interval = setInterval(async () => {
+          const res = await this.$http.get("/user/role/technician");
+          this.technicians = res.data;
+          this.setPages();
+        }, 500);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    clearInterval(interval) {
+      clearInterval(interval);
+    },
   },
   computed: {
     displayedTechnicians() {
@@ -79,15 +242,10 @@ export default {
     },
   },
   created() {
-    this.$http
-      .get("/user/role/technician")
-      .then((res) => {
-        this.technicians = res.data;
-        this.setPages();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval(this.interval);
   },
   filters: {
     trimWords(value) {

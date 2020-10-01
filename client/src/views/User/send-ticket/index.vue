@@ -69,6 +69,8 @@ export default {
     submitForm(e) {
       const user = this.$store.getters["userModule/getUser"];
       this.ticket.userId = user.data.id;
+      this.ticket.fullName = user.data.fullName;
+      console.log(this.ticket);
       this.$http
         .post("/ticket", this.ticket)
         .then((res) => {

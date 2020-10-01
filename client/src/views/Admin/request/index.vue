@@ -108,14 +108,16 @@ export default {
         });
         if (chose.isConfirmed) {
           this.request.technicianId = this.technicianId;
-
+          this.request.technicianName = this.getTechniciansName(
+            this.technicians,
+            this.technicianId
+          );
           await this.$http.put(
             "/ticket/" + this.$route.params.id,
             this.request
           );
-          this.$forceUpdate();
-
           this.$swal("Updated!", "", "success");
+          this.getData();
         }
       } catch (err) {
         this.$swal({
@@ -156,7 +158,6 @@ export default {
     },
     getTechniciansName(technicians, technicianId) {
       const name = technicians.filter((tech) => tech.id === technicianId);
-      console.log(technicians, name);
 
       return name.length !== 0 ? name[0].fullName : "Not Assigned";
     },

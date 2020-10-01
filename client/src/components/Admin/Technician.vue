@@ -1,5 +1,5 @@
 <template>
-  <tr class="technician-admin__row">
+  <tr class="technician-admin__row" @click="changeInformation">
     <td class="technician-admin__data">{{ technician.id }}</td>
     <td class="technician-admin__data">{{ technician.fullName }}</td>
     <td class="technician-admin__data">{{ technician.username }}</td>
@@ -13,6 +13,11 @@ export default {
     technician: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    changeInformation() {
+      this.$emit("change-information", this.technician);
     },
   },
 };

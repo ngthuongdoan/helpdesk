@@ -22,14 +22,22 @@
             disabled
           />
         </div>
-        <button type="button" class="btn btn-light" @click="isChangePassword = !isChangePassword">Change Password</button>
+        <button
+          type="button"
+          class="btn btn-dark"
+          style="margin-bottom: 10px"
+          @click="isChangePassword = !isChangePassword"
+        >
+          Change Password
+        </button>
         <div class="form-group">
           <label for="password">New Password</label>
           <input
             type="password"
             class="form-control"
             id="password"
-            :disabled="isChangePassword"
+            :disabled="!isChangePassword"
+            v-model="newPass"
             required
           />
         </div>
@@ -39,14 +47,16 @@
             type="password"
             class="form-control"
             id="confirmpassword"
-            :disabled="isChangePassword"
+            :disabled="!isChangePassword"
+            ref="confirmPassword"
             required
           />
         </div>
-        <input type="submit" class="btn btn-primary" value="Update">
+        <input type="submit" class="btn btn-primary" value="Update" />
         <button
           type="button"
           class="btn btn-secondary"
+          style="margin-left: 20px"
           @click="overlay = false"
         >
           Cancel
@@ -70,18 +80,48 @@ export default {
   data() {
     return {
       overlay: false,
-      isChangePassword: false
+      isChangePassword: false,
+      newPass: "",
     };
   },
-  methods:{
-    async updateInformation(){
-      try{
-        //Validate password
-        //Add new password
-        await this.$http.put("/user/"+this.user.data.id,this.user);
-        this.$swal() //Success
-      }catch(err){
-        //Error
+  methods: {
+    validate() {
+      if (this.isChangePassword)
+        return this.$refs.confirmPassword.value === this.newPass;
+      return true;
+    },
+    async updateInformation() {
+      if (!this.validate()) {
+        this.$swal({
+          icon: "error",
+          title: "Password not match",
+        });
+        return;
+      }
+      try {
+        this.user.data.password = this.newPass;
+        const chose = await this.$swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Update",
+        });
+        if (chose.isConfirmed) {
+          await this.$http.put("/user/" + this.user.data.id, this.user.data);
+          this.$forceUpdate();
+
+          this.$swal("Updated!", "", "success");
+          this.$store.dispatch("userModule/signOut");
+        }
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: "Sorry we busy right now",
+        });
+        console.log(err);
       }
     },
   },
