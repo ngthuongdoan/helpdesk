@@ -70,7 +70,7 @@ export default {
           const uid = await this.$store.getters["userModule/getUser"].data.id;
           const res = await this.$http.get("/ticket/user/" + uid);
           this.tickets = res.data;
-        }, 1000);
+        }, 5000);
       } catch (err) {
         console.log(err);
       }
