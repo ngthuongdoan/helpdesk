@@ -16,7 +16,7 @@
         <tr>
           <th>ID</th>
           <th>Ticket Title</th>
-          <th>Technician ID</th>
+          <th>Technician</th>
           <th>Status</th>
           <th>Start Date</th>
           <th>End Date</th>
@@ -34,7 +34,7 @@
 <script>
 import Ticket from "@/components/User/Ticket.vue";
 import Pagination from "@/components/Pagination.vue";
-import mockTickets from "@/mocks/ticket.js";
+// import mockTickets from "@/mocks/ticket.js";
 export default {
   data() {
     return {
@@ -66,11 +66,10 @@ export default {
     },
     async getData() {
       try {
-        let that = this;
         this.interval = setInterval(async () => {
-          const uid = that.$store.getters["userModule/getUser"].data.id;
-          const res = await that.$http.get("/ticket/user/" + uid);
-          if (res.data.length !== that.tickets.length) that.tickets = res.data;
+          const uid = await this.$store.getters["userModule/getUser"].data.id;
+          const res = await this.$http.get("/ticket/user/" + uid);
+          this.tickets = res.data;
         }, 1000);
       } catch (err) {
         console.log(err);

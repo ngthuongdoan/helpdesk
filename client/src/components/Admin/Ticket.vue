@@ -38,8 +38,8 @@ export default {
     const technician = this.$http.get("/user/" + ticket.technicianId);
     Promise.all([user, technician]).then((res) => {
       const [userData, technicianData] = res;
-      this.$props.ticket.username = userData.data.username;
-      this.$props.ticket.technicianName = technicianData.data.username;
+      this.$props.ticket.username = userData.data.fullName;
+      this.$props.ticket.technicianName = technicianData.data.fullName;
       this.isFetching = false;
     });
   },

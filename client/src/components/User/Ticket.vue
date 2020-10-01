@@ -2,7 +2,7 @@
   <tr class="ticket__row">
     <td class="ticket__data">{{ ticket.id }}</td>
     <td class="ticket__data">{{ ticket.title }}</td>
-    <td class="ticket__data">{{ ticket.technicianID }}</td>
+    <td class="ticket__data">{{ technicianName }}</td>
     <td class="ticket__data">
       {{ ticket.status[ticket.status.length - 1].name }}
     </td>
@@ -17,11 +17,35 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isFetching: true,
+      technicianName: "",
+    };
+  },
   props: {
     ticket: {
       type: Object,
       required: true,
     },
+  },
+  async getData() {
+    try {
+      this.interval = setInterval(async () => {
+        const ticket = this.$props.ticket;
+        const technician = await this.$http.get("/user/" + ticket.technicianId);
+        this.technicianName = technician.data.fullName;
+        this.isFetching = false;
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  clearInterval(interval) {
+    clearInterval(interval);
+  },
+  async created() {
+    this.getData();
   },
 };
 </script>

@@ -113,8 +113,9 @@ export default {
             "/ticket/" + this.$route.params.id,
             this.request
           );
-          this.$swal("Updated!", "", "success");
           this.$forceUpdate();
+
+          this.$swal("Updated!", "", "success");
         }
       } catch (err) {
         this.$swal({

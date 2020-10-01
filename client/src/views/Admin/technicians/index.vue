@@ -17,7 +17,7 @@
           <th>ID</th>
           <th>Full name</th>
           <th>Username</th>
-          <th>Status</th>
+          <th>Email</th>
         </tr>
       </thead>
       <Technician
