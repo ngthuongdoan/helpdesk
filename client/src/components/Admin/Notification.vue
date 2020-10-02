@@ -5,7 +5,6 @@
         class="button"
         id="accountBtn"
         @click="changeInformation"
-        data-toggle="tooltip"
         title="Change Information"
       >
         <img
@@ -13,25 +12,13 @@
           alt="Change Information"
         />
       </div>
-      <div
-        class="button"
-        id="addBtn"
-        data-toggle="tooltip"
-        @click="addNew"
-        title="Add Technician"
-      >
+      <div class="button" id="addBtn" @click="addNew" title="Add Technician">
         <img
           src="https://img.icons8.com/android/24/000000/plus.png"
           alt="Add Technician"
         />
       </div>
-      <div
-        class="button"
-        id="signOutBtn"
-        @click="signOut"
-        data-toggle="tooltip"
-        title="Logout"
-      >
+      <div class="button" id="signOutBtn" @click="signOut" title="Logout">
         <img
           src="https://img.icons8.com/metro/26/000000/export.png"
           width="16px"
@@ -55,11 +42,6 @@ export default {
     addNew() {
       this.$emit("add-technician");
     },
-  },
-  mounted() {
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
   },
 };
 </script>

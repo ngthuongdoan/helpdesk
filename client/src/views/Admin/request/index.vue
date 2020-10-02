@@ -202,15 +202,15 @@ export default {
 
 <style lang="scss" scoped>
 .request {
-  padding: 20px;
   width: 100%;
   height: 100%;
+  padding: 20px;
   &__container {
+    padding: 20px 30px;
     background: white;
     max-width: 100%;
     height: 100%;
     overflow: auto;
-    padding: 20px;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
     border-radius: 10px;
   }

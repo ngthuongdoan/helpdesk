@@ -4,11 +4,7 @@
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
     >
-      <div
-        class="imgOverlay"
-        v-if="imgOverlay"
-        @click="imgOverlay = !imgOverlay"
-      >
+      <div id="imgOverlay" v-if="imgOverlay" @click="imgOverlay = !imgOverlay">
         <img :src="this.img" />
       </div>
     </transition>
@@ -224,20 +220,27 @@ export default {
     height: 80vh;
     overflow: auto;
     background: white;
-    padding: 20px;
+    padding: 20px 30px;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
     border-radius: 10px;
+    z-index: 0;
   }
-  .imgOverlay {
+  #imgOverlay {
     animation-duration: 0.3s;
+    position: absolute;
     top: 0;
     left: 0;
+    background-color: rgba(0, 0, 0, 0.61);
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
     img {
-      max-width: 800px;
       position: absolute;
-      top: 50%;
+      max-width: 800px;
       left: 50%;
+      top: 50%;
       transform: translate(-50%, -50%);
+      z-index: 10000;
     }
   }
   &__img {
