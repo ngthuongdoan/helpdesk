@@ -9,30 +9,37 @@
       </div>
     </transition>
     <div class="ticket-user__container custom-scrollbar">
-      <h2 class="ticket-user__title">{{ ticket.title.toUpperCase() }}</h2>
-      <p class="ticket-user__detail">
-        <span class="label">Place: </span>{{ ticket.place }}
-      </p>
+      <h2 class="ticket-user__title">{{ newTicket.title.toUpperCase() }}</h2>
       <p class="ticket-user__detail">
         <span class="label">Status: </span
-        >{{ ticket.status | getStatusName }} at
-        {{ ticket.status | getStatusTime }}
+        >{{ newTicket.status | getStatusName }} at
+        {{ newTicket.status | getStatusTime }}
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Assigned: </span>{{ ticket.technicianName }}
+        <span class="label">Assigned: </span>{{ newTicket.technicianName }}
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Start: </span>{{ ticket.startDate | changeDate }}
+        <span class="label">Start: </span>{{ newTicket.startDate | changeDate }}
       </p>
       <p class="ticket-user__detail">
-        <span class="label">End: </span>{{ ticket.endDate | changeDate }}
+        <span class="label">End: </span>{{ newTicket.endDate | changeDate }}
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Description: </span>{{ ticket.description }}
+        <span class="label">Place: </span><br />
+        <input type="text" v-model="ticket.place" :disabled="!isUpdate" />
+      </p>
+      <p class="ticket-user__detail">
+        <span class="label">Description: </span><br />
+        <textarea
+          cols="30"
+          rows="10"
+          v-model="newTicket.description"
+          :disabled="!isUpdate"
+        ></textarea>
       </p>
       <img
         class="ticket-user__img"
-        v-for="img in ticket.images"
+        v-for="img in newTicket.images"
         :key="img"
         :src="img"
         @click="showImage(img)"
@@ -41,7 +48,15 @@
       <button
         type="button"
         class="btn btn-primary"
-        :disabled="isDisable"
+        v-if="!isUpdate"
+        @click="isUpdate = !isUpdate"
+      >
+        Change Information
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        v-if="isUpdate"
         @click="updateTicket"
       >
         Update
@@ -61,26 +76,25 @@ export default {
   data() {
     return {
       ticket: null,
-      technicians: [],
-      isDisable: true,
-      technicianId: "",
       imgOverlay: false,
       img: "",
+      isUpdate: false,
+      newTicket: {},
     };
   },
   methods: {
     async getData() {
       try {
-        const tickets = await this.$http.get(
-          "/ticket/" + this.$route.params.id
-        );
-        this.ticket = tickets.data;
+        const ticket = await this.$http.get("/ticket/" + this.$route.params.id);
+        this.ticket = ticket.data;
+        this.newTicket = Object.assign({}, this.ticket);
       } catch (err) {
         console.log(err);
       }
     },
     async updateTicket() {
       try {
+        console.log(this.newTicket);
         const chose = await this.$swal({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -91,21 +105,18 @@ export default {
           confirmButtonText: "Update",
         });
         if (chose.isConfirmed) {
-          this.ticket.technicianId = this.technicianId;
-          this.ticket.technicianName = this.getTechniciansName(
-            this.technicians,
-            this.technicianId
+          await this.$http.put(
+            "/ticket/" + this.$route.params.id,
+            this.newTicket
           );
-          await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
-          this.$swal("Updated!", "", "success");
-          this.getData();
+          await this.$swal("Updated!", "", "success");
+          this.back();
         }
       } catch (err) {
         this.$swal({
           icon: "error",
-          title: "Sorry we busy right now",
+          title: err.message,
         });
-        console.log(err);
       }
     },
     async deleteTicket() {
@@ -120,18 +131,15 @@ export default {
           confirmButtonText: "Delete",
         });
         if (chose.isConfirmed) {
-          this.ticket.technicianId = this.technicianId;
-
           await this.$http.delete("/ticket/" + this.$route.params.id);
-          this.$swal("Delete!", "", "success");
+          await this.$swal("Delete!", "", "success");
           this.back();
         }
       } catch (err) {
         this.$swal({
           icon: "error",
-          title: "Sorry we busy right now",
+          title: err.message,
         });
-        console.log(err);
       }
     },
     back() {
@@ -224,6 +232,22 @@ export default {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
     border-radius: 10px;
     z-index: 0;
+  }
+  input[type="text"],
+  textarea {
+    width: 500px;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: 0.2s all ease-in-out;
+    outline: none;
+    &:focus {
+      border: 2px solid #eccd59;
+      box-shadow: 1px 1px 10px #eccd59;
+    }
   }
   #imgOverlay {
     animation-duration: 0.3s;

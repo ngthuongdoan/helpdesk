@@ -74,12 +74,17 @@ const routes = [
       {
         path: "dashboard",
         name: "technician-dashboard",
-        component: () => import("../views/Admin/index"),
+        component: () => import("../views/Technician/index"),
       },
       {
-        path: "request",
+        path: "requests",
         name: "technician-request",
-        component: () => import("../views/Admin/request"),
+        component: () => import("../views/Technician/all-requests"),
+      },
+      {
+        path: "requests/:id",
+        name: "request",
+        component: () => import("../views/Technician/request"),
       },
     ],
   },

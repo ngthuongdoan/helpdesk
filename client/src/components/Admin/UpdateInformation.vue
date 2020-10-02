@@ -88,7 +88,6 @@ export default {
   methods: {
     async updateInformation(evt) {
       try {
-        console.log(this.newUser, this.user);
         if (this.newUser.password !== this.confirm)
           throw new Error("Password not match");
         const chose = await this.$swal({

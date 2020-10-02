@@ -8,7 +8,9 @@
             type="text"
             class="form-control"
             id="fullname"
-            v-model="technician.fullName"
+            v-model="newTechnician.fullName"
+            :disabled="!isChangeInformation"
+            required
           />
         </div>
         <div class="form-group">
@@ -18,25 +20,19 @@
             class="form-control"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
-            v-model="technician.email"
+            v-model="newTechnician.email"
+            :disabled="!isChangeInformation"
+            required
           />
         </div>
-        <button
-          type="button"
-          class="btn btn-dark"
-          style="margin-bottom: 10px"
-          @click="isChangePassword = !isChangePassword"
-        >
-          Change Password
-        </button>
         <div class="form-group">
           <label for="password">New Password</label>
           <input
             type="password"
             class="form-control"
             id="password"
-            :disabled="!isChangePassword"
-            v-model="newPass"
+            :disabled="!isChangeInformation"
+            v-model="newTechnician.password"
             required
           />
         </div>
@@ -46,28 +42,33 @@
             type="password"
             class="form-control"
             id="confirmpassword"
-            :disabled="!isChangePassword"
+            :disabled="!isChangeInformation"
             ref="confirmPassword"
+            v-model="confirm"
             required
           />
         </div>
-        <input type="submit" class="btn btn-primary" value="Update" />
-
+        <button
+          type="button"
+          class="btn btn-primary"
+          v-if="!isChangeInformation"
+          @click="isChangeInformation = !isChangeInformation"
+        >
+          Change Information
+        </button>
+        <input
+          type="submit"
+          class="btn btn-primary"
+          value="Update"
+          v-if="isChangeInformation"
+        />
         <button
           type="button"
           class="btn btn-secondary"
           style="margin-left: 20px"
-          @click="overlay = false"
+          @click="turnOffOverlay"
         >
           Cancel
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          style="margin-left: 20px"
-          @click="deleteTechnician"
-        >
-          Delete
         </button>
       </form>
     </div>
@@ -113,9 +114,9 @@ export default {
       pages: [],
       technicians: [],
       overlay: false,
-      isChangePassword: false,
-      newPass: "",
-      technician: {},
+      isChangeInformation: false,
+      confirm: "",
+      newTechnician: {},
       isFetching: true,
     };
   },
@@ -141,23 +142,17 @@ export default {
     },
     changeInformation(event) {
       this.overlay = true;
-      this.technician = event;
+      this.newTechnician = Object.assign({}, event);
     },
-    validate() {
-      if (this.isChangePassword)
-        return this.$refs.confirmPassword.value === this.newPass;
-      return true;
+    turnOffOverlay() {
+      this.overlay = false;
+      this.newTechnician = {};
     },
     async updateInformation() {
-      if (!this.validate()) {
-        this.$swal({
-          icon: "error",
-          title: "Password not match",
-        });
-        return;
-      }
       try {
-        this.technician.password = this.newPass;
+        if (this.newTechnician.password !== this.confirm)
+          throw new Error("Password not match");
+        console.log(this.newTechnician);
         const chose = await this.$swal({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -168,9 +163,10 @@ export default {
           confirmButtonText: "Update",
         });
         if (chose.isConfirmed) {
-          await this.$http.put("/user/" + this.technician.id, this.technician);
-          this.$forceUpdate();
-
+          await this.$http.put(
+            "/user/" + this.newTechnician.id,
+            this.newTechnician
+          );
           this.$swal("Updated!", "", "success");
           this.overlay = false;
           this.technician = {};
@@ -178,9 +174,8 @@ export default {
       } catch (err) {
         this.$swal({
           icon: "error",
-          title: "Sorry we busy right now",
+          title: err.message,
         });
-        console.log(err);
       }
     },
     async deleteTechnician() {

@@ -65,9 +65,9 @@ export default {
             check: true,
           },
           {
-            id: "request",
+            id: "requests",
             name: "Request",
-            url: "/technician/request",
+            url: "/technician/requests",
             check: true,
           },
         ];
