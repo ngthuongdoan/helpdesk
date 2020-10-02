@@ -42,6 +42,7 @@ export default {
       perPage: 12,
       pages: [],
       tickets: [],
+      isFetching: true,
     };
   },
   components: {
@@ -78,8 +79,8 @@ export default {
           const uid = await this.$store.getters["userModule/getUser"].data.id;
           const res = await this.$http.get("/ticket/user/" + uid);
           this.tickets = res.data;
-          this.$swal.close();
-        }, 500);
+          this.isFetching = false;
+        }, 2000);
       } catch (err) {
         console.log(err);
       }
@@ -99,6 +100,9 @@ export default {
   watch: {
     tickets() {
       this.setPages();
+    },
+    isFetching() {
+      if (!this.isFetching) this.$swal.close();
     },
   },
   created() {

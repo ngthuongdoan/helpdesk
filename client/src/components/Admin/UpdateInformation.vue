@@ -42,6 +42,7 @@
         id="confirmpassword"
         :disabled="!isChangeInformation"
         ref="confirmPassword"
+        v-model="confirm"
         required
       />
     </div>
@@ -75,6 +76,7 @@ export default {
   data() {
     return {
       isChangeInformation: false,
+      confirm: "",
     };
   },
   props: {
@@ -86,29 +88,24 @@ export default {
   methods: {
     async updateInformation(evt) {
       try {
-        this.newUser.password = this.newPass;
         console.log(this.newUser, this.user);
-        if (this.newUser.fullName === this.user.fullName)
-          throw new Error("Not change");
-        if (!this.isChangeInformation)
-          this.newUser.password = this.user.password;
-        console.log(this.newUser);
-        //       const chose = await this.$swal({
-        //         title: "Are you sure?",
-        //         text: "You won't be able to revert this!",
-        //         icon: "warning",
-        //         showCancelButton: true,
-        //         confirmButtonColor: "#3085d6",
-        //         cancelButtonColor: "#d33",
-        //         confirmButtonText: "Update",
-        //       });
-        //       if (chose.isConfirmed) {
-        //         await this.$http.put("/user/" + this.user.data.id, this.user.data);
-        //         this.$forceUpdate();
+        if (this.newUser.password !== this.confirm)
+          throw new Error("Password not match");
+        const chose = await this.$swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Update",
+        });
+        if (chose.isConfirmed) {
+          await this.$http.put("/user/" + this.user.id, this.newUser);
 
-        //         this.$swal("Updated!", "", "success");
-        //         this.$store.dispatch("userModule/signOut");
-        //       }
+          this.$swal("Updated!", "", "success");
+          this.$store.dispatch("userModule/signOut");
+        }
       } catch (err) {
         this.$swal({
           icon: "error",
@@ -119,11 +116,12 @@ export default {
     },
     turnOffOverlay() {
       this.isChangeInformation = false;
+      this.newUser = Object.assign({});
       this.$emit("turn-off-overlay");
     },
   },
   created() {
-    this.newUser = this.$props.user;
+    this.newUser = Object.assign({}, this.$props.user);
   },
 };
 </script>

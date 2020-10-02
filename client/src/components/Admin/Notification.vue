@@ -1,17 +1,41 @@
 <template>
   <div class="notification">
     <div class="btn-group">
-      <div class="button" id="accountBtn" @click="changeInformation">
-        <img src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png" />
+      <div
+        class="button"
+        id="accountBtn"
+        @click="changeInformation"
+        data-toggle="tooltip"
+        title="Change Information"
+      >
+        <img
+          src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png"
+          alt="Change Information"
+        />
       </div>
-      <div class="button" id="addBtn" @click="addNew">
-        <img src="https://img.icons8.com/android/24/000000/plus.png" />
+      <div
+        class="button"
+        id="addBtn"
+        data-toggle="tooltip"
+        @click="addNew"
+        title="Add Technician"
+      >
+        <img
+          src="https://img.icons8.com/android/24/000000/plus.png"
+          alt="Add Technician"
+        />
       </div>
-      <div class="button" id="signOutBtn" @click="signOut">
+      <div
+        class="button"
+        id="signOutBtn"
+        @click="signOut"
+        data-toggle="tooltip"
+        title="Logout"
+      >
         <img
           src="https://img.icons8.com/metro/26/000000/export.png"
           width="16px"
-          alt="signout"
+          alt="Logout"
         />
       </div>
     </div>
@@ -31,6 +55,11 @@ export default {
     addNew() {
       this.$emit("add-technician");
     },
+  },
+  mounted() {
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
   },
 };
 </script>

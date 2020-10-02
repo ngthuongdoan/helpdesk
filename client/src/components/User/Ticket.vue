@@ -1,5 +1,5 @@
 <template>
-  <tr class="ticket__row">
+  <tr class="ticket__row" @click="showTicket">
     <td class="ticket__data">{{ ticket.id }}</td>
     <td class="ticket__data">{{ ticket.title }}</td>
     <td class="ticket__data">{{ ticket.technicianName }}</td>
@@ -21,6 +21,11 @@ export default {
     ticket: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    showTicket() {
+      this.$router.push("/tickets/" + this.ticket.id);
     },
   },
 };

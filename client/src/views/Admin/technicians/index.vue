@@ -116,6 +116,7 @@ export default {
       isChangePassword: false,
       newPass: "",
       technician: {},
+      isFetching: true,
     };
   },
   components: {
@@ -200,8 +201,6 @@ export default {
           this.overlay = false;
           this.technician = {};
           this.$forceUpdate();
-
-          this.getData();
         }
       } catch (err) {
         this.$swal({
@@ -212,12 +211,21 @@ export default {
       }
     },
     async getData() {
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       try {
         this.interval = setInterval(async () => {
           const res = await this.$http.get("/user/role/technician");
           this.technicians = res.data;
           this.setPages();
-        }, 500);
+          this.isFetching = false;
+        }, 2000);
       } catch (err) {
         console.log(err);
       }
@@ -239,6 +247,9 @@ export default {
   watch: {
     technicians() {
       this.setPages();
+    },
+    isFetching() {
+      this.$swal.close();
     },
   },
   created() {

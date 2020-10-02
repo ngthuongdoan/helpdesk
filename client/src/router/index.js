@@ -15,12 +15,17 @@ const routes = [
         component: () => import("../views/User/index"),
       },
       {
-        path: "/tickets",
-        name: "tickets",
-        component: () => import("../views/User/tickets"),
+        path: "tickets",
+        name: "all-tickets",
+        component: () => import("../views/User/all-tickets"),
       },
       {
-        path: "/faq",
+        path: "tickets/:id",
+        name: "ticket",
+        component: () => import("../views/User/ticket"),
+      },
+      {
+        path: "faq",
         name: "faq",
         component: () => import("../views/User/faq"),
       },

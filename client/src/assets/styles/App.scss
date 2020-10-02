@@ -3,6 +3,9 @@
   height: 100vh;
   color: #3f414f;
 }
+.clearfix {
+  clear: both;
+}
 .custom-scrollbar {
   &::-webkit-scrollbar {
     width: 6px;

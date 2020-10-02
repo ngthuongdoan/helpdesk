@@ -43,6 +43,7 @@ export default {
       perPage: 15,
       pages: [],
       tickets: [],
+      isFetching: true,
     };
   },
   components: {
@@ -66,11 +67,20 @@ export default {
       return tickets.slice(from, to);
     },
     async getData() {
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       try {
         this.interval = setInterval(async () => {
           const res = await this.$http.get("/ticket");
           if (res.data.length !== this.tickets.length) this.tickets = res.data;
-        }, 1000);
+          this.isFetching = false;
+        }, 2000);
       } catch (err) {
         console.log(err);
       }
@@ -90,6 +100,9 @@ export default {
   watch: {
     tickets() {
       this.setPages();
+    },
+    isFetching() {
+      this.$swal.close();
     },
   },
   created() {
