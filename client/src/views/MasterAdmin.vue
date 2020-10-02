@@ -1,71 +1,22 @@
 <template>
   <div id="admin">
     <div class="overlay" v-if="overlay">
-      <form @submit.prevent="updateInformation">
-        <div class="form-group">
-          <label for="fullname">Full name:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="fullname"
-            v-model="user.data.fullName"
-          />
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            v-model="user.data.email"
-            disabled
-          />
-        </div>
-        <button
-          type="button"
-          class="btn btn-dark"
-          style="margin-bottom: 10px"
-          @click="isChangePassword = !isChangePassword"
-        >
-          Change Password
-        </button>
-        <div class="form-group">
-          <label for="password">New Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            :disabled="!isChangePassword"
-            v-model="newPass"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="confirmpassword">Confirm Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="confirmpassword"
-            :disabled="!isChangePassword"
-            ref="confirmPassword"
-            required
-          />
-        </div>
-        <input type="submit" class="btn btn-primary" value="Update" />
-        <button
-          type="button"
-          class="btn btn-secondary"
-          style="margin-left: 20px"
-          @click="overlay = false"
-        >
-          Cancel
-        </button>
-      </form>
+      <AddTechnician
+        v-if="!update"
+        @turn-off-overlay="overlay = false"
+      ></AddTechnician>
+      <UpdateInformation
+        v-else
+        :user="user.data"
+        @turn-off-overlay="overlay = false"
+      ></UpdateInformation>
     </div>
     <SideBar :user="user.data"></SideBar>
     <div class="content">
-      <Notification @change-information="overlay = true"></Notification>
+      <Notification
+        @change-information="changeInformation"
+        @add-technician="addTechnician"
+      ></Notification>
       <router-view></router-view>
     </div>
   </div>
@@ -75,64 +26,40 @@
 import { mapGetters } from "vuex";
 import SideBar from "@/components/Admin/SideBar";
 import Notification from "@/components/Admin/Notification";
+import AddTechnician from "@/components/Admin/AddTechnician";
+import UpdateInformation from "@/components/Admin/UpdateInformation";
 
 export default {
   data() {
     return {
       overlay: false,
-      isChangePassword: false,
-      newPass: "",
+      update: false,
     };
   },
-  methods: {
-    validate() {
-      if (this.isChangePassword)
-        return this.$refs.confirmPassword.value === this.newPass;
-      return true;
-    },
-    async updateInformation() {
-      if (!this.validate()) {
-        this.$swal({
-          icon: "error",
-          title: "Password not match",
-        });
-        return;
-      }
-      try {
-        this.user.data.password = this.newPass;
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Update",
-        });
-        if (chose.isConfirmed) {
-          await this.$http.put("/user/" + this.user.data.id, this.user.data);
-          this.$forceUpdate();
 
-          this.$swal("Updated!", "", "success");
-          this.$store.dispatch("userModule/signOut");
-        }
-      } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: "Sorry we busy right now",
-        });
-        console.log(err);
-      }
-    },
-  },
   computed: {
     ...mapGetters({
       user: "userModule/getUser",
     }),
   },
+  methods: {
+    changeInformation() {
+      this.overlay = true;
+      this.update = true;
+    },
+    addTechnician() {
+      this.overlay = true;
+      this.update = false;
+    },
+    turnOffOverlay() {
+      this.overlay = false;
+    },
+  },
   components: {
     SideBar,
     Notification,
+    AddTechnician,
+    UpdateInformation,
   },
   mounted() {
     let bootstrapStyle = document.createElement("link");

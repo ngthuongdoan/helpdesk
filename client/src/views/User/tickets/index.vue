@@ -65,18 +65,27 @@ export default {
       return tickets.slice(from, to);
     },
     async getData() {
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       try {
         this.interval = setInterval(async () => {
           const uid = await this.$store.getters["userModule/getUser"].data.id;
           const res = await this.$http.get("/ticket/user/" + uid);
           this.tickets = res.data;
+          this.$swal.close();
         }, 500);
       } catch (err) {
         console.log(err);
       }
     },
-    clearInterval(interval) {
-      clearInterval(interval);
+    clearInterval() {
+      clearInterval(this.interval);
     },
   },
   computed: {
@@ -95,7 +104,9 @@ export default {
   created() {
     this.getData();
   },
-
+  beforeDestroy() {
+    this.clearInterval();
+  },
   filters: {
     trimWords(value) {
       return value.split(" ").splice(0, 20).join(" ") + "...";

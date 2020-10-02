@@ -1,14 +1,12 @@
 <template>
   <div class="notification">
     <div class="btn-group">
-      <div>
-        <div class="button" id="accountBtn" @click="changeInformation">
-          <img
-            src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png"
-          />
-        </div>
+      <div class="button" id="accountBtn" @click="changeInformation">
+        <img src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png" />
       </div>
-
+      <div class="button" id="addBtn" @click="addNew">
+        <img src="https://img.icons8.com/android/24/000000/plus.png" />
+      </div>
       <div class="button" id="signOutBtn" @click="signOut">
         <img
           src="https://img.icons8.com/metro/26/000000/export.png"
@@ -29,6 +27,9 @@ export default {
     },
     changeInformation() {
       this.$emit("change-information");
+    },
+    addNew() {
+      this.$emit("add-technician");
     },
   },
 };
@@ -51,7 +52,7 @@ export default {
   margin: auto 5px;
 }
 #signOutBtn,
-#notifyBtn,
+#addBtn,
 #accountBtn {
   width: 35px;
   height: 35px;
@@ -63,7 +64,7 @@ export default {
     transform: translate(60%, 60%);
   }
 }
-#notifyBtn,
+#addBtn,
 #accountBtn {
   background-color: white;
   img {
@@ -71,7 +72,7 @@ export default {
     width: 20px;
   }
 }
-#notifyBtn {
+#addBtn {
   position: relative;
 }
 .badge {

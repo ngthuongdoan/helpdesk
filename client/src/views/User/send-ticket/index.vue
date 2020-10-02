@@ -70,13 +70,22 @@ export default {
       const user = this.$store.getters["userModule/getUser"];
       this.ticket.userId = user.data.id;
       this.ticket.fullName = user.data.fullName;
-      console.log(this.ticket);
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       this.$http
         .post("/ticket", this.ticket)
         .then((res) => {
+          this.$swal.close();
           this.$swal({
             title: "Success",
             icon: "success",
+            allowOutsideClick: false,
           });
           this.init();
         })

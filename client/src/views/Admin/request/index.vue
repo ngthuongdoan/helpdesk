@@ -1,5 +1,13 @@
 <template>
   <div class="request">
+    <transition
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
+    >
+      <div class="overlay" v-if="overlay" @click="overlay = !overlay">
+        <img :src="this.img" />
+      </div>
+    </transition>
     <div class="request__container custom-scrollbar">
       <h2 class="request__title">{{ request.title.toUpperCase() }}</h2>
       <p class="request__detail">
@@ -27,6 +35,7 @@
         v-for="img in request.images"
         :key="img"
         :src="img"
+        @click="showImage(img)"
       />
       <div class="request__assignee">
         <div class="form-group">
@@ -73,6 +82,8 @@ export default {
       isDisable: true,
       technicianId: "",
       technicianName: "",
+      overlay: false,
+      img: "",
     };
   },
   methods: {
@@ -158,8 +169,11 @@ export default {
     },
     getTechniciansName(technicians, technicianId) {
       const name = technicians.filter((tech) => tech.id === technicianId);
-
       return name.length !== 0 ? name[0].fullName : "Not Assigned";
+    },
+    showImage(img) {
+      this.overlay = true;
+      this.img = img;
     },
   },
   watch: {
@@ -200,9 +214,22 @@ export default {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
     border-radius: 10px;
   }
+  .overlay {
+    animation-duration: 0.3s;
+    top: 0;
+    left: 0;
+    img {
+      max-width: 800px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
   &__img {
     margin: 10px;
     max-width: 250px;
+    cursor: pointer;
   }
   .label {
     font-weight: bold;

@@ -68,7 +68,7 @@ const routes = [
     children: [
       {
         path: "dashboard",
-        name: "dashboard",
+        name: "technician-dashboard",
         component: () => import("../views/Admin/index"),
       },
       {
