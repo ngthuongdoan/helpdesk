@@ -123,6 +123,14 @@ export default {
             this.technicians,
             this.technicianId
           );
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
           await this.$http.put(
             "/ticket/" + this.$route.params.id,
             this.request

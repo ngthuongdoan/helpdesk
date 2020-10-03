@@ -11,8 +11,8 @@ import VueSuggestion from "vue-suggestion";
 Vue.use(VueSuggestion);
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios);
-// axios.defaults.baseURL = "https://helpdesk-v2.herokuapp.com/v1";
-axios.defaults.baseURL = "http://10.3.65.133:8081/v1";
+axios.defaults.baseURL = "https://helpdesk-v2.herokuapp.com/v1";
+// axios.defaults.baseURL = "http://10.3.65.133:8081/v1";
 
 Vue.config.productionTip = false;
 

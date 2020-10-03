@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Ticket from "@/components/Admin/Ticket.vue";
+import Ticket from "@/components/Technician/Ticket.vue";
 import Pagination from "@/components/Pagination.vue";
 import mockTickets from "@/mocks/ticket.js";
 export default {

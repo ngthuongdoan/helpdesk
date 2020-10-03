@@ -96,7 +96,7 @@ export default {
     document.body.appendChild(popperjs);
     document.body.appendChild(bootstrap);
   },
-  beforeDestroy() {
+  destroyed() {
     let bootstrapStyle = document.getElementById("bsstyle");
     document.head.removeChild(bootstrapStyle);
 

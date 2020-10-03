@@ -19,9 +19,6 @@
         {{ request.status | getStatusTime }}
       </p>
       <p class="request__detail">
-        <span class="label">Assigned: </span>{{ technicianName }}
-      </p>
-      <p class="request__detail">
         <span class="label">Start: </span>{{ request.startDate | changeDate }}
       </p>
       <p class="request__detail">
@@ -37,37 +34,15 @@
         :src="img"
         @click="showImage(img)"
       />
-      <div class="request__assignee">
-        <div class="form-group">
-          <label for="exampleFormControlSelect1">Assign to</label>
-          <select
-            class="form-control"
-            id="exampleFormControlSelect1"
-            v-model="technicianId"
-          >
-            <option
-              v-for="technician in technicians"
-              :key="technician.id"
-              :value="technician.id"
-            >
-              {{ technician.fullName }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <button
-        type="button"
-        class="btn btn-primary"
-        :disabled="isDisable"
-        @click="updateTicket"
-      >
-        Update
+      <div class="clearfix"></div>
+      <button type="button" class="btn btn-primary" @click="updateTicket">
+        Done
       </button>
       <button type="button" class="btn btn-secondary" @click="back">
         Cancel
       </button>
-      <button type="button" class="btn btn-danger" @click="deleteTicket">
-        Delete
+      <button type="button" class="btn btn-danger" @click="dropTicket">
+        Drop
       </button>
     </div>
   </div>
@@ -78,10 +53,6 @@ export default {
   data() {
     return {
       request: null,
-      technicians: [],
-      isDisable: true,
-      technicianId: "",
-      technicianName: "",
       overlay: false,
       img: "",
     };
@@ -89,19 +60,9 @@ export default {
   methods: {
     async getData() {
       try {
-        const tickets = await this.$http.get(
-          "/ticket/" + this.$route.params.id
-        );
-        const technicians = await this.$http.get("/user/role/technician");
-        this.request = tickets.data;
-        this.technicianId = this.request.technicianId
-          ? this.request.technicianId
-          : "";
-        this.technicians = technicians.data;
-        this.technicianName = this.getTechniciansName(
-          this.technicians,
-          this.technicianId
-        );
+        const ticket = await this.$http.get("/ticket/" + this.$route.params.id);
+        this.request = ticket.data;
+        console.log(this.request);
       } catch (err) {
         console.log(err);
       }
@@ -118,11 +79,20 @@ export default {
           confirmButtonText: "Update",
         });
         if (chose.isConfirmed) {
-          this.request.technicianId = this.technicianId;
-          this.request.technicianName = this.getTechniciansName(
-            this.technicians,
-            this.technicianId
-          );
+          const status = {
+            name: "Done",
+            time: new Date().toISOString(),
+          };
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
+          this.request.status.push(status);
+          console.log(this.request);
           await this.$http.put(
             "/ticket/" + this.$route.params.id,
             this.request
@@ -133,12 +103,11 @@ export default {
       } catch (err) {
         this.$swal({
           icon: "error",
-          title: "Sorry we busy right now",
+          title: err.message,
         });
-        console.log(err);
       }
     },
-    async deleteTicket() {
+    async dropTicket() {
       try {
         const chose = await this.$swal({
           title: "Are you sure?",
@@ -147,14 +116,29 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Delete",
+          confirmButtonText: "Drop",
         });
         if (chose.isConfirmed) {
-          this.request.technicianId = this.technicianId;
+          const status = {
+            name: "Drop",
+            time: new Date(),
+          };
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
+          this.request.status.push(status);
+          await this.$http.put(
+            "/ticket/" + this.$route.params.id,
+            this.request
+          );
 
-          await this.$http.delete("/ticket/" + this.$route.params.id);
-          this.$swal("Delete!", "", "success");
-          this.back();
+          this.$swal("Updated!", "", "success");
+          this.getData();
         }
       } catch (err) {
         this.$swal({
@@ -167,18 +151,9 @@ export default {
     back() {
       this.$router.back();
     },
-    getTechniciansName(technicians, technicianId) {
-      const name = technicians.filter((tech) => tech.id === technicianId);
-      return name.length !== 0 ? name[0].fullName : "Not Assigned";
-    },
     showImage(img) {
       this.overlay = true;
       this.img = img;
-    },
-  },
-  watch: {
-    technicianId() {
-      this.isDisable = false;
     },
   },
   filters: {

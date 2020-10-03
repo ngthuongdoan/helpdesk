@@ -15,7 +15,7 @@
         />
       </span>
       <br />
-      <div class="btn-group">
+      <div class="button-group">
         <input type="submit" value="Submit" />
         <button @click="init">Clear</button>
       </div>

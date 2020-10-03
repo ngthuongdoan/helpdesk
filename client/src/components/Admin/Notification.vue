@@ -1,6 +1,6 @@
 <template>
   <div class="notification">
-    <div class="btn-group">
+    <div class="button-group">
       <div
         class="button"
         id="accountBtn"
@@ -54,10 +54,11 @@ export default {
   position: sticky;
   display: grid;
 }
-.btn-group {
+.button-group {
   justify-self: end;
   align-self: center;
   margin: auto 30px;
+  display: inline-flex;
 }
 .button {
   margin: auto 5px;
@@ -85,14 +86,6 @@ export default {
 }
 #addBtn {
   position: relative;
-}
-.badge {
-  background: rgb(255, 72, 72);
-  display: block;
-  position: absolute;
-  right: 0;
-  transform: translate(25%, -25%);
-  border-radius: 50%;
 }
 .option {
   position: absolute;

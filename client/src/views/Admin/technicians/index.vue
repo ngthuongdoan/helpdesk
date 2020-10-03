@@ -163,6 +163,14 @@ export default {
           confirmButtonText: "Update",
         });
         if (chose.isConfirmed) {
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
           await this.$http.put(
             "/user/" + this.newTechnician.id,
             this.newTechnician
@@ -190,6 +198,14 @@ export default {
           confirmButtonText: "Delete",
         });
         if (chose.isConfirmed) {
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
           await this.$http.delete("/user/" + this.technician.id);
 
           this.$swal("Deleted!", "", "success");
