@@ -1,6 +1,6 @@
 <template>
   <div class="notification">
-    <div class="button-group">
+    <div class="buttons">
       <div
         class="button"
         id="accountBtn"
@@ -54,7 +54,7 @@ export default {
   position: sticky;
   display: grid;
 }
-.button-group {
+.buttons {
   justify-self: end;
   align-self: center;
   margin: auto 30px;

@@ -9,7 +9,7 @@
         <router-link to="/faq" tag="li">FAQ</router-link>
       </ul>
     </nav>
-    <div class="button-group">
+    <div class="buttons">
       <button id="sendBtn" @click="send">Send Ticket</button>
       <button id="logoutBtn" @click="logout">Log Out</button>
     </div>
@@ -86,7 +86,7 @@ nav {
     }
   }
 }
-.button-group {
+.buttons {
   grid-column: 3/4;
   justify-self: flex-end;
   align-self: center;

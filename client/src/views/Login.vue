@@ -1,29 +1,33 @@
 <template>
-  <div class="login__container">
-    <form class="login__form" @submit.prevent="submitForm">
-      <label for>Username</label>
-      <br />
-      <input type="text" v-model="login.username" required />
-      <br />
-      <label for>Password</label>
-      <br />
-      <input type="password" v-model="login.password" required />
-      <span id="eye">
-        <img
-          src="https://img.icons8.com/android/24/000000/visible.png"
-          alt="show-password"
-        />
-      </span>
-      <br />
-      <div class="button-group">
-        <input type="submit" value="Submit" />
-        <button @click="init">Clear</button>
-      </div>
-    </form>
+  <div>
+    <div class="login__container" v-if="!isMobile">
+      <form class="login__form" @submit.prevent="submitForm">
+        <label for>Username</label>
+        <br />
+        <input type="text" v-model="login.username" required />
+        <br />
+        <label for>Password</label>
+        <br />
+        <input type="password" v-model="login.password" required />
+        <span id="eye">
+          <img
+            src="https://img.icons8.com/android/24/000000/visible.png"
+            alt="show-password"
+          />
+        </span>
+        <br />
+        <div class="buttons">
+          <input type="submit" value="Submit" />
+          <button @click="init">Clear</button>
+        </div>
+      </form>
+    </div>
+    <Mobile v-else></Mobile>
   </div>
 </template>
 
 <script>
+import Mobile from "@/components/Mobile";
 export default {
   data() {
     return {
@@ -31,7 +35,11 @@ export default {
         username: "",
         password: "",
       },
+      isMobile: false,
     };
+  },
+  components: {
+    Mobile,
   },
   methods: {
     init() {
@@ -79,20 +87,25 @@ export default {
     },
   },
   mounted() {
-    const eye = document.getElementById("eye");
-    const password = document.querySelector("input[type='password']");
-    let wasShowed = false;
-    eye.addEventListener("click", () => {
-      if (wasShowed) {
-        wasShowed = false;
-        eye.style.opacity = "0.4";
-        password.type = "password";
-      } else {
-        wasShowed = true;
-        eye.style.opacity = "1";
-        password.type = "text";
-      }
-    });
+    if (!this.isMobile) {
+      const eye = document.getElementById("eye");
+      const password = document.querySelector("input[type='password']");
+      let wasShowed = false;
+      eye.addEventListener("click", () => {
+        if (wasShowed) {
+          wasShowed = false;
+          eye.style.opacity = "0.4";
+          password.type = "password";
+        } else {
+          wasShowed = true;
+          eye.style.opacity = "1";
+          password.type = "text";
+        }
+      });
+    }
+  },
+  created() {
+    if (window.innerWidth < 1266) this.isMobile = true;
   },
 };
 </script>

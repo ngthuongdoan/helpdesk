@@ -2,7 +2,11 @@
   <div>
     <Header></Header>
     <div class="container">
-      <transition appear enter-active-class="animate__animated animate__fadeIn" mode="out-in">
+      <transition
+        appear
+        enter-active-class="animate__animated animate__fadeIn"
+        mode="out-in"
+      >
         <router-view />
       </transition>
     </div>
