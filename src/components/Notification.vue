@@ -2,27 +2,33 @@
   <div class="notification">
     <div class="buttons">
       <div
-          id="accountBtn"
-          class="button"
-          title="Change Information"
-          @click="changeInformation"
+        id="accountBtn"
+        class="button"
+        title="Change Information"
+        @click="changeInformation"
       >
         <img
-            alt="Change Information"
-            src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png"
+          alt="Change Information"
+          src="https://img.icons8.com/ios-glyphs/30/000000/guest-male.png"
         />
       </div>
-      <div id="addBtn" class="button" title="Add Technician" @click="addNew">
+      <div
+        v-if="!isTechnician"
+        id="addBtn"
+        class="button"
+        title="Add Technician"
+        @click="addNew"
+      >
         <img
-            alt="Add Technician"
-            src="https://img.icons8.com/android/24/000000/plus.png"
+          alt="Add Technician"
+          src="https://img.icons8.com/android/24/000000/plus.png"
         />
       </div>
       <div id="signOutBtn" class="button" title="Logout" @click="signOut">
         <img
-            alt="Logout"
-            src="https://img.icons8.com/metro/26/000000/export.png"
-            width="16px"
+          alt="Logout"
+          src="https://img.icons8.com/metro/26/000000/export.png"
+          width="16px"
         />
       </div>
     </div>
@@ -34,14 +40,20 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch("userModule/signOut");
-      this.$router.push("/login").catch(() => {
-      });
+      this.$router.push("/login").catch(() => {});
     },
     changeInformation() {
       this.$emit("change-information");
     },
     addNew() {
       this.$emit("add-technician");
+    },
+  },
+  computed: {
+    isTechnician() {
+      return (
+        this.$store.getters["userModule/getUser"].data.role === "technician"
+      );
     },
   },
 };

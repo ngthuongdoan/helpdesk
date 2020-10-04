@@ -69,20 +69,15 @@ const routes = [
   },
   {
     path: "/technician",
-    component: () => import("../views/MasterAdmin.vue"),
+    component: () => import("../views/MasterTechnician.vue"),
     children: [
       {
-        path: "dashboard",
-        name: "technician-dashboard",
+        path: "",
+        name: "technician-all-tickets",
         component: () => import("../views/Technician/index"),
       },
       {
-        path: "tickets",
-        name: "technician-all-tickets",
-        component: () => import("../views/Technician/all-tickets"),
-      },
-      {
-        path: "tickets/:id",
+        path: ":id",
         name: "technician-ticket",
         component: () => import("../views/Technician/ticket"),
       },

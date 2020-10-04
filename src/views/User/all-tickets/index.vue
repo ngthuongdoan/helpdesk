@@ -1,38 +1,38 @@
 <template>
   <div class="ticket__container">
     <Pagination
-        v-if="isOnePage"
-        :page="page"
-        :pages="pages"
-        @changePage="page = $event"
-        @next="page++"
-        @previous="page--"
+      v-if="isOnePage"
+      :page="page"
+      :pages="pages"
+      @changePage="page = $event"
+      @next="page++"
+      @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">No ticket</p>
     </div>
     <table v-else class="ticket__table">
       <thead>
-      <tr>
-        <th>ID</th>
-        <th>Ticket Title</th>
-        <th>Technician</th>
-        <th>Status</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-      </tr>
+        <tr>
+          <th>ID</th>
+          <th>Ticket Title</th>
+          <th>Technician</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
       </thead>
       <Ticket
-          v-for="ticket in displayedTickets"
-          :key="ticket.id"
-          :ticket="ticket"
+        v-for="ticket in displayedTickets"
+        :key="ticket.id"
+        :ticket="ticket"
       ></Ticket>
     </table>
   </div>
 </template>
 
 <script>
-import Ticket from "@/components/User/Ticket.vue";
+import Ticket from "@/components/Ticket.vue";
 import Pagination from "@/components/Pagination.vue";
 // import mockTickets from "@/mocks/ticket.js";
 export default {

@@ -1,22 +1,13 @@
 <template>
   <div id="admin">
     <div v-if="overlay" class="overlay">
-      <AddTechnician
-        v-if="!update"
-        @turn-off-overlay="overlay = false"
-      ></AddTechnician>
       <UpdateInformation
-        v-else
-        :user="user"
+        :user="user.data"
         @turn-off-overlay="overlay = false"
       ></UpdateInformation>
     </div>
-    <SideBar :user="user"></SideBar>
     <div class="content">
-      <Notification
-        @change-information="changeInformation"
-        @add-technician="addTechnician"
-      ></Notification>
+      <Notification @change-information="turnOnOverlay"></Notification>
       <router-view></router-view>
     </div>
   </div>
@@ -25,14 +16,12 @@
 <script>
 import SideBar from "@/components/Admin/SideBar";
 import Notification from "@/components/Notification";
-import AddTechnician from "@/components/Admin/AddTechnician";
 import UpdateInformation from "@/components/Admin/UpdateInformation";
 
 export default {
   data() {
     return {
       overlay: false,
-      update: false,
     };
   },
   mounted() {
@@ -42,13 +31,8 @@ export default {
     this.$helpers.removeBoostrap();
   },
   methods: {
-    changeInformation() {
+    turnOnOverlay() {
       this.overlay = true;
-      this.update = true;
-    },
-    addTechnician() {
-      this.overlay = true;
-      this.update = false;
     },
     turnOffOverlay() {
       this.overlay = false;
@@ -56,13 +40,12 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.getters["userModule/getUser"].data;
+      return this.$store.getters["userModule/getUser"];
     },
   },
   components: {
     SideBar,
     Notification,
-    AddTechnician,
     UpdateInformation,
   },
 };
@@ -70,4 +53,11 @@ export default {
 
 <style lang="scss">
 @import "~@/assets/styles/MasterAdmin.scss";
+#admin {
+  display: block;
+}
+.content {
+  margin: 0;
+  height: 100%;
+}
 </style>

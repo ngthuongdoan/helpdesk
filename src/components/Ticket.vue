@@ -1,8 +1,11 @@
 <template>
-  <tr class="ticket__row" @click="showTicket">
+  <tr class="ticket__row" v-if="ticket" @click="showTicket">
     <td class="ticket__data">{{ ticket.id }}</td>
+    <td class="ticket__data" v-if="!isUser">{{ ticket.fullName }}</td>
     <td class="ticket__data">{{ ticket.title }}</td>
-    <td class="ticket__data">{{ ticket.technicianName }}</td>
+    <td class="ticket__data" v-if="!isTechincian">
+      {{ ticket.technicianName }}
+    </td>
     <td class="ticket__data">
       {{ ticket.status[ticket.status.length - 1].name }}
     </td>
@@ -25,7 +28,30 @@ export default {
   },
   methods: {
     showTicket() {
-      this.$router.push("/tickets/" + this.ticket.id);
+      let url = "";
+      switch (this.role) {
+        case "user":
+          url = "/tickets/" + this.ticket.id;
+          break;
+        case "admin":
+          url = "/admin/tickets/" + this.ticket.id;
+          break;
+        case "technician":
+          url = "/technician/" + this.ticket.id;
+          break;
+      }
+      this.$router.push(url);
+    },
+  },
+  computed: {
+    role() {
+      return this.$store.getters["userModule/getUser"].data.role;
+    },
+    isTechincian() {
+      return this.role === "technician";
+    },
+    isUser() {
+      return this.role === "user";
     },
   },
 };

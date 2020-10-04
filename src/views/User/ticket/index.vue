@@ -2,11 +2,11 @@
 <template>
   <div class="ticket-user">
     <transition
-        enter-active-class="animate__animated animate__fadeIn"
-        leave-active-class="animate__animated animate__fadeOut"
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
     >
       <div v-if="imgOverlay" id="imgOverlay" @click="imgOverlay = !imgOverlay">
-        <img :src="this.img" alt="imgOverlay"/>
+        <img :src="this.img" alt="imgOverlay" />
       </div>
     </transition>
     <div class="ticket-user__container custom-scrollbar">
@@ -26,39 +26,39 @@
         <span class="label">End: </span>{{ newTicket.endDate | changeDate }}
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Place: </span><br/>
-        <input v-model="ticket.place" :disabled="!isUpdate" type="text"/>
+        <span class="label">Place: </span><br />
+        <input v-model="ticket.place" :disabled="!isUpdate" type="text" />
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Description: </span><br/>
+        <span class="label">Description: </span><br />
         <textarea
-            v-model="newTicket.description"
-            :disabled="!isUpdate"
-            cols="30"
-            rows="10"
+          v-model="newTicket.description"
+          :disabled="!isUpdate"
+          cols="30"
+          rows="10"
         ></textarea>
       </p>
       <img
-          v-for="img in newTicket.images"
-          :key="img"
-          :src="img"
-          class="ticket-user__img"
-          @click="showImage(img)"
+        v-for="img in newTicket.images"
+        :key="img"
+        :src="img"
+        class="ticket-user__img"
+        @click="showImage(img)"
       />
       <div class="clearfix"></div>
       <button
-          v-if="!isDone && !isUpdate"
-          class="btn btn-primary"
-          type="button"
-          @click="isUpdate = !isUpdate"
+        v-if="!isDone && !isUpdate"
+        class="btn btn-primary"
+        type="button"
+        @click="isUpdate = !isUpdate"
       >
         Change Information
       </button>
       <button
-          v-if="!isDone && isUpdate"
-          class="btn btn-primary"
-          type="button"
-          @click="updateTicket"
+        v-if="!isDone && isUpdate"
+        class="btn btn-primary"
+        type="button"
+        @click="updateTicket"
       >
         Update
       </button>
@@ -109,9 +109,18 @@ export default {
           confirmButtonText: "Update",
         });
         if (chose.isConfirmed) {
+          // noinspection ES6MissingAwait
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
           await this.$http.put(
-              "/ticket/" + this.$route.params.id,
-              this.newTicket
+            "/ticket/" + this.$route.params.id,
+            this.newTicket
           );
           await this.$swal("Updated!", "", "success");
           this.back();
@@ -135,6 +144,15 @@ export default {
           confirmButtonText: "Delete",
         });
         if (chose.isConfirmed) {
+          // noinspection ES6MissingAwait
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
           await this.$http.delete("/ticket/" + this.$route.params.id);
           await this.$swal("Delete!", "", "success");
           this.back();
@@ -160,8 +178,8 @@ export default {
     },
     getStatusTime(value) {
       return value
-          ? new Date(value[value.length - 1].time).toLocaleString()
-          : "";
+        ? new Date(value[value.length - 1].time).toLocaleString()
+        : "";
     },
     getStatusName(value) {
       return value ? value[value.length - 1].name : "";

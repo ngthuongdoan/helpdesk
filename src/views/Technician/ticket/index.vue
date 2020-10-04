@@ -2,11 +2,11 @@
 <template>
   <div class="ticket">
     <transition
-        enter-active-class="animate__animated animate__fadeIn"
-        leave-active-class="animate__animated animate__fadeOut"
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
     >
       <div v-if="overlay" class="overlay" @click="overlay = !overlay">
-        <img :src="this.img" alt="imgOverlay"/>
+        <img :src="this.img" alt="imgOverlay" />
       </div>
     </transition>
     <div class="ticket__container custom-scrollbar">
@@ -29,12 +29,12 @@
         <span class="label">Description: </span>{{ ticket.description }}
       </p>
       <img
-          v-for="img in ticket.images"
-          :key="img"
-          :src="img"
-          alt="image"
-          class="ticket__img"
-          @click="showImage(img)"
+        v-for="img in ticket.images"
+        :key="img"
+        :src="img"
+        alt="image"
+        class="ticket__img"
+        @click="showImage(img)"
       />
       <div class="clearfix"></div>
       <button class="btn btn-primary" type="button" @click="updateTicket">
@@ -160,17 +160,19 @@ export default {
     },
     getStatusTime(value) {
       return value
-          ? new Date(value[value.length - 1].time).toLocaleString()
-          : "";
+        ? new Date(value[value.length - 1].time).toLocaleString()
+        : "";
     },
     getStatusName(value) {
       return value ? value[value.length - 1].name : "";
     },
   },
-
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/Technician/Ticket.scss";
+.ticket__container {
+  height: 100%;
+}
 </style>

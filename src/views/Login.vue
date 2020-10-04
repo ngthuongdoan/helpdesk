@@ -9,7 +9,12 @@
         <br />
         <label for="password">Password</label>
         <br />
-        <input id="password" type="password" v-model="login.password" required />
+        <input
+          id="password"
+          type="password"
+          v-model="login.password"
+          required
+        />
         <span id="eye">
           <img
             src="https://img.icons8.com/android/24/000000/visible.png"
@@ -73,7 +78,7 @@ export default {
           this.$router.replace("/admin/dashboard");
           break;
         case "technician":
-          this.$router.replace("/technician/dashboard");
+          this.$router.replace("/technician");
           break;
         case "user":
           this.$router.replace("/");
@@ -89,7 +94,7 @@ export default {
         if (this.login.password === "") throw new Error("Password blank");
         const user = await this.$http.post("/login", this.login);
         await this.$store.dispatch("userModule/logIn", user.data);
-        this.$swal({
+        await this.$swal({
           title: "Success",
           icon: "success",
         }).then();

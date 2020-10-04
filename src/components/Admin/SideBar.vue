@@ -61,13 +61,7 @@ export default {
           {
             id: "dashboard",
             name: "Dashboard",
-            url: "/technician/dashboard",
-            check: true,
-          },
-          {
-            id: "tickets",
-            name: "Tickets",
-            url: "/technician/tickets",
+            url: "/technician",
             check: true,
           },
         ];

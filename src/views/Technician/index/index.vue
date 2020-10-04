@@ -1,31 +1,49 @@
+<!--suppress ES6MissingAwait -->
 <template>
-  <div class="logger__container">
+  <div class="ticket__container">
     <Pagination
-        v-if="isOnePage"
-        :page="page"
-        :pages="pages"
-        @changePage="page = $event"
-        @next="page++"
-        @previous="page--"
+      v-if="isOnePage"
+      :page="page"
+      :pages="pages"
+      @changePage="page = $event"
+      @next="page++"
+      @previous="page--"
     ></Pagination>
-    <div v-if="displayedLogs.length === 0">
-      <p id="noLog">No logs</p>
+    <div v-if="displayedTickets.length === 0">
+      <p id="noTicket">No ticket</p>
     </div>
-    <Log v-for="log in displayedLogs" :key="log.id" :log="log"></Log>
+    <table v-else>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Employee</th>
+          <th>Ticket Title</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
+      </thead>
+      <Ticket
+        v-for="ticket in displayedTickets"
+        :key="ticket.id"
+        :ticket="ticket"
+      ></Ticket>
+    </table>
   </div>
 </template>
 
 <script>
+import Ticket from "@/components/Ticket.vue";
 import Pagination from "@/components/Pagination.vue";
-import Log from "@/components/Admin/Log.vue";
-
+// noinspection ES6MissingAwait
 export default {
   data() {
     return {
       page: 1,
-      perPage: 9,
+      perPage: 15,
       pages: [],
-      logs: [],
+      tickets: [],
+      isFetching: true,
     };
   },
   created() {
@@ -34,29 +52,39 @@ export default {
   beforeDestroy() {
     this.clearInterval(this.interval);
   },
+
   methods: {
     setPages() {
-      if (this.logs.length === 0) return;
+      if (this.tickets.length === 0) return;
       this.pages = [];
-      let numberOfPages = Math.ceil(this.logs.length / this.perPage);
+      let numberOfPages = Math.ceil(this.tickets.length / this.perPage);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
     },
-    paginate(logs) {
+    paginate(tickets) {
       let page = this.page;
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
-      return logs.slice(from, to);
+      return tickets.slice(from, to);
     },
     async getData() {
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       try {
-        let that = this;
         this.interval = setInterval(async () => {
-          const res = await that.$http.get("/log");
-          if (res.data.length !== that.logs.length) that.logs = res.data;
-        }, 1000);
+          const uid = await this.$store.getters["userModule/getUser"].data.id;
+          const res = await this.$http.get("/ticket/technicians/" + uid);
+          this.tickets = res.data;
+          this.isFetching = false;
+        }, 2000);
       } catch (err) {
         console.log(err);
       }
@@ -66,16 +94,19 @@ export default {
     },
   },
   computed: {
-    displayedLogs() {
-      return this.logs.length !== 0 ? this.paginate(this.logs) : [];
+    displayedTickets() {
+      return this.tickets.length !== 0 ? this.paginate(this.tickets) : [];
     },
     isOnePage() {
       return this.pages.length > 1;
     },
   },
   watch: {
-    logs() {
+    tickets() {
       this.setPages();
+    },
+    isFetching() {
+      this.$swal.close();
     },
   },
   filters: {
@@ -84,12 +115,12 @@ export default {
     },
   },
   components: {
-    Log,
+    Ticket,
     Pagination,
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/styles/Technician/index.scss";
+@import "~@/assets/styles/Admin/AllTickets.scss";
 </style>
