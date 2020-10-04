@@ -1,16 +1,17 @@
 <template>
-  <tr class="ticket-admin__row" @click="showTicket">
+  <tr class="ticket-admin__row" v-if="ticket" @click="showTicket">
     <td class="ticket-admin__data">{{ ticket.id }}</td>
     <td class="ticket-admin__data">{{ ticket.fullName }}</td>
     <td class="ticket-admin__data">{{ ticket.title }}</td>
-    <td class="ticket-admin__data">{{ ticket.technicianName }}</td>
     <td class="ticket-admin__data">
       {{ ticket.status[ticket.status.length - 1].name }}
     </td>
     <td class="ticket-admin__data">
       {{ new Date(ticket.startDate).toLocaleString() }}
     </td>
-    <td class="ticket-admin__data">{{ ticket.endDate }}</td>
+    <td class="ticket-admin__data">
+      {{ ticket.endDate ? new Date(ticket.endDate).toLocaleString() : "" }}
+    </td>
   </tr>
 </template>
 
@@ -22,10 +23,24 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      disable: false,
+    };
+  },
   methods: {
     showTicket() {
-      this.$router.push("/technician/requests/" + this.ticket.id);
+      if (!this.disable)
+        this.$router.push("/technician/tickets/" + this.ticket.id);
     },
+  },
+  created() {
+    if (
+      this.$props.ticket.status[this.$props.ticket.status.length - 1].name ===
+      "Done"
+    ) {
+      this.disable = true;
+    }
   },
 };
 </script>

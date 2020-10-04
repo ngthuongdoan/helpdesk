@@ -3,11 +3,11 @@
     <Header></Header>
     <div class="container">
       <transition
-        appear
-        enter-active-class="animate__animated animate__fadeIn"
-        mode="out-in"
+          appear
+          enter-active-class="animate__animated animate__fadeIn"
+          mode="out-in"
       >
-        <router-view />
+        <router-view/>
       </transition>
     </div>
   </div>
@@ -21,6 +21,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

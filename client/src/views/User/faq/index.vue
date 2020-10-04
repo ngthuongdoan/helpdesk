@@ -1,10 +1,11 @@
 <template>
   <div class="faq__container">
+    <!--suppress HtmlFormInputWithoutLabel -->
     <input
-      type="text"
-      class="vs__input custom-searchbar"
-      placeholder="Search here..."
-      v-model="input"
+        v-model="input"
+        class="vs__input custom-searchbar"
+        placeholder="Search here..."
+        type="text"
     />
     <div class="faq__inner-container custom-scrollbar">
       <FAQ v-for="faq in searchItems" :key="faq.id" :faq="faq"></FAQ>
@@ -14,26 +15,27 @@
 
 <script>
 import FAQ from "@/components/User/FAQ";
+
 export default {
-  components: {
-    FAQ,
-  },
   data() {
     return {
       input: "",
       searchItems: [],
     };
   },
-  watch: {
-    input() {
-      this.searchItems = this.faqs.filter((faq) =>
-        faq.question.includes(this.input)
-      );
-    },
-  },
   async created() {
     this.faqs = await this.$store.getters["userModule/getFaq"];
     this.searchItems = this.faqs;
+  },
+  watch: {
+    input() {
+      this.searchItems = this.faqs.filter((faq) =>
+          faq.question.includes(this.input)
+      );
+    },
+  },
+  components: {
+    FAQ,
   },
 };
 </script>

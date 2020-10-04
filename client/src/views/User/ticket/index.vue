@@ -1,11 +1,12 @@
+<!--suppress ALL -->
 <template>
   <div class="ticket-user">
     <transition
-      enter-active-class="animate__animated animate__fadeIn"
-      leave-active-class="animate__animated animate__fadeOut"
+        enter-active-class="animate__animated animate__fadeIn"
+        leave-active-class="animate__animated animate__fadeOut"
     >
-      <div id="imgOverlay" v-if="imgOverlay" @click="imgOverlay = !imgOverlay">
-        <img :src="this.img" />
+      <div v-if="imgOverlay" id="imgOverlay" @click="imgOverlay = !imgOverlay">
+        <img :src="this.img" alt="imgOverlay"/>
       </div>
     </transition>
     <div class="ticket-user__container custom-scrollbar">
@@ -25,46 +26,46 @@
         <span class="label">End: </span>{{ newTicket.endDate | changeDate }}
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Place: </span><br />
-        <input type="text" v-model="ticket.place" :disabled="!isUpdate" />
+        <span class="label">Place: </span><br/>
+        <input v-model="ticket.place" :disabled="!isUpdate" type="text"/>
       </p>
       <p class="ticket-user__detail">
-        <span class="label">Description: </span><br />
+        <span class="label">Description: </span><br/>
         <textarea
-          cols="30"
-          rows="10"
-          v-model="newTicket.description"
-          :disabled="!isUpdate"
+            v-model="newTicket.description"
+            :disabled="!isUpdate"
+            cols="30"
+            rows="10"
         ></textarea>
       </p>
       <img
-        class="ticket-user__img"
-        v-for="img in newTicket.images"
-        :key="img"
-        :src="img"
-        @click="showImage(img)"
+          v-for="img in newTicket.images"
+          :key="img"
+          :src="img"
+          class="ticket-user__img"
+          @click="showImage(img)"
       />
       <div class="clearfix"></div>
       <button
-        type="button"
-        class="btn btn-primary"
-        v-if="!isUpdate"
-        @click="isUpdate = !isUpdate"
+          v-if="!isDone && !isUpdate"
+          class="btn btn-primary"
+          type="button"
+          @click="isUpdate = !isUpdate"
       >
         Change Information
       </button>
       <button
-        type="button"
-        class="btn btn-primary"
-        v-if="isUpdate"
-        @click="updateTicket"
+          v-if="!isDone && isUpdate"
+          class="btn btn-primary"
+          type="button"
+          @click="updateTicket"
       >
         Update
       </button>
-      <button type="button" class="btn btn-secondary" @click="back">
+      <button class="btn btn-secondary" type="button" @click="back">
         Cancel
       </button>
-      <button type="button" class="btn btn-danger" @click="deleteTicket">
+      <button class="btn btn-danger" type="button" @click="deleteTicket">
         Delete
       </button>
     </div>
@@ -80,6 +81,7 @@ export default {
       img: "",
       isUpdate: false,
       newTicket: {},
+      isDone: false,
     };
   },
   methods: {
@@ -88,13 +90,15 @@ export default {
         const ticket = await this.$http.get("/ticket/" + this.$route.params.id);
         this.ticket = ticket.data;
         this.newTicket = Object.assign({}, this.ticket);
+        if (this.ticket.status[this.ticket.status.length - 1].name === "Done") {
+          this.isDone = true;
+        }
       } catch (err) {
         console.log(err);
       }
     },
     async updateTicket() {
       try {
-        console.log(this.newTicket);
         const chose = await this.$swal({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -106,8 +110,8 @@ export default {
         });
         if (chose.isConfirmed) {
           await this.$http.put(
-            "/ticket/" + this.$route.params.id,
-            this.newTicket
+              "/ticket/" + this.$route.params.id,
+              this.newTicket
           );
           await this.$swal("Updated!", "", "success");
           this.back();
@@ -156,8 +160,8 @@ export default {
     },
     getStatusTime(value) {
       return value
-        ? new Date(value[value.length - 1].time).toLocaleString()
-        : "";
+          ? new Date(value[value.length - 1].time).toLocaleString()
+          : "";
     },
     getStatusName(value) {
       return value ? value[value.length - 1].name : "";
@@ -165,55 +169,13 @@ export default {
   },
 
   mounted() {
-    let bootstrapStyle = document.createElement("link");
-    bootstrapStyle.setAttribute(
-      "href",
-      "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    );
-    bootstrapStyle.setAttribute("rel", "stylesheet");
-    bootstrapStyle.setAttribute("id", "bsstyle");
-
-    let jQuery = document.createElement("script");
-    jQuery.setAttribute("id", "jquery");
-    jQuery.setAttribute(
-      "src",
-      "https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    );
-
-    let popperjs = document.createElement("script");
-    popperjs.setAttribute("id", "popperjs");
-    popperjs.setAttribute(
-      "src",
-      "https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-    );
-
-    let bootstrap = document.createElement("script");
-    bootstrap.setAttribute("id", "bootstrap");
-    bootstrap.setAttribute(
-      "src",
-      "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-    );
-
-    document.head.appendChild(bootstrapStyle);
-    document.body.appendChild(jQuery);
-    document.body.appendChild(popperjs);
-    document.body.appendChild(bootstrap);
+    this.$helpers.importBoostrap();
   },
   created() {
     this.getData();
   },
   beforeDestroy() {
-    let bootstrapStyle = document.getElementById("bsstyle");
-    document.head.removeChild(bootstrapStyle);
-
-    let jQuery = document.getElementById("jquery");
-    document.body.removeChild(jQuery);
-
-    let popperjs = document.getElementById("popperjs");
-    document.body.removeChild(popperjs);
-
-    let bootstrap = document.getElementById("bootstrap");
-    document.body.removeChild(bootstrap);
+    this.$helpers.removeBoostrap();
   },
 };
 </script>
@@ -233,6 +195,7 @@ export default {
     border-radius: 10px;
     z-index: 0;
   }
+
   input[type="text"],
   textarea {
     width: 500px;
@@ -244,11 +207,13 @@ export default {
     box-sizing: border-box;
     transition: 0.2s all ease-in-out;
     outline: none;
+
     &:focus {
       border: 2px solid #eccd59;
       box-shadow: 1px 1px 10px #eccd59;
     }
   }
+
   #imgOverlay {
     animation-duration: 0.3s;
     position: absolute;
@@ -258,6 +223,7 @@ export default {
     width: 100vw;
     height: 100vh;
     z-index: 10000;
+
     img {
       position: absolute;
       max-width: 800px;
@@ -267,14 +233,17 @@ export default {
       z-index: 10000;
     }
   }
+
   &__img {
     margin: 10px;
     max-width: 250px;
     cursor: pointer;
   }
+
   .label {
     font-weight: bold;
   }
+
   button {
     margin-right: 20px;
     padding: 10px 20px;

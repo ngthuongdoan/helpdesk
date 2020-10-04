@@ -9,7 +9,7 @@
       v-if="isOnePage"
     ></Pagination>
     <div v-if="displayedLogs.length === 0">
-      <p id="noLog">Không có log</p>
+      <p id="noLog">No log</p>
     </div>
     <Log v-for="log in displayedLogs" :key="log.id" :log="log"></Log>
   </div>
@@ -18,7 +18,6 @@
 <script>
 import Pagination from "@/components/Pagination.vue";
 import Log from "@/components/Admin/Log.vue";
-import mockLogs from "@/mocks/log.js";
 export default {
   data() {
     return {
@@ -28,9 +27,11 @@ export default {
       logs: [],
     };
   },
-  components: {
-    Log,
-    Pagination,
+  created() {
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval(this.interval);
   },
   methods: {
     setPages() {
@@ -76,16 +77,14 @@ export default {
       this.setPages();
     },
   },
-  created() {
-    this.getData();
-  },
-  beforeDestroy() {
-    this.clearInterval(this.interval);
-  },
   filters: {
     trimWords(value) {
       return value.split(" ").splice(0, 20).join(" ") + "...";
     },
+  },
+  components: {
+    Log,
+    Pagination,
   },
 };
 </script>

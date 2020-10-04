@@ -1,63 +1,64 @@
+<!--suppress ES6MissingAwait -->
 <template>
-  <form @submit.prevent="addInformation" style="padding: 30px">
+  <form style="padding: 30px" @submit.prevent="addInformation">
     <div class="form-group">
-      <label for="fullname">Full name</label>
+      <label for="full-name">Full name</label>
       <input
-        type="text"
-        class="form-control"
-        id="fullname"
-        v-model="technician.fullName"
-        required
+          id="full-name"
+          v-model="technician.fullName"
+          class="form-control"
+          required
+          type="text"
       />
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
       <input
-        type="email"
-        class="form-control"
-        id="exampleInputEmail1"
-        aria-describedby="emailHelp"
-        v-model="technician.email"
-        required
+          id="exampleInputEmail1"
+          v-model="technician.email"
+          aria-describedby="emailHelp"
+          class="form-control"
+          required
+          type="email"
       />
     </div>
     <div class="form-group">
       <label for="username">Username</label>
       <input
-        type="text"
-        class="form-control"
-        id="username"
-        v-model="technician.username"
-        required
+          id="username"
+          v-model="technician.username"
+          class="form-control"
+          required
+          type="text"
       />
     </div>
     <div class="form-group">
       <label for="password">Password</label>
       <input
-        type="password"
-        class="form-control"
-        id="password"
-        v-model="technician.password"
-        required
+          id="password"
+          v-model="technician.password"
+          class="form-control"
+          required
+          type="password"
       />
     </div>
     <div class="form-group">
-      <label for="confirmpassword">Confirm Password</label>
+      <label for="confirm-password">Confirm Password</label>
       <input
-        type="password"
-        class="form-control"
-        id="confirmpassword"
-        ref="confirmPassword"
-        v-model="confirm"
-        required
+          id="confirm-password"
+          ref="confirmPassword"
+          v-model="confirm"
+          class="form-control"
+          required
+          type="password"
       />
     </div>
-    <input type="submit" class="btn btn-primary" value="Add new" />
+    <input class="btn btn-primary" type="submit" value="Add new"/>
     <button
-      type="button"
-      class="btn btn-secondary"
-      style="margin-left: 20px"
-      @click="turnOffOverlay"
+        class="btn btn-secondary"
+        style="margin-left: 20px"
+        type="button"
+        @click="turnOffOverlay"
     >
       Cancel
     </button>

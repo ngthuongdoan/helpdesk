@@ -6,7 +6,15 @@
     </div>
   </div>
 </template>
-
+<script>
+/**
+ * Creates Mobile Component whenever the screen width is less than 800px.
+ * @displayName Mobile
+ */
+export default {
+  name: "Mobile",
+}
+</script>
 <style lang="scss">
 .mobile {
   width: 100%;

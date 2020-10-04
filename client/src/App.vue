@@ -2,9 +2,6 @@
   <router-view></router-view>
 </template>
 
-<script>
-</script>
-
 <style lang="scss">
 @import "~@/assets/styles/App.scss";
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="logger">
     <div class="logger__icon">
-      <img :src="log.icon" width="20px" />
+      <img alt="icon" :src="log.icon" width="20px"/>
     </div>
     <p class="logger__content">
-      {{ log.content }} at {{ new Date(log.time).toLocaleString() }}
+      {{ log.content }}
     </p>
   </div>
 </template>
@@ -31,8 +31,7 @@ export default {
   border-radius: 10px;
   margin: 10px auto;
   &__content {
-    margin: 0;
-    margin-left: 10px;
+    margin: 0 0 0 10px;
   }
 }
 </style>

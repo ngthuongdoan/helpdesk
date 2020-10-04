@@ -10,7 +10,9 @@
     <td class="ticket-admin__data">
       {{ new Date(ticket.startDate).toLocaleString() }}
     </td>
-    <td class="ticket-admin__data">{{ ticket.endDate }}</td>
+    <td class="ticket-admin__data">
+      {{ ticket.endDate ? new Date(ticket.endDate).toLocaleString() : "" }}
+    </td>
   </tr>
 </template>
 
@@ -24,7 +26,7 @@ export default {
   },
   methods: {
     showTicket() {
-      this.$router.push("/admin/requests/" + this.ticket.id);
+      this.$router.push("/admin/tickets/" + this.ticket.id);
     },
   },
 };
@@ -35,13 +37,16 @@ export default {
   &__row {
     transition: 0.3s all ease-in-out;
     cursor: pointer;
+
     &:nth-child(even) {
       background: #efefef;
     }
+
     &:hover {
       background: #d1d1d1;
     }
   }
+
   &__data {
     padding: 2px;
     border: 1px solid rgb(139, 139, 139);

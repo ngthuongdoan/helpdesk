@@ -2,30 +2,30 @@
   <div class="ticket__container">
     <form class="ticket__form" @submit.prevent="submitForm">
       <div class="ticket__info">
-        <label for>Title</label>
-        <br />
-        <input type="text" v-model="ticket.title" required />
-        <br />
-        <label for>Place</label>
-        <br />
-        <input type="text" v-model="ticket.place" required />
-        <br />
+        <label for="title">Title</label>
+        <br/>
+        <input id="title" v-model="ticket.title" required type="text"/>
+        <br/>
+        <label for="place">Place</label>
+        <br/>
+        <input id="place" v-model="ticket.place" required type="text"/>
+        <br/>
       </div>
       <div class="ticket__description">
-        <label for>Your problems</label>
-        <br />
-        <textarea rows="8" v-model="ticket.description" required />
-        <br />
+        <label for="problem">Your problems</label>
+        <br/>
+        <textarea id="problem" v-model="ticket.description" required rows="8"/>
+        <br/>
         <input
-          ref="fileInput"
-          type="file"
-          accept="image/*"
-          @change="uploadImage"
-          multiple
-          required
+            ref="fileInput"
+            accept="image/*"
+            multiple
+            required
+            type="file"
+            @change="uploadImage"
         />
       </div>
-      <input type="submit" value="Submit" />
+      <input type="submit" value="Submit"/>
       <button @click="init">Clear</button>
     </form>
   </div>
@@ -66,7 +66,7 @@ export default {
         };
       });
     },
-    submitForm(e) {
+    submitForm() {
       const user = this.$store.getters["userModule/getUser"];
       this.ticket.userId = user.data.id;
       this.ticket.fullName = user.data.fullName;
@@ -79,23 +79,23 @@ export default {
         },
       });
       this.$http
-        .post("/ticket", this.ticket)
-        .then((res) => {
-          this.$swal.close();
-          this.$swal({
-            title: "Success",
-            icon: "success",
-            allowOutsideClick: false,
+          .post("/ticket", this.ticket)
+          .then(() => {
+            this.$swal.close();
+            this.$swal({
+              title: "Success",
+              icon: "success",
+              allowOutsideClick: false,
+            });
+            this.init();
+          })
+          .catch((err) => {
+            this.$swal({
+              title: "Error",
+              icon: "error",
+              text: err,
+            });
           });
-          this.init();
-        })
-        .catch((err) => {
-          this.$swal({
-            title: "Error",
-            icon: "error",
-            text: err,
-          });
-        });
     },
   },
 };

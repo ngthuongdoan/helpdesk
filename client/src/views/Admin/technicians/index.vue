@@ -1,111 +1,120 @@
 <template>
   <div class="technician__container">
-    <div class="overlay" v-if="overlay">
+    <div v-if="overlay" class="overlay">
       <form @submit.prevent="updateInformation">
         <div class="form-group">
-          <label for="fullname">Full name:</label>
+          <label for="full-name">Full name:</label>
           <input
-            type="text"
-            class="form-control"
-            id="fullname"
-            v-model="newTechnician.fullName"
-            :disabled="!isChangeInformation"
-            required
+              id="full-name"
+              v-model="newTechnician.fullName"
+              :disabled="!isChangeInformation"
+              class="form-control"
+              required
+              type="text"
           />
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            v-model="newTechnician.email"
-            :disabled="!isChangeInformation"
-            required
+              id="exampleInputEmail1"
+              v-model="newTechnician.email"
+              :disabled="!isChangeInformation"
+              aria-describedby="emailHelp"
+              class="form-control"
+              required
+              type="email"
           />
         </div>
         <div class="form-group">
           <label for="password">New Password</label>
           <input
-            type="password"
-            class="form-control"
-            id="password"
-            :disabled="!isChangeInformation"
-            v-model="newTechnician.password"
-            required
+              id="password"
+              v-model="newTechnician.password"
+              :disabled="!isChangeInformation"
+              class="form-control"
+              required
+              type="password"
           />
         </div>
         <div class="form-group">
-          <label for="confirmpassword">Confirm Password</label>
+          <label for="confirm-password">Confirm Password</label>
           <input
-            type="password"
-            class="form-control"
-            id="confirmpassword"
-            :disabled="!isChangeInformation"
-            ref="confirmPassword"
-            v-model="confirm"
-            required
+              id="confirm-password"
+              ref="confirmPassword"
+              v-model="confirm"
+              :disabled="!isChangeInformation"
+              class="form-control"
+              required
+              type="password"
           />
         </div>
         <button
-          type="button"
-          class="btn btn-primary"
-          v-if="!isChangeInformation"
-          @click="isChangeInformation = !isChangeInformation"
+            v-if="!isChangeInformation"
+            class="btn btn-primary"
+            type="button"
+            @click="isChangeInformation = !isChangeInformation"
         >
           Change Information
         </button>
         <input
-          type="submit"
-          class="btn btn-primary"
-          value="Update"
-          v-if="isChangeInformation"
+            v-if="isChangeInformation"
+            class="btn btn-primary"
+            type="submit"
+            value="Update"
         />
         <button
-          type="button"
-          class="btn btn-secondary"
-          style="margin-left: 20px"
-          @click="turnOffOverlay"
+            class="btn btn-secondary"
+            style="margin-left: 20px"
+            type="button"
+            @click="turnOffOverlay"
         >
           Cancel
+        </button>
+        <button
+            class="btn btn-danger"
+            style="margin-left: 20px"
+            type="button"
+            @click="deleteTechnician"
+        >
+          Delete
         </button>
       </form>
     </div>
     <Pagination
-      :page="page"
-      :pages="pages"
-      @previous="page--"
-      @changePage="page = $event"
-      @next="page++"
-      v-if="isOnePage"
+        v-if="isOnePage"
+        :page="page"
+        :pages="pages"
+        @changePage="page = $event"
+        @next="page++"
+        @previous="page--"
     ></Pagination>
     <div v-if="displayedTechnicians.length === 0">
-      <p id="noTechnician">Không có technician nào</p>
+      <p id="noTechnician">No technician</p>
     </div>
     <table v-else>
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Full name</th>
-          <th>Username</th>
-          <th>Email</th>
-        </tr>
+      <tr>
+        <th>ID</th>
+        <th>Full name</th>
+        <th>Username</th>
+        <th>Email</th>
+      </tr>
       </thead>
       <Technician
-        v-for="technician in displayedTechnicians"
-        :key="technician.id"
-        :technician="technician"
-        @change-information="changeInformation"
+          v-for="technician in displayedTechnicians"
+          :key="technician.id"
+          :technician="technician"
+          @change-information="changeInformation"
       ></Technician>
     </table>
   </div>
 </template>
 
+<!--suppress ExceptionCaughtLocallyJS, ES6MissingAwait -->
 <script>
 import Technician from "@/components/Admin/Technician.vue";
 import Pagination from "@/components/Pagination.vue";
-import mockTechnicians from "@/mocks/technician.js";
+
 export default {
   data() {
     return {
@@ -152,7 +161,6 @@ export default {
       try {
         if (this.newTechnician.password !== this.confirm)
           throw new Error("Password not match");
-        console.log(this.newTechnician);
         const chose = await this.$swal({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -172,8 +180,8 @@ export default {
             },
           });
           await this.$http.put(
-            "/user/" + this.newTechnician.id,
-            this.newTechnician
+              "/user/" + this.newTechnician.id,
+              this.newTechnician
           );
           this.$swal("Updated!", "", "success");
           this.overlay = false;
@@ -216,9 +224,8 @@ export default {
       } catch (err) {
         this.$swal({
           icon: "error",
-          title: "Sorry we busy right now",
+          title: err.message,
         });
-        console.log(err);
       }
     },
     async getData() {
@@ -248,8 +255,8 @@ export default {
   computed: {
     displayedTechnicians() {
       return this.technicians.length !== 0
-        ? this.paginate(this.technicians)
-        : [];
+          ? this.paginate(this.technicians)
+          : [];
     },
     isOnePage() {
       return this.pages.length > 1;

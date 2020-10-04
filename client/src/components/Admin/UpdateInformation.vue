@@ -1,70 +1,71 @@
+<!--suppress JSUnresolvedVariable, ES6MissingAwait -->
 <template>
   <form @submit.prevent="updateInformation">
     <div class="form-group">
-      <label for="fullname">Full name:</label>
+      <label for="full-name">Full name:</label>
       <input
-        type="text"
-        class="form-control"
-        id="fullname"
-        v-model="newUser.fullName"
-        :disabled="!isChangeInformation"
-        required
+          id="full-name"
+          v-model="newUser.fullName"
+          :disabled="!isChangeInformation"
+          class="form-control"
+          required
+          type="text"
       />
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
       <input
-        type="email"
-        class="form-control"
-        id="exampleInputEmail1"
-        aria-describedby="emailHelp"
-        v-model="newUser.email"
-        :disabled="!isChangeInformation"
-        required
+          id="exampleInputEmail1"
+          v-model="newUser.email"
+          :disabled="!isChangeInformation"
+          aria-describedby="emailHelp"
+          class="form-control"
+          required
+          type="email"
       />
     </div>
     <div class="form-group">
       <label for="password">New Password</label>
       <input
-        type="password"
-        class="form-control"
-        id="password"
-        :disabled="!isChangeInformation"
-        v-model="newUser.password"
-        required
+          id="password"
+          v-model="newUser.password"
+          :disabled="!isChangeInformation"
+          class="form-control"
+          required
+          type="password"
       />
     </div>
     <div class="form-group">
-      <label for="confirmpassword">Confirm Password</label>
+      <label for="confirm-password">Confirm Password</label>
       <input
-        type="password"
-        class="form-control"
-        id="confirmpassword"
-        :disabled="!isChangeInformation"
-        ref="confirmPassword"
-        v-model="confirm"
-        required
+          id="confirm-password"
+          ref="confirmPassword"
+          v-model="confirm"
+          :disabled="!isChangeInformation"
+          class="form-control"
+          required
+          type="password"
       />
     </div>
     <button
-      type="button"
-      class="btn btn-primary"
-      v-if="!isChangeInformation"
-      @click="isChangeInformation = !isChangeInformation"
+        v-if="!isChangeInformation"
+        class="btn btn-primary"
+        type="button"
+        @click="isChangeInformation = !isChangeInformation"
     >
       Change Information
     </button>
     <input
-      type="submit"
-      class="btn btn-primary"
-      value="Update"
-      v-if="isChangeInformation"
+        v-if="isChangeInformation"
+        class="btn btn-primary"
+        type="submit"
+        value="Update"
     />
     <button
-      type="button"
-      class="btn btn-secondary"
-      style="margin-left: 20px"
-      @click="turnOffOverlay"
+        class="btn btn-secondary"
+        style="margin-left: 20px"
+        type="button"
+        @click="turnOffOverlay"
     >
       Cancel
     </button>
@@ -86,7 +87,7 @@ export default {
     },
   },
   methods: {
-    async updateInformation(evt) {
+    async updateInformation() {
       try {
         if (this.newUser.password !== this.confirm)
           throw new Error("Password not match");

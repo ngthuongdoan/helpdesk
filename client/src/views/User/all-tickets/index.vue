@@ -1,31 +1,31 @@
 <template>
   <div class="ticket__container">
     <Pagination
-      :page="page"
-      :pages="pages"
-      @previous="page--"
-      @changePage="page = $event"
-      @next="page++"
-      v-if="isOnePage"
+        v-if="isOnePage"
+        :page="page"
+        :pages="pages"
+        @changePage="page = $event"
+        @next="page++"
+        @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
-      <p id="noTicket">Không có ticket nào</p>
+      <p id="noTicket">No ticket</p>
     </div>
-    <table class="ticket__table" v-else>
+    <table v-else class="ticket__table">
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Ticket Title</th>
-          <th>Technician</th>
-          <th>Status</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-        </tr>
+      <tr>
+        <th>ID</th>
+        <th>Ticket Title</th>
+        <th>Technician</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+      </tr>
       </thead>
       <Ticket
-        v-for="ticket in displayedTickets"
-        :key="ticket.id"
-        :ticket="ticket"
+          v-for="ticket in displayedTickets"
+          :key="ticket.id"
+          :ticket="ticket"
       ></Ticket>
     </table>
   </div>
@@ -45,9 +45,11 @@ export default {
       isFetching: true,
     };
   },
-  components: {
-    Ticket,
-    Pagination,
+  created() {
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval();
   },
   methods: {
     setPages() {
@@ -66,6 +68,7 @@ export default {
       return tickets.slice(from, to);
     },
     async getData() {
+      // noinspection ES6MissingAwait
       this.$swal({
         title: "Please wait",
         showConfirmButton: false,
@@ -105,16 +108,14 @@ export default {
       if (!this.isFetching) this.$swal.close();
     },
   },
-  created() {
-    this.getData();
-  },
-  beforeDestroy() {
-    this.clearInterval();
-  },
   filters: {
     trimWords(value) {
       return value.split(" ").splice(0, 20).join(" ") + "...";
     },
+  },
+  components: {
+    Ticket,
+    Pagination,
   },
 };
 </script>

@@ -1,15 +1,15 @@
 <template>
   <div class="logger__container">
     <Pagination
-      :page="page"
-      :pages="pages"
-      @previous="page--"
-      @changePage="page = $event"
-      @next="page++"
-      v-if="isOnePage"
+        v-if="isOnePage"
+        :page="page"
+        :pages="pages"
+        @changePage="page = $event"
+        @next="page++"
+        @previous="page--"
     ></Pagination>
     <div v-if="displayedLogs.length === 0">
-      <p id="noLog">Không có log</p>
+      <p id="noLog">No logs</p>
     </div>
     <Log v-for="log in displayedLogs" :key="log.id" :log="log"></Log>
   </div>
@@ -18,7 +18,7 @@
 <script>
 import Pagination from "@/components/Pagination.vue";
 import Log from "@/components/Admin/Log.vue";
-import mockLogs from "@/mocks/log.js";
+
 export default {
   data() {
     return {
@@ -28,9 +28,11 @@ export default {
       logs: [],
     };
   },
-  components: {
-    Log,
-    Pagination,
+  created() {
+    this.getData();
+  },
+  beforeDestroy() {
+    this.clearInterval(this.interval);
   },
   methods: {
     setPages() {
@@ -76,28 +78,18 @@ export default {
       this.setPages();
     },
   },
-  created() {
-    this.getData();
-  },
-  beforeDestroy() {
-    this.clearInterval(this.interval);
-  },
   filters: {
     trimWords(value) {
       return value.split(" ").splice(0, 20).join(" ") + "...";
     },
   },
+  components: {
+    Log,
+    Pagination,
+  },
 };
 </script>
 
-<style lang="scss">
-.logger__container {
-  width: 100%;
-  padding: 20px;
-}
-#noLog {
-  color: black;
-  font-weight: bold;
-  font-size: 20px;
-}
+<style lang="scss" scoped>
+@import "~@/assets/styles/Technician/index.scss";
 </style>

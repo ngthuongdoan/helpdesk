@@ -1,56 +1,57 @@
 import router from "@/router";
 import axios from "axios";
+
 export const state = () => ({
-  user: {
-    loggedIn: false,
-    data: null,
-  },
-  faq: [],
+    user: {
+        loggedIn: false,
+        data: null,
+    },
+    faq: [],
 });
 
 export const getters = {
-  getUser(state) {
-    return state.user;
-  },
-  getFaq(state) {
-    return state.faq;
-  },
+    getUser(state) {
+        return state.user;
+    },
+    getFaq(state) {
+        return state.faq;
+    },
 };
 export const mutations = {
-  SET_LOGGED_IN(state, value) {
-    state.user.loggedIn = value;
-  },
-  SET_USER(state, payload) {
-    state.user.data = payload;
-  },
-  SET_FAQ(state, faq) {
-    state.faq = faq;
-  },
+    SET_LOGGED_IN(state, value) {
+        state.user.loggedIn = value;
+    },
+    SET_USER(state, payload) {
+        state.user.data = payload;
+    },
+    SET_FAQ(state, faq) {
+        state.faq = faq;
+    },
 };
 
 export const actions = {
-  logIn({ commit }, user) {
-    commit("SET_LOGGED_IN", user !== null);
-    if (user) {
-      commit("SET_USER", user);
-    } else {
-      commit("SET_USER", null);
-    }
-  },
-  signOut({ commit }) {
-    commit("SET_LOGGED_IN", false);
-    router.push("/login");
-  },
-  fetchFaq({ commit }) {
-    axios
-      .get("https://helpdesk-v2.herokuapp.com/v1/faq")
-      .then((res) => {
-        commit("SET_FAQ", res.data);
-      })
-      .catch((err) => {
-        console.err(err);
-      });
-  },
+    logIn({commit}, user) {
+        commit("SET_LOGGED_IN", user !== null);
+        if (user) {
+            commit("SET_USER", user);
+        } else {
+            commit("SET_USER", null);
+        }
+    },
+    signOut({commit}) {
+        commit("SET_LOGGED_IN", false);
+        router.push("/login").then();
+    },
+    fetchFaq({commit}) {
+        axios
+            .get("https://helpdesk-v2.herokuapp.com/v1/faq")
+            .then((res) => {
+                commit("SET_FAQ", res.data);
+            })
+            .catch((err) => {
+                console.err(err);
+            });
+    },
 };
 
 export const namespaced = true;

@@ -2,12 +2,12 @@
   <div class="faq">
     <h3 class="faq__question" @click="showAnswer">{{ faq.question }}</h3>
     <transition
-      enter-active-class="animate__animated animate__flipInX"
-      leave-active-class="animate__animated animate__flipOutX"
+        enter-active-class="animate__animated animate__flipInX"
+        leave-active-class="animate__animated animate__flipOutX"
     >
-      <p class="faq__answer" v-show="isShown">{{ faq.answer }}</p>
+      <p v-show="isShown" class="faq__answer">{{ faq.answer }}</p>
     </transition>
-    <hr />
+    <hr/>
   </div>
 </template>
 
@@ -34,12 +34,14 @@ export default {
 <style lang="scss">
 .faq {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
+
   &__question {
     background: rgb(228, 228, 228);
     padding: 10px;
     width: 100%;
     position: relative;
     cursor: pointer;
+
     &::after {
       content: url("https://img.icons8.com/windows/32/000000/down-squared.png");
       position: absolute;
@@ -48,6 +50,7 @@ export default {
       opacity: 0.6;
     }
   }
+
   &__answer {
     padding: 10px;
     background: white;

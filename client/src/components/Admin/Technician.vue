@@ -28,13 +28,16 @@ export default {
   &__row {
     transition: 0.3s all ease-in-out;
     cursor: pointer;
+
     &:nth-child(even) {
       background: #efefef;
     }
+
     &:hover {
       background: #d1d1d1;
     }
   }
+
   &__data {
     padding: 2px;
     border: 1px solid rgb(139, 139, 139);

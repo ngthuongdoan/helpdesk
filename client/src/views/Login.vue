@@ -1,14 +1,15 @@
+<!--suppress ALL -->
 <template>
   <div>
     <div class="login__container" v-if="!isMobile">
       <form class="login__form" @submit.prevent="submitForm">
-        <label for>Username</label>
+        <label for="username">Username</label>
         <br />
-        <input type="text" v-model="login.username" required />
+        <input id="username" type="text" v-model="login.username" required />
         <br />
-        <label for>Password</label>
+        <label for="password">Password</label>
         <br />
-        <input type="password" v-model="login.password" required />
+        <input id="password" type="password" v-model="login.password" required />
         <span id="eye">
           <img
             src="https://img.icons8.com/android/24/000000/visible.png"
@@ -38,8 +39,26 @@ export default {
       isMobile: false,
     };
   },
-  components: {
-    Mobile,
+  mounted() {
+    if (!this.isMobile) {
+      const eye = document.getElementById("eye");
+      const password = document.querySelector("input[type='password']");
+      let wasShowed = false;
+      eye.addEventListener("click", () => {
+        if (wasShowed) {
+          wasShowed = false;
+          eye.style.opacity = "0.4";
+          password.type = "password";
+        } else {
+          wasShowed = true;
+          eye.style.opacity = "1";
+          password.type = "text";
+        }
+      });
+    }
+  },
+  created() {
+    if (window.innerWidth < 800) this.isMobile = true;
   },
   methods: {
     init() {
@@ -70,15 +89,13 @@ export default {
         if (this.login.password === "") throw new Error("Password blank");
         const user = await this.$http.post("/login", this.login);
         await this.$store.dispatch("userModule/logIn", user.data);
-
         this.$swal({
           title: "Success",
           icon: "success",
-        });
-
+        }).then();
         this.changeRoute(user.data.role.toLowerCase());
       } catch (err) {
-        this.$swal({
+        await this.$swal({
           title: "Error",
           icon: "error",
           text: err,
@@ -86,26 +103,8 @@ export default {
       }
     },
   },
-  mounted() {
-    if (!this.isMobile) {
-      const eye = document.getElementById("eye");
-      const password = document.querySelector("input[type='password']");
-      let wasShowed = false;
-      eye.addEventListener("click", () => {
-        if (wasShowed) {
-          wasShowed = false;
-          eye.style.opacity = "0.4";
-          password.type = "password";
-        } else {
-          wasShowed = true;
-          eye.style.opacity = "1";
-          password.type = "text";
-        }
-      });
-    }
-  },
-  created() {
-    if (window.innerWidth < 1266) this.isMobile = true;
+  components: {
+    Mobile,
   },
 };
 </script>

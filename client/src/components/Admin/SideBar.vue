@@ -7,12 +7,12 @@
       <transition enter-active-class="animate__animated animate__fadeInLeft">
         <ul class="nav flex-column sidebar__menu">
           <router-link
-            v-for="value in menu"
-            :key="value.id"
-            tag="li"
-            class="nav-item"
-            :to="value.url"
-            active-class="active"
+              v-for="value in menu"
+              :key="value.id"
+              :to="value.url"
+              active-class="active"
+              class="nav-item"
+              tag="li"
           >
             <a class="nav-link">{{ value.name }}</a>
           </router-link>
@@ -43,9 +43,9 @@ export default {
             check: true,
           },
           {
-            id: "request",
-            name: "Request",
-            url: "/admin/requests",
+            id: "tickets",
+            name: "Tickets",
+            url: "/admin/tickets",
             check: true,
           },
           {
@@ -65,9 +65,9 @@ export default {
             check: true,
           },
           {
-            id: "requests",
-            name: "Request",
-            url: "/technician/requests",
+            id: "tickets",
+            name: "Tickets",
+            url: "/technician/tickets",
             check: true,
           },
         ];
@@ -82,6 +82,7 @@ export default {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Sonsie+One&display=swap");
+
 .sidebar {
   color: white;
   position: fixed;
@@ -89,9 +90,11 @@ export default {
   min-width: 200px;
   text-align: center;
   background: rgb(49, 49, 49);
+
   &__header {
     background: rgb(31, 30, 30);
     text-align: center;
+
     h4 {
       padding: 50px 0;
       display: block;
@@ -100,18 +103,23 @@ export default {
       font-size: 20px;
     }
   }
+
   .active {
     background-color: rgb(250, 250, 122);
+
     a {
       color: black;
     }
   }
+
   &__menu {
     text-align: left;
+
     li {
       &:hover {
         background-color: rgb(66, 66, 66);
       }
+
       a {
         margin-left: 30px;
         padding: 10px;
@@ -120,6 +128,7 @@ export default {
       }
     }
   }
+
   #logo {
     position: absolute;
     bottom: 30px;

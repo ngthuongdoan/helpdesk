@@ -56,14 +56,14 @@ const routes = [
         component: () => import("../views/Admin/technicians"),
       },
       {
-        path: "requests",
-        name: "admin-request",
-        component: () => import("../views/Admin/all-requests"),
+        path: "tickets",
+        name: "admin-all-tickets",
+        component: () => import("../views/Admin/all-tickets"),
       },
       {
-        path: "requests/:id",
-        name: "request",
-        component: () => import("../views/Admin/request"),
+        path: "tickets/:id",
+        name: "ticket",
+        component: () => import("../views/Admin/ticket"),
       },
     ],
   },
@@ -77,14 +77,14 @@ const routes = [
         component: () => import("../views/Technician/index"),
       },
       {
-        path: "requests",
-        name: "technician-request",
-        component: () => import("../views/Technician/all-requests"),
+        path: "tickets",
+        name: "technician-all-tickets",
+        component: () => import("../views/Technician/all-tickets"),
       },
       {
-        path: "requests/:id",
-        name: "request",
-        component: () => import("../views/Technician/request"),
+        path: "tickets/:id",
+        name: "technician-ticket",
+        component: () => import("../views/Technician/ticket"),
       },
     ],
   },
@@ -97,7 +97,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let user = store.state.userModule.user;
+  let user = store.getters["userModule/getUser"];
   if (to.path !== "/login") {
     if (user.loggedIn === true) {
       next();
