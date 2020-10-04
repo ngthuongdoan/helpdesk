@@ -62,7 +62,7 @@ const routes = [
       },
       {
         path: "tickets/:id",
-        name: "ticket",
+        name: "admin-ticket",
         component: () => import("../views/Admin/ticket"),
       },
     ],
@@ -87,6 +87,10 @@ const routes = [
         component: () => import("../views/Technician/ticket"),
       },
     ],
+  },
+  {
+    path: "*",
+    redirect: "/login",
   },
 ];
 
