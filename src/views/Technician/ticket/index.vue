@@ -95,6 +95,7 @@ export default {
               this.$swal.showLoading();
             },
           });
+          this.ticket.modifiedBy = this.$store.getters["userModule/getUser"].data.id;
           this.ticket.status.push(status);
           this.ticket.endDate = new Date();
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
@@ -115,8 +116,8 @@ export default {
           text: "You won't be able to revert this!",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
           confirmButtonText: "Drop",
         });
         if (chose.isConfirmed) {
@@ -132,6 +133,7 @@ export default {
               this.$swal.showLoading();
             },
           });
+          this.ticket.modifiedBy = await this.$store.getters["userModule/getUser"].data.id;
           this.ticket.status.push(status);
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
 

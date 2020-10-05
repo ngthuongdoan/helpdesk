@@ -125,6 +125,7 @@ export default {
               this.technicians,
               this.technicianId
           );
+          this.ticket.modifiedBy = this.$store.getters["userModule/getUser"].data.id;
           this.$swal({
             title: "Please wait",
             showConfirmButton: false,
@@ -133,6 +134,7 @@ export default {
               this.$swal.showLoading();
             },
           });
+          console.log(this.ticket);
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
           this.$swal("Updated!", "", "success");
           await this.getData();
@@ -158,6 +160,8 @@ export default {
         });
         if (chose.isConfirmed) {
           this.ticket.technicianId = this.technicianId;
+          this.ticket.modifiedBy = this.$store.getters["userModule/getUser"].data.id;
+          console.log(this.ticket);
 
           await this.$http.delete("/ticket/" + this.$route.params.id);
           this.$swal("Delete!", "", "success");
