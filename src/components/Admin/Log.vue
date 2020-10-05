@@ -1,10 +1,10 @@
 <template>
   <div class="logger">
     <div class="logger__icon">
-      <img alt="icon" :src="log.icon" width="20px"/>
+      <img alt="icon" :src="log.icon" width="20px" />
     </div>
     <p class="logger__content">
-      {{ log.content }}
+      {{ log.content }} {{ new Date(log.time).toLocaleString() }}
     </p>
   </div>
 </template>
