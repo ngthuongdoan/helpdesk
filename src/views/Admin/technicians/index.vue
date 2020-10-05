@@ -5,106 +5,106 @@
         <div class="form-group">
           <label for="full-name">Full name:</label>
           <input
-              id="full-name"
-              v-model="newTechnician.fullName"
-              :disabled="!isChangeInformation"
-              class="form-control"
-              required
-              type="text"
+            id="full-name"
+            v-model="newTechnician.fullName"
+            :disabled="!isChangeInformation"
+            class="form-control"
+            required
+            type="text"
           />
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input
-              id="exampleInputEmail1"
-              v-model="newTechnician.email"
-              :disabled="!isChangeInformation"
-              aria-describedby="emailHelp"
-              class="form-control"
-              required
-              type="email"
+            id="exampleInputEmail1"
+            v-model="newTechnician.email"
+            :disabled="!isChangeInformation"
+            aria-describedby="emailHelp"
+            class="form-control"
+            required
+            type="email"
           />
         </div>
         <div class="form-group">
           <label for="password">New Password</label>
           <input
-              id="password"
-              v-model="newTechnician.password"
-              :disabled="!isChangeInformation"
-              class="form-control"
-              required
-              type="password"
+            id="password"
+            v-model="newTechnician.password"
+            :disabled="!isChangeInformation"
+            class="form-control"
+            required
+            type="password"
           />
         </div>
         <div class="form-group">
           <label for="confirm-password">Confirm Password</label>
           <input
-              id="confirm-password"
-              ref="confirmPassword"
-              v-model="confirm"
-              :disabled="!isChangeInformation"
-              class="form-control"
-              required
-              type="password"
+            id="confirm-password"
+            ref="confirmPassword"
+            v-model="confirm"
+            :disabled="!isChangeInformation"
+            class="form-control"
+            required
+            type="password"
           />
         </div>
         <button
-            v-if="!isChangeInformation"
-            class="btn btn-primary"
-            type="button"
-            @click="isChangeInformation = !isChangeInformation"
+          v-if="!isChangeInformation"
+          class="btn btn-primary"
+          type="button"
+          @click="isChangeInformation = !isChangeInformation"
         >
           Change Information
         </button>
         <input
-            v-if="isChangeInformation"
-            class="btn btn-primary"
-            type="submit"
-            value="Update"
+          v-if="isChangeInformation"
+          class="btn btn-primary"
+          type="submit"
+          value="Update"
         />
         <button
-            class="btn btn-secondary"
-            style="margin-left: 20px"
-            type="button"
-            @click="turnOffOverlay"
+          class="btn btn-secondary"
+          style="margin-left: 20px"
+          type="button"
+          @click="turnOffOverlay"
         >
           Cancel
         </button>
         <button
-            class="btn btn-danger"
-            style="margin-left: 20px"
-            type="button"
-            @click="deleteTechnician"
+          class="btn btn-danger"
+          style="margin-left: 20px"
+          type="button"
+          @click="deleteTechnician"
         >
           Delete
         </button>
       </form>
     </div>
     <Pagination
-        v-if="isOnePage"
-        :page="page"
-        :pages="pages"
-        @changePage="page = $event"
-        @next="page++"
-        @previous="page--"
+      v-if="isOnePage"
+      :page="page"
+      :pages="pages"
+      @changePage="page = $event"
+      @next="page++"
+      @previous="page--"
     ></Pagination>
     <div v-if="displayedTechnicians.length === 0">
       <p id="noTechnician">No technician</p>
     </div>
     <table v-else>
       <thead>
-      <tr>
-        <th>ID</th>
-        <th>Full name</th>
-        <th>Username</th>
-        <th>Email</th>
-      </tr>
+        <tr>
+          <th>ID</th>
+          <th>Full name</th>
+          <th>Username</th>
+          <th>Email</th>
+        </tr>
       </thead>
       <Technician
-          v-for="technician in displayedTechnicians"
-          :key="technician.id"
-          :technician="technician"
-          @change-information="changeInformation"
+        v-for="technician in displayedTechnicians"
+        :key="technician.id"
+        :technician="technician"
+        @change-information="changeInformation"
       ></Technician>
     </table>
   </div>
@@ -155,7 +155,8 @@ export default {
     },
     turnOffOverlay() {
       this.overlay = false;
-      this.newTechnician = {};
+      this.isChangeInformation = false;
+      this.confirm = "";
     },
     async updateInformation() {
       try {
@@ -180,8 +181,8 @@ export default {
             },
           });
           await this.$http.put(
-              "/user/" + this.newTechnician.id,
-              this.newTechnician
+            "/user/" + this.newTechnician.id,
+            this.newTechnician
           );
           this.$swal("Updated!", "", "success");
           this.overlay = false;
@@ -255,8 +256,8 @@ export default {
   computed: {
     displayedTechnicians() {
       return this.technicians.length !== 0
-          ? this.paginate(this.technicians)
-          : [];
+        ? this.paginate(this.technicians)
+        : [];
     },
     isOnePage() {
       return this.pages.length > 1;
