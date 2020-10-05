@@ -4,6 +4,8 @@
       v-if="isOnePage"
       :page="page"
       :pages="pages"
+      :per-page="perPage"
+      :ticket-length="tickets.length"
       @changePage="page = $event"
       @next="page++"
       @previous="page--"

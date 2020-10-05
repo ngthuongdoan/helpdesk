@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav style="position: relative;">
     <ul class="pagination">
       <li class="page-item">
         <button
@@ -32,6 +32,9 @@
           Next
         </button>
       </li>
+      <li class="totalPage">
+        <p>{{ (perPage * page) > ticketLength ? ticketLength : perPage * page }}/{{ ticketLength }}</p>
+      </li>
     </ul>
   </nav>
 </template>
@@ -54,6 +57,14 @@ export default {
       type: Array,
       required: true,
     },
+    ticketLength: {
+      type: Number,
+      required: true,
+    },
+    perPage: {
+      type: Number,
+      required: true,
+    }
   },
   methods: {
     previous() {
@@ -73,6 +84,19 @@ export default {
 .pagination {
   list-style-type: none;
   display: inline-flex;
+}
+
+.totalPage {
+  position: absolute;
+  right: 0;
+  font-weight: bold;
+  background: white;
+  padding: 5px;
+  p{
+    margin: 0;
+    color:#5a5959;
+    font-size: 14px;
+  }
 }
 
 button.page-link {

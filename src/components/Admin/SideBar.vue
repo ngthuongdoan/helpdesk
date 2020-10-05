@@ -19,7 +19,7 @@
         </ul>
       </transition>
     </nav>
-    <h1 id="logo">HelpCenter</h1>
+    <div id="logo"><img src="~@/assets/logo.png" alt="logo"></div>
   </div>
 </template>
 
@@ -84,11 +84,9 @@ export default {
   min-width: 200px;
   text-align: center;
   background: rgb(49, 49, 49);
-
   &__header {
     background: rgb(31, 30, 30);
     text-align: center;
-
     h4 {
       padding: 50px 0;
       display: block;
@@ -97,23 +95,18 @@ export default {
       font-size: 20px;
     }
   }
-
   .active {
     background-color: rgb(250, 250, 122);
-
     a {
       color: black;
     }
   }
-
   &__menu {
     text-align: left;
-
     li {
       &:hover {
         background-color: rgb(66, 66, 66);
       }
-
       a {
         margin-left: 30px;
         padding: 10px;
@@ -125,14 +118,15 @@ export default {
 
   #logo {
     position: absolute;
-    bottom: 30px;
-    text-align: center;
+    bottom: 0;
     width: 100%;
+    text-align: center;
     justify-self: flex-start;
     align-self: center;
-    font-size: 20px;
-    font-family: "Sonsie One", cursive;
-    font-style: italic;
+    background: #c8c8c8;
+    img{
+      width: 80px;
+    }
   }
 }
 </style>

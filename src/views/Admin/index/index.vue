@@ -1,17 +1,9 @@
 <template>
-  <div class="logger__container">
-    <Pagination
-      :page="page"
-      :pages="pages"
-      @previous="page--"
-      @changePage="page = $event"
-      @next="page++"
-      v-if="isOnePage"
-    ></Pagination>
-    <div v-if="displayedLogs.length === 0">
+  <div class="logger__container custom-scrollbar">
+    <div v-if="logs.length === 0">
       <p id="noLog">No log</p>
     </div>
-    <Log v-for="log in displayedLogs" :key="log.id" :log="log"></Log>
+    <Log v-for="log in logs" :key="log.id" :log="log"></Log>
   </div>
 </template>
 
@@ -34,21 +26,21 @@ export default {
     this.clearInterval(this.interval);
   },
   methods: {
-    setPages() {
-      if (this.logs.length === 0) return;
-      this.pages = [];
-      let numberOfPages = Math.ceil(this.logs.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(logs) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return logs.slice(from, to);
-    },
+    // setPages() {
+    //   if (this.logs.length === 0) return;
+    //   this.pages = [];
+    //   let numberOfPages = Math.ceil(this.logs.length / this.perPage);
+    //   for (let index = 1; index <= numberOfPages; index++) {
+    //     this.pages.push(index);
+    //   }
+    // },
+    // paginate(logs) {
+    //   let page = this.page;
+    //   let perPage = this.perPage;
+    //   let from = page * perPage - perPage;
+    //   let to = page * perPage;
+    //   return logs.slice(from, to);
+    // },
     async getData() {
       try {
         let that = this;
@@ -65,12 +57,12 @@ export default {
     },
   },
   computed: {
-    displayedLogs() {
-      return this.logs.length !== 0 ? this.paginate(this.logs) : [];
-    },
-    isOnePage() {
-      return this.pages.length > 1;
-    },
+    // displayedLogs() {
+    //   return this.logs.length !== 0 ? this.paginate(this.logs) : [];
+    // },
+    // isOnePage() {
+    //   return this.pages.length > 1;
+    // },
   },
   watch: {
     logs() {
@@ -78,9 +70,9 @@ export default {
     },
   },
   filters: {
-    trimWords(value) {
-      return value.split(" ").splice(0, 20).join(" ") + "...";
-    },
+    // trimWords(value) {
+    //   return value.split(" ").splice(0, 20).join(" ") + "...";
+    // },
   },
   components: {
     Log,
@@ -93,6 +85,8 @@ export default {
 .logger__container {
   width: 100%;
   padding: 20px;
+  height: 100%;
+  overflow: auto;
 }
 #noLog {
   color: black;
