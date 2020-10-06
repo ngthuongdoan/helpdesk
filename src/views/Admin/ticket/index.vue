@@ -1,11 +1,11 @@
 <template>
   <div class="ticket">
     <transition
-        enter-active-class="animate__animated animate__fadeIn"
-        leave-active-class="animate__animated animate__fadeOut"
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
     >
       <div v-if="overlay" class="overlay" @click="overlay = !overlay">
-        <img :src="this.img" alt="imgOverlay"/>
+        <img :src="this.img" alt="imgOverlay" />
       </div>
     </transition>
     <div v-if="ticket" class="ticket__container custom-scrollbar">
@@ -31,25 +31,25 @@
         <span class="label">Description: </span>{{ ticket.description }}
       </p>
       <img
-          v-for="img in ticket.images"
-          :key="img"
-          :src="img"
-          alt="image"
-          class="ticket__img"
-          @click="showImage(img)"
+        v-for="img in ticket.images"
+        :key="img"
+        :src="img"
+        alt="image"
+        class="ticket__img"
+        @click="showImage(img)"
       />
       <div class="ticket__assignee">
         <div class="form-group">
           <label for="exampleFormControlSelect1">Assign to</label>
           <select
-              id="exampleFormControlSelect1"
-              v-model="technicianId"
-              class="form-control"
+            id="exampleFormControlSelect1"
+            v-model="technicianId"
+            class="form-control"
           >
             <option
-                v-for="technician in technicians"
-                :key="technician.id"
-                :value="technician.id"
+              v-for="technician in technicians"
+              :key="technician.id"
+              :value="technician.id"
             >
               {{ technician.fullName }}
             </option>
@@ -57,10 +57,10 @@
         </div>
       </div>
       <button
-          :disabled="isDisable"
-          class="btn btn-primary"
-          type="button"
-          @click="updateTicket"
+        :disabled="isDisable"
+        class="btn btn-primary"
+        type="button"
+        @click="updateTicket"
       >
         Update
       </button>
@@ -92,17 +92,17 @@ export default {
     async getData() {
       try {
         const tickets = await this.$http.get(
-            "/ticket/" + this.$route.params.id
+          "/ticket/" + this.$route.params.id
         );
         const technicians = await this.$http.get("/user/role/technician");
         this.ticket = tickets.data;
         this.technicianId = this.ticket.technicianId
-            ? this.ticket.technicianId
-            : "";
+          ? this.ticket.technicianId
+          : "";
         this.technicians = technicians.data;
         this.technicianName = this.getTechniciansName(
-            this.technicians,
-            this.technicianId
+          this.technicians,
+          this.technicianId
         );
       } catch (err) {
         console.log(err);
@@ -122,10 +122,12 @@ export default {
         if (chose.isConfirmed) {
           this.ticket.technicianId = this.technicianId;
           this.ticket.technicianName = this.getTechniciansName(
-              this.technicians,
-              this.technicianId
+            this.technicians,
+            this.technicianId
           );
-          this.ticket.modifiedBy = this.$store.getters["userModule/getUser"].data.id;
+          this.ticket.modifiedBy = this.$store.getters[
+            "userModule/getUser"
+          ].data.id;
           this.$swal({
             title: "Please wait",
             showConfirmButton: false,
@@ -134,7 +136,6 @@ export default {
               this.$swal.showLoading();
             },
           });
-          console.log(this.ticket);
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
           this.$swal("Updated!", "", "success");
           await this.getData();
@@ -159,12 +160,21 @@ export default {
           confirmButtonText: "Delete",
         });
         if (chose.isConfirmed) {
-          this.ticket.technicianId = this.technicianId;
-          this.ticket.modifiedBy = this.$store.getters["userModule/getUser"].data.id;
-          console.log(this.ticket);
-
-          await this.$http.delete("/ticket/" + this.$route.params.id);
-          this.$swal("Delete!", "", "success");
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
+          this.ticket.modifiedBy = this.$store.getters[
+            "userModule/getUser"
+          ].data.id;
+          await this.$http.delete(
+            `/ticket/${this.$route.params.id}/${this.ticket.modifiedBy}`
+          );
+          await this.$swal("Delete!", "", "success");
           this.back();
         }
       } catch (err) {
@@ -198,8 +208,8 @@ export default {
     },
     getStatusTime(value) {
       return value
-          ? new Date(value[value.length - 1].time).toLocaleString()
-          : "";
+        ? new Date(value[value.length - 1].time).toLocaleString()
+        : "";
     },
     getStatusName(value) {
       return value ? value[value.length - 1].name : "";
