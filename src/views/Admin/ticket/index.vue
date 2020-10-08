@@ -56,6 +56,10 @@
           </select>
         </div>
       </div>
+      <div class="form-group">
+        <label for="comment">Comment:</label>
+        <textarea class="form-control" id="comment" rows="5" v-model="comment"></textarea>
+      </div>
       <button
         :disabled="isDisable"
         class="btn btn-primary"
@@ -86,6 +90,7 @@ export default {
       technicianName: "",
       overlay: false,
       img: "",
+      comment:"",
     };
   },
   methods: {
@@ -104,6 +109,7 @@ export default {
           this.technicians,
           this.technicianId
         );
+        this.comment = this.ticket.comment;
       } catch (err) {
         console.log(err);
       }
@@ -125,9 +131,16 @@ export default {
             this.technicians,
             this.technicianId
           );
+          const status = {
+            name: "Assigned",
+            time: new Date().toISOString(),
+          };
+          this.ticket.status.push(status);
           this.ticket.modifiedBy = this.$store.getters[
             "userModule/getUser"
           ].data.id;
+          this.ticket.comment = this.comment;
+
           this.$swal({
             title: "Please wait",
             showConfirmButton: false,

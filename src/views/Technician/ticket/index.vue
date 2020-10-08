@@ -37,6 +37,10 @@
         @click="showImage(img)"
       />
       <div class="clearfix"></div>
+      <div class="form-group">
+        <label for="comment">Comment:</label>
+        <textarea class="form-control" id="comment" rows="5" v-model="comment"></textarea>
+      </div>
       <button class="btn btn-primary" type="button" @click="updateTicket">
         Done
       </button>
@@ -57,6 +61,7 @@ export default {
       ticket: null,
       overlay: false,
       img: "",
+      comment :""
     };
   },
   created() {
@@ -67,6 +72,7 @@ export default {
       try {
         const ticket = await this.$http.get("/ticket/" + this.$route.params.id);
         this.ticket = ticket.data;
+        this.comment = this.ticket.comment
       } catch (err) {
         console.log(err);
       }
@@ -98,6 +104,7 @@ export default {
           this.ticket.modifiedBy = this.$store.getters["userModule/getUser"].data.id;
           this.ticket.status.push(status);
           this.ticket.endDate = new Date();
+          this.ticket.comment = this.comment;
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
           await this.$swal("Updated!", "", "success");
           this.back();
@@ -135,6 +142,8 @@ export default {
           });
           this.ticket.modifiedBy = await this.$store.getters["userModule/getUser"].data.id;
           this.ticket.status.push(status);
+          this.ticket.comment = this.comment;
+
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
 
           this.$swal("Updated!", "", "success");

@@ -1,34 +1,34 @@
 <template>
   <div class="ticket__container custom-scrollbar">
     <Pagination
-      v-if="isOnePage"
-      :page="page"
-      :pages="pages"
-      :per-page="perPage"
-      :ticket-length="tickets.length"
-      @changePage="page = $event"
-      @next="page++"
-      @previous="page--"
+        v-if="isOnePage"
+        :page="page"
+        :pages="pages"
+        :per-page="perPage"
+        :ticket-length="tickets.length"
+        @changePage="page = $event"
+        @next="page++"
+        @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">No ticket</p>
     </div>
     <table v-else>
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Employee</th>
-          <th>Ticket Title</th>
-          <th>Technician</th>
-          <th>Status</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-        </tr>
+      <tr>
+        <th>ID</th>
+        <th @click="sorted = 'fullName'">Employee</th>
+        <th>Ticket Title</th>
+        <th @click="sorted = 'technicianName'">Technician</th>
+        <th @click="sorted = 'status'">Status</th>
+        <th @click="sorted = 'startDate'">Start Date</th>
+        <th @click="sorted = 'endDate'">End Date</th>
+      </tr>
       </thead>
       <Ticket
-        v-for="ticket in displayedTickets"
-        :key="ticket.id"
-        :ticket="ticket"
+          v-for="ticket in displayedTickets"
+          :key="ticket.id"
+          :ticket="ticket"
       ></Ticket>
     </table>
   </div>
@@ -47,6 +47,8 @@ export default {
       pages: [],
       tickets: [],
       isFetching: true,
+      sorted: "",
+      url: "/ticket"
     };
   },
   created() {
@@ -82,8 +84,9 @@ export default {
       });
       try {
         this.interval = setInterval(async () => {
-          const res = await this.$http.get("/ticket");
-          if (res.data.length !== this.tickets.length) this.tickets = res.data;
+          console.log(this.url);
+          const res = await this.$http.get(this.url);
+          this.tickets = res.data;
           this.isFetching = false;
         }, 2000);
       } catch (err) {
@@ -108,6 +111,12 @@ export default {
     },
     isFetching() {
       this.$swal.close();
+    },
+    sorted() {
+      console.log(this.sorted)
+      if (this.sorted) {
+        this.url = "/ticket/sort/desc/" + this.sorted;
+      }
     },
   },
   filters: {
