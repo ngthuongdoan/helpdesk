@@ -111,7 +111,10 @@ export default {
         );
         this.comment = this.ticket.comment;
       } catch (err) {
-        console.log(err);
+        this.$swal({
+          icon: "error",
+          title: err.message,
+        });
       }
     },
     async updateTicket() {
@@ -158,7 +161,6 @@ export default {
           icon: "error",
           title: err.message,
         });
-        console.log(err);
       }
     },
     async deleteTicket() {

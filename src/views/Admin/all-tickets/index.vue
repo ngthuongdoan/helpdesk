@@ -84,7 +84,6 @@ export default {
       });
       try {
         this.interval = setInterval(async () => {
-          console.log(this.url);
           const res = await this.$http.get(this.url);
           this.tickets = res.data;
           this.isFetching = false;
