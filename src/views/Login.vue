@@ -23,7 +23,7 @@
         </span>
         <br />
         <div class="buttons">
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Login" />
           <button @click="init">Clear</button>
         </div>
       </form>

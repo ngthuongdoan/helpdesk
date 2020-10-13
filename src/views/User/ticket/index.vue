@@ -65,7 +65,7 @@
       <button class="btn btn-secondary" type="button" @click="back">
         Cancel
       </button>
-      <button class="btn btn-danger" type="button" @click="deleteTicket">
+      <button class="btn btn-danger" type="button" @click="deleteTicket" v-if="!isAssigned">
         Delete
       </button>
     </div>
@@ -82,6 +82,7 @@ export default {
       isUpdate: false,
       newTicket: {},
       isDone: false,
+      isAssigned:false,
     };
   },
   methods: {
@@ -92,6 +93,9 @@ export default {
         this.newTicket = Object.assign({}, this.ticket);
         if (this.ticket.status[this.ticket.status.length - 1].name === "Done") {
           this.isDone = true;
+        }
+        if (this.ticket.status[this.ticket.status.length - 1].name === "Assigned") {
+          this.isAssigned = true;
         }
       } catch (err) {
         console.log(err);
