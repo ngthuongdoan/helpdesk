@@ -42,7 +42,7 @@
         @click="showImage(img)"
       />
       <div class="ticket__conversation">
-        <Comment v-for="cmt in ticket.comment" :key="cmt" :id="cmt"></Comment>
+        <Comment v-for="id in ticket.comment" :key="id" :id="id"></Comment>
         <div class="ticket__box">
           <form @submit.prevent="addNewComment">
             <textarea
@@ -51,6 +51,7 @@
               placeholder="Type here"
               v-model="newComment"
               required
+              :disabled="!isClose"
             ></textarea>
             <div class="form-group">
               <label for="exampleFormControlSelect1">Assign to</label>
@@ -59,6 +60,7 @@
                 v-model="technicianId"
                 @change="assignTo"
                 class="form-control"
+                :disabled="!isClose"
               >
                 <option
                   v-for="technician in technicians"
@@ -69,9 +71,21 @@
                 </option>
               </select>
             </div>
-            <input type="submit" value="Comment" class="btn btn-success" />
-            <button class="btn btn-secondary" @click="back">Back</button>
-            <button class="btn btn-light" @click="closeTicket">
+            <input
+              type="submit"
+              value="Comment"
+              class="btn btn-success"
+              :disabled="!isClose"
+            />
+            <button class="btn btn-secondary" type="button" @click="back">
+              Back
+            </button>
+            <button
+              class="btn btn-light"
+              type="button"
+              @click="closeTicket"
+              :disabled="!isClose"
+            >
               <img src="@/assets/icon/error_red.png" alt="" width="20px" />
               Close this
             </button>
@@ -90,16 +104,26 @@ export default {
     return {
       ticket: null,
       technicians: [],
-      isDisable: true,
+      isClose: false,
       technicianId: "",
       technicianName: "",
       overlay: false,
       img: "",
       newComment: "",
+      isFetching: true,
     };
   },
   methods: {
     async getData() {
+      this.isFetching = true;
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       try {
         this.interval = setInterval(async () => {
           const tickets = await this.$http.get(
@@ -115,6 +139,8 @@ export default {
             this.technicians,
             this.technicianId
           );
+          this.isClose = this.ticket.status.name === "Closed";
+          this.isFetching = false;
         }, 500);
       } catch (err) {
         this.$swal({
@@ -123,7 +149,45 @@ export default {
         });
       }
     },
-    async closeTicket() {},
+    async closeTicket() {
+      try {
+        const chose = await this.$swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Close",
+        });
+        if (chose.isConfirmed) {
+          const status = {
+            name: "Closed",
+            time: new Date().toISOString(),
+          };
+          this.ticket.status.push(status);
+          this.ticket.modifiedBy = this.$store.getters[
+            "userModule/getUser"
+          ].data.id;
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
+          await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
+          await this.$swal("Closed!", "", "success");
+          await this.back();
+        }
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: err.message,
+        });
+      }
+    },
     async addNewComment() {
       try {
         this.$swal({
@@ -213,6 +277,9 @@ export default {
   watch: {
     technicianId() {
       clearInterval(this.interval);
+    },
+    isFetching() {
+      this.$swal.close();
     },
   },
   filters: {

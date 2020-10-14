@@ -46,6 +46,8 @@ export default {
     width: 100%;
     padding: 10px 20px;
     border-radius: 5px 5px 0 0;
+    display: inline-flex;
+    position: relative;
     h4 {
       margin: 0;
       padding: 0;
@@ -59,6 +61,32 @@ export default {
     }
     &--technician {
       background: rgba($color: #ec5959, $alpha: 0.4);
+    }
+    img {
+      width: 16px;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      cursor: pointer;
+    }
+    .menu {
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      background: white;
+      border: 1px solid rgb(185, 185, 185);
+      ul {
+        list-style-type: none;
+        // width: max-content;
+        height: fit-content;
+        margin: 0;
+        padding: 0;
+        li {
+          padding: 5px;
+          height: fit-content;
+          font-size: 12px;
+        }
+      }
     }
   }
   &__role {
