@@ -1,5 +1,5 @@
 <template>
-  <div class="ticket" v-if="ticket">
+  <div class="ticket" v-if="!isFetching">
     <transition
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
@@ -51,7 +51,7 @@
               placeholder="Type here"
               v-model="newComment"
               required
-              :disabled="!isClose"
+              :disabled="isClose"
             ></textarea>
             <div class="form-group">
               <label for="exampleFormControlSelect1">Assign to</label>
@@ -60,7 +60,7 @@
                 v-model="technicianId"
                 @change="assignTo"
                 class="form-control"
-                :disabled="!isClose"
+                :disabled="isClose"
               >
                 <option
                   v-for="technician in technicians"
@@ -75,7 +75,7 @@
               type="submit"
               value="Comment"
               class="btn btn-success"
-              :disabled="!isClose"
+              :disabled="isClose"
             />
             <button class="btn btn-secondary" type="button" @click="back">
               Back
@@ -84,7 +84,7 @@
               class="btn btn-light"
               type="button"
               @click="closeTicket"
-              :disabled="!isClose"
+              :disabled="isClose"
             >
               <img src="@/assets/icon/error_red.png" alt="" width="20px" />
               Close this
@@ -139,7 +139,8 @@ export default {
             this.technicians,
             this.technicianId
           );
-          this.isClose = this.ticket.status.name === "Closed";
+          this.isClose =
+            this.ticket.status[this.ticket.status.length - 1].name === "Closed";
           this.isFetching = false;
         }, 500);
       } catch (err) {

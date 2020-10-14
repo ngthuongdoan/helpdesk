@@ -1,6 +1,6 @@
 <!--suppress ES6MissingAwait -->
 <template>
-  <div class="ticket" v-if="ticket">
+  <div class="ticket" v-if="!isFetching">
     <transition
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
@@ -52,10 +52,23 @@
               placeholder="Type here"
               v-model="newComment"
               required
+              :disabled="isClose"
             ></textarea>
-            <input type="submit" value="Comment" class="btn btn-success" />
-            <button class="btn btn-secondary" @click="back">Back</button>
-            <button class="btn btn-light" @click="closeTicket">
+            <input
+              type="submit"
+              value="Comment"
+              class="btn btn-success"
+              :disabled="isClose"
+            />
+            <button class="btn btn-secondary" type="button" @click="back">
+              Back
+            </button>
+            <button
+              class="btn btn-light"
+              type="button"
+              @click="closeTicket"
+              :disabled="isClose"
+            >
               <img src="@/assets/icon/error_red.png" alt="" width="20px" />
               Close this
             </button>
@@ -74,21 +87,73 @@ export default {
       ticket: null,
       overlay: false,
       img: "",
-      isUpdate: false,
       newComment: "",
+      isFetching: true,
+      isClose: false,
     };
   },
   methods: {
     async getData() {
+      this.isFetching = true;
+      this.$swal({
+        title: "Please wait",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        onOpen: () => {
+          this.$swal.showLoading();
+        },
+      });
       try {
         this.interval = setInterval(async () => {
           const ticket = await this.$http.get(
             "/ticket/" + this.$route.params.id
           );
           this.ticket = ticket.data;
+          this.isClose =
+            this.ticket.status[this.ticket.status.length - 1].name === "Closed";
+          this.isFetching = false;
         }, 500);
       } catch (err) {
         console.log(err);
+      }
+    },
+    async closeTicket() {
+      try {
+        const chose = await this.$swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Close",
+        });
+        if (chose.isConfirmed) {
+          const status = {
+            name: "Closed",
+            time: new Date().toISOString(),
+          };
+          this.ticket.status.push(status);
+          this.ticket.modifiedBy = this.$store.getters[
+            "userModule/getUser"
+          ].data.id;
+          this.$swal({
+            title: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              this.$swal.showLoading();
+            },
+          });
+          await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
+          await this.$swal("Closed!", "", "success");
+          await this.back();
+        }
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: err.message,
+        });
       }
     },
     async addNewComment() {
@@ -121,13 +186,17 @@ export default {
         });
       }
     },
-    closeTicket() {},
     back() {
       this.$router.back();
     },
     showImage(img) {
       this.overlay = true;
       this.img = img;
+    },
+  },
+  watch:{
+    isFetching() {
+      this.$swal.close();
     },
   },
   filters: {
