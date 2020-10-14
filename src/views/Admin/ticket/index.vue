@@ -44,7 +44,7 @@
       <div class="ticket__conversation">
         <Comment v-for="cmt in ticket.comment" :key="cmt" :id="cmt"></Comment>
         <div class="ticket__box">
-          <form @submit.prevent="comment">
+          <form @submit.prevent="addNewComment">
             <textarea
               cols="30"
               rows="3"
@@ -57,6 +57,7 @@
               <select
                 id="exampleFormControlSelect1"
                 v-model="technicianId"
+                @change="assignTo"
                 class="form-control"
               >
                 <option
@@ -69,7 +70,7 @@
               </select>
             </div>
             <input type="submit" value="Comment" class="btn btn-success" />
-            <button class="btn btn-secondary" @click="back">Cancel</button>
+            <button class="btn btn-secondary" @click="back">Back</button>
             <button class="btn btn-light" @click="closeTicket">
               <img src="@/assets/icon/error_red.png" alt="" width="20px" />
               Close this
@@ -100,20 +101,21 @@ export default {
   methods: {
     async getData() {
       try {
-        const tickets = await this.$http.get(
-          "/ticket/" + this.$route.params.id
-        );
-        const technicians = await this.$http.get("/user/role/technician");
-        this.ticket = tickets.data;
-        this.technicianId = this.ticket.technicianId
-          ? this.ticket.technicianId
-          : "";
-        this.technicians = technicians.data;
-        this.technicianName = this.getTechniciansName(
-          this.technicians,
-          this.technicianId
-        );
-        this.comment = this.ticket.comment;
+        this.interval = setInterval(async () => {
+          const tickets = await this.$http.get(
+            "/ticket/" + this.$route.params.id
+          );
+          const technicians = await this.$http.get("/user/role/technician");
+          this.ticket = tickets.data;
+          this.technicianId = this.ticket.technicianId
+            ? this.ticket.technicianId
+            : "";
+          this.technicians = technicians.data;
+          this.technicianName = this.getTechniciansName(
+            this.technicians,
+            this.technicianId
+          );
+        }, 500);
       } catch (err) {
         this.$swal({
           icon: "error",
@@ -121,7 +123,36 @@ export default {
         });
       }
     },
-    closeTicket() {},
+    async closeTicket() {},
+    async addNewComment() {
+      try {
+        this.$swal({
+          title: "Please wait",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          onOpen: () => {
+            this.$swal.showLoading();
+          },
+        });
+        const comment = {
+          fullName: this.$store.getters["userModule/getUser"].data.fullName,
+          userId: this.$store.getters["userModule/getUser"].data.id,
+          content: this.newComment,
+        };
+        this.newComment = "";
+        await this.$http.put(
+          "/comment/ticket/" + this.$route.params.id,
+          comment
+        );
+        this.$swal("Updated!", "", "success");
+        await this.getData();
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: err.message,
+        });
+      }
+    },
     back() {
       this.$router.back();
     },
@@ -133,9 +164,7 @@ export default {
       this.overlay = true;
       this.img = img;
     },
-  },
-  watch: {
-    async technicianId() {
+    async assignTo() {
       try {
         const chose = await this.$swal({
           title: "Are you sure?",
@@ -160,8 +189,7 @@ export default {
           this.ticket.modifiedBy = this.$store.getters[
             "userModule/getUser"
           ].data.id;
-          this.ticket.comment = this.comment;
-
+          console.log(this.ticket);
           this.$swal({
             title: "Please wait",
             showConfirmButton: false,
@@ -182,6 +210,11 @@ export default {
       }
     },
   },
+  watch: {
+    technicianId() {
+      clearInterval(this.interval);
+    },
+  },
   filters: {
     changeDate(value) {
       return value ? new Date(value).toLocaleString() : "";
@@ -195,8 +228,11 @@ export default {
       return value ? value[value.length - 1].name : "";
     },
   },
-  created() {
+  async created() {
     this.getData();
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   },
   components: {
     Comment,

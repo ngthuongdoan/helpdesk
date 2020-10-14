@@ -68,7 +68,7 @@
           type="button"
           @click="turnOffOverlay"
         >
-          Cancel
+          Back
         </button>
         <button
           class="btn btn-danger"

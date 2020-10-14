@@ -1,6 +1,6 @@
 <template>
   <div class="comment" v-if="comment && role">
-    <div class="comment__name">
+    <div class="comment__name" :class="'comment__name--' + role">
       <h4>
         {{ comment.fullName }} <span class="comment__role">{{ role }}</span>
         <span class="comment__date">{{
@@ -26,7 +26,6 @@ export default {
   async created() {
     try {
       const comment = await this.$http.get(`/comment/${this.$props.id}`);
-
       const user = await this.$http.get(`/user/${comment.data.userId}`);
       this.comment = comment.data;
       this.role = user.data.role;
@@ -42,15 +41,24 @@ export default {
   width: 100%;
   border: 1px solid rgba(107, 107, 107, 0.295);
   border-radius: 5px;
+  margin: 20px auto;
   &__name {
     width: 100%;
     padding: 10px 20px;
-    background: rgba($color: #eccd59, $alpha: 0.4);
     border-radius: 5px 5px 0 0;
     h4 {
       margin: 0;
       padding: 0;
       font-size: 15px;
+    }
+    &--user {
+      background: rgba($color: #eccd59, $alpha: 0.4);
+    }
+    &--admin {
+      background: rgba($color: #6359ec, $alpha: 0.4);
+    }
+    &--technician {
+      background: rgba($color: #ec5959, $alpha: 0.4);
     }
   }
   &__role {
@@ -59,6 +67,7 @@ export default {
     border: 1px solid rgb(221, 221, 221);
     border-radius: 10px;
     background: rgba($color: white, $alpha: 0.4);
+    font-weight: 400;
   }
   &__date {
     margin-left: 10px;

@@ -43,13 +43,9 @@
         @click="showImage(img)"
       />
       <div class="ticket-user__conversation">
-        <Comment
-          v-for="cmt in ticket.comment"
-          :key="cmt"
-          :id="cmt"
-        ></Comment>
+        <Comment v-for="cmt in ticket.comment" :key="cmt" :id="cmt"></Comment>
         <div class="ticket-user__box">
-          <form @submit.prevent="comment">
+          <form @submit.prevent="addNewComment">
             <textarea
               cols="30"
               rows="3"
@@ -58,7 +54,7 @@
               required
             ></textarea>
             <input type="submit" value="Comment" class="btn btn-success" />
-            <button class="btn btn-secondary" @click="back">Cancel</button>
+            <button class="btn btn-secondary" @click="back">Back</button>
             <button class="btn btn-light" @click="closeTicket">
               <img src="@/assets/icon/error_red.png" alt="" width="20px" />
               Close this
@@ -85,13 +81,46 @@ export default {
   methods: {
     async getData() {
       try {
-        const ticket = await this.$http.get("/ticket/" + this.$route.params.id);
-        this.ticket = ticket.data;
+        this.interval = setInterval(async () => {
+          const ticket = await this.$http.get(
+            "/ticket/" + this.$route.params.id
+          );
+          this.ticket = ticket.data;
+        }, 500);
       } catch (err) {
         console.log(err);
       }
     },
-    comment() {},
+    async addNewComment() {
+      try {
+        this.$swal({
+          title: "Please wait",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          onOpen: () => {
+            this.$swal.showLoading();
+          },
+        });
+        const comment = {
+          fullName: this.$store.getters["userModule/getUser"].data.fullName,
+          userId: this.$store.getters["userModule/getUser"].data.id,
+          content: this.newComment,
+        };
+        this.newComment = "";
+
+        await this.$http.put(
+          "/comment/ticket/" + this.$route.params.id,
+          comment
+        );
+        this.$swal("Updated!", "", "success");
+        await this.getData();
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: err.message,
+        });
+      }
+    },
     closeTicket() {},
     back() {
       this.$router.back();
@@ -123,7 +152,10 @@ export default {
   created() {
     this.getData();
   },
+
   beforeDestroy() {
+    clearInterval(this.interval);
+
     this.$helpers.removeBoostrap();
   },
 };
