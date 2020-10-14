@@ -1,35 +1,38 @@
 <template>
-  <div class="ticket">
+  <div class="ticket" v-if="ticket">
     <transition
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
     >
       <div v-if="overlay" class="overlay" @click="overlay = !overlay">
-        <img :src="this.img" alt="imgOverlay" />
+        <img :src="img" alt="imgOverlay" />
       </div>
     </transition>
-    <div v-if="ticket" class="ticket__container custom-scrollbar">
-      <h2 class="ticket__title">{{ ticket.title.toUpperCase() }}</h2>
-      <p class="ticket__detail">
-        <span class="label">Place: </span>{{ ticket.place }}
-      </p>
-      <p class="ticket__detail">
-        <span class="label">Status: </span
-        >{{ ticket.status | getStatusName }} at
-        {{ ticket.status | getStatusTime }}
-      </p>
-      <p class="ticket__detail">
-        <span class="label">Assigned: </span>{{ technicianName }}
-      </p>
-      <p class="ticket__detail">
-        <span class="label">Start: </span>{{ ticket.startDate | changeDate }}
-      </p>
-      <p class="ticket__detail">
-        <span class="label">End: </span>{{ ticket.endDate | changeDate }}
-      </p>
-      <p class="ticket__detail">
-        <span class="label">Description: </span>{{ ticket.description }}
-      </p>
+    <div class="ticket__container custom-scrollbar">
+      <div class="ticket__information">
+        <table>
+          <thead>
+            <th colspan="2">Basic Information</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Tilte:</b> {{ ticket.title.toUpperCase() }}</td>
+              <td><b>Assigned:</b> {{ ticket.technicianName }}</td>
+            </tr>
+            <tr>
+              <td><b>Start Date:</b> {{ ticket.startDate | changeDate }}</td>
+              <td>
+                <b>Status:</b> {{ ticket.status | getStatusName }} at
+                {{ ticket.status | getStatusTime }}
+              </td>
+            </tr>
+            <tr>
+              <td><b>End Date:</b> {{ ticket.endDate | changeDate }}</td>
+              <td><b>Place:</b> {{ ticket.place }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <img
         v-for="img in ticket.images"
         :key="img"
@@ -38,48 +41,50 @@
         class="ticket__img"
         @click="showImage(img)"
       />
-      <div class="ticket__assignee">
-        <div class="form-group">
-          <label for="exampleFormControlSelect1">Assign to</label>
-          <select
-            id="exampleFormControlSelect1"
-            v-model="technicianId"
-            class="form-control"
-          >
-            <option
-              v-for="technician in technicians"
-              :key="technician.id"
-              :value="technician.id"
-            >
-              {{ technician.fullName }}
-            </option>
-          </select>
+      <div class="ticket__conversation">
+        <Comment v-for="cmt in ticket.comment" :key="cmt" :id="cmt"></Comment>
+        <div class="ticket__box">
+          <form @submit.prevent="addNewComment">
+            <textarea
+              cols="30"
+              rows="3"
+              placeholder="Type here"
+              v-model="newComment"
+              required
+            ></textarea>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Assign to</label>
+              <select
+                id="exampleFormControlSelect1"
+                v-model="technicianId"
+                @change="assignTo"
+                class="form-control"
+              >
+                <option
+                  v-for="technician in technicians"
+                  :key="technician.id"
+                  :value="technician.id"
+                >
+                  {{ technician.fullName }}
+                </option>
+              </select>
+            </div>
+            <input type="submit" value="Comment" class="btn btn-success" />
+            <button class="btn btn-secondary" @click="back">Back</button>
+            <button class="btn btn-light" @click="closeTicket">
+              <img src="@/assets/icon/error_red.png" alt="" width="20px" />
+              Close this
+            </button>
+          </form>
         </div>
       </div>
-      <div class="form-group">
-        <label for="comment">Comment:</label>
-        <textarea class="form-control" id="comment" rows="5" v-model="comment"></textarea>
-      </div>
-      <button
-        :disabled="isDisable"
-        class="btn btn-primary"
-        type="button"
-        @click="updateTicket"
-      >
-        Update
-      </button>
-      <button class="btn btn-secondary" type="button" @click="back">
-        Cancel
-      </button>
-      <button class="btn btn-danger" type="button" @click="deleteTicket">
-        Delete
-      </button>
     </div>
   </div>
 </template>
 
 <!--suppress ES6MissingAwait -->
 <script>
+import Comment from "@/components/Comment";
 export default {
   data() {
     return {
@@ -90,26 +95,27 @@ export default {
       technicianName: "",
       overlay: false,
       img: "",
-      comment:"",
+      newComment: "",
     };
   },
   methods: {
     async getData() {
       try {
-        const tickets = await this.$http.get(
-          "/ticket/" + this.$route.params.id
-        );
-        const technicians = await this.$http.get("/user/role/technician");
-        this.ticket = tickets.data;
-        this.technicianId = this.ticket.technicianId
-          ? this.ticket.technicianId
-          : "";
-        this.technicians = technicians.data;
-        this.technicianName = this.getTechniciansName(
-          this.technicians,
-          this.technicianId
-        );
-        this.comment = this.ticket.comment;
+        this.interval = setInterval(async () => {
+          const tickets = await this.$http.get(
+            "/ticket/" + this.$route.params.id
+          );
+          const technicians = await this.$http.get("/user/role/technician");
+          this.ticket = tickets.data;
+          this.technicianId = this.ticket.technicianId
+            ? this.ticket.technicianId
+            : "";
+          this.technicians = technicians.data;
+          this.technicianName = this.getTechniciansName(
+            this.technicians,
+            this.technicianId
+          );
+        }, 500);
       } catch (err) {
         this.$swal({
           icon: "error",
@@ -117,7 +123,48 @@ export default {
         });
       }
     },
-    async updateTicket() {
+    async closeTicket() {},
+    async addNewComment() {
+      try {
+        this.$swal({
+          title: "Please wait",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          onOpen: () => {
+            this.$swal.showLoading();
+          },
+        });
+        const comment = {
+          fullName: this.$store.getters["userModule/getUser"].data.fullName,
+          userId: this.$store.getters["userModule/getUser"].data.id,
+          content: this.newComment,
+        };
+        this.newComment = "";
+        await this.$http.put(
+          "/comment/ticket/" + this.$route.params.id,
+          comment
+        );
+        this.$swal("Updated!", "", "success");
+        await this.getData();
+      } catch (err) {
+        this.$swal({
+          icon: "error",
+          title: err.message,
+        });
+      }
+    },
+    back() {
+      this.$router.back();
+    },
+    getTechniciansName(technicians, technicianId) {
+      const name = technicians.filter((tech) => tech.id === technicianId);
+      return name.length !== 0 ? name[0].fullName : "Not Assigned";
+    },
+    showImage(img) {
+      this.overlay = true;
+      this.img = img;
+    },
+    async assignTo() {
       try {
         const chose = await this.$swal({
           title: "Are you sure?",
@@ -142,8 +189,7 @@ export default {
           this.ticket.modifiedBy = this.$store.getters[
             "userModule/getUser"
           ].data.id;
-          this.ticket.comment = this.comment;
-
+          console.log(this.ticket);
           this.$swal({
             title: "Please wait",
             showConfirmButton: false,
@@ -163,58 +209,10 @@ export default {
         });
       }
     },
-    async deleteTicket() {
-      try {
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Delete",
-        });
-        if (chose.isConfirmed) {
-          this.$swal({
-            title: "Please wait",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            onOpen: () => {
-              this.$swal.showLoading();
-            },
-          });
-          this.ticket.modifiedBy = this.$store.getters[
-            "userModule/getUser"
-          ].data.id;
-          await this.$http.delete(
-            `/ticket/${this.$route.params.id}/${this.ticket.modifiedBy}`
-          );
-          await this.$swal("Delete!", "", "success");
-          this.back();
-        }
-      } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
-        console.log(err);
-      }
-    },
-    back() {
-      this.$router.back();
-    },
-    getTechniciansName(technicians, technicianId) {
-      const name = technicians.filter((tech) => tech.id === technicianId);
-      return name.length !== 0 ? name[0].fullName : "Not Assigned";
-    },
-    showImage(img) {
-      this.overlay = true;
-      this.img = img;
-    },
   },
   watch: {
     technicianId() {
-      this.isDisable = false;
+      clearInterval(this.interval);
     },
   },
   filters: {
@@ -230,8 +228,14 @@ export default {
       return value ? value[value.length - 1].name : "";
     },
   },
-  created() {
+  async created() {
     this.getData();
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
+  components: {
+    Comment,
   },
 };
 </script>

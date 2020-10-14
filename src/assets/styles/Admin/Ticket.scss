@@ -13,6 +13,42 @@
     border-radius: 10px;
   }
 
+  &__information {
+    line-height: 1.5;
+    background-color: white;
+    table {
+      width: 100%;
+      th {
+        padding: 10px;
+        font-size: 22px;
+        border-bottom: 1px dashed rgb(51, 51, 51);
+      }
+      td {
+        padding: 5px;
+      }
+    }
+  }
+  &__conversation {
+    position: relative;
+    margin-top: 20px;
+  }
+  &__box {
+    margin-top: 50px;
+    form {
+      width: 100%;
+      textarea {
+        width: 100%;
+        padding: 20px 10px;
+        border: 1px solid rgba(107, 107, 107, 0.295);
+      }
+      button {
+        margin-left: 20px;
+        img {
+          margin-top: -5px;
+        }
+      }
+    }
+  }
   .overlay {
     animation-duration: 0.3s;
     top: 0;
@@ -35,10 +71,5 @@
 
   .label {
     font-weight: bold;
-  }
-
-  button {
-    margin-right: 20px;
-    padding: 10px 20px;
   }
 }
