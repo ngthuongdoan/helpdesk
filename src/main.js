@@ -9,6 +9,7 @@ import store from "./store";
 import axios from "axios";
 
 import helpers from "./helper";
+import i18n from './i18n'
 
 Vue.use(VueSuggestion);
 Vue.use(VueSweetalert2);
@@ -23,5 +24,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  i18n,
+  render: (h) => h(App)
 }).$mount("#app");
