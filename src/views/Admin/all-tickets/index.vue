@@ -1,34 +1,34 @@
 <template>
-  <div class="ticket__container custom-scrollbar">
+  <div class="all-ticket__container custom-scrollbar">
     <Pagination
-        v-if="isOnePage"
-        :page="page"
-        :pages="pages"
-        :per-page="perPage"
-        :ticket-length="tickets.length"
-        @changePage="page = $event"
-        @next="page++"
-        @previous="page--"
+      v-if="isOnePage"
+      :page="page"
+      :pages="pages"
+      :per-page="perPage"
+      :ticket-length="tickets.length"
+      @changePage="page = $event"
+      @next="page++"
+      @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">No ticket</p>
     </div>
     <table v-else>
       <thead>
-      <tr>
-        <th>ID</th>
-        <th @click="sorted = 'fullName'">Employee</th>
-        <th>Ticket Title</th>
-        <th @click="sorted = 'technicianName'">Technician</th>
-        <th @click="sorted = 'status'">Status</th>
-        <th @click="sorted = 'startDate'">Start Date</th>
-        <th @click="sorted = 'endDate'">End Date</th>
-      </tr>
+        <tr>
+          <th>ID</th>
+          <th @click="sorted = 'fullName'">Employee</th>
+          <th>Ticket Title</th>
+          <th @click="sorted = 'technicianName'">Technician</th>
+          <th @click="sorted = 'status'">Status</th>
+          <th @click="sorted = 'startDate'">Start Date</th>
+          <th @click="sorted = 'endDate'">End Date</th>
+        </tr>
       </thead>
       <Ticket
-          v-for="ticket in displayedTickets"
-          :key="ticket.id"
-          :ticket="ticket"
+        v-for="ticket in displayedTickets"
+        :key="ticket.id"
+        :ticket="ticket"
       ></Ticket>
     </table>
   </div>
@@ -48,7 +48,7 @@ export default {
       tickets: [],
       isFetching: true,
       sorted: "",
-      url: "/ticket"
+      url: "/ticket",
     };
   },
   created() {
@@ -112,7 +112,7 @@ export default {
       this.$swal.close();
     },
     sorted() {
-      console.log(this.sorted)
+      console.log(this.sorted);
       if (this.sorted) {
         this.url = "/ticket/sort/desc/" + this.sorted;
       }

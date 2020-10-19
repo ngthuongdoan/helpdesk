@@ -1,6 +1,6 @@
 <!--suppress ES6MissingAwait -->
 <template>
-  <div class="ticket__container">
+  <div class="all-ticket__container">
     <Pagination
       v-if="isOnePage"
       :page="page"

@@ -1,287 +1,93 @@
-<!--suppress ALL -->
 <template>
-  <div class="ticket-user" v-if="!isFetching">
-    <transition
-      enter-active-class="animate__animated animate__fadeIn"
-      leave-active-class="animate__animated animate__fadeOut"
-    >
-      <div v-if="imgOverlay" id="imgOverlay" @click="imgOverlay = !imgOverlay">
-        <img :src="img" alt="imgOverlay" />
-      </div>
-    </transition>
-    <div class="ticket-user__container custom-scrollbar">
-      <div class="ticket-user__information">
-        <table>
-          <thead>
-            <th colspan="2">Basic Information</th>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Tilte:</b> {{ ticket.title.toUpperCase() }}</td>
-              <td><b>Assigned:</b> {{ ticket.technicianName }}</td>
-            </tr>
-            <tr>
-              <td><b>Start Date:</b> {{ ticket.startDate | changeDate }}</td>
-              <td>
-                <b>Status:</b> {{ ticket.status | getStatusName }} at
-                {{ ticket.status | getStatusTime }}
-              </td>
-            </tr>
-            <tr>
-              <td><b>End Date:</b> {{ ticket.endDate | changeDate }}</td>
-              <td><b>Place:</b> {{ ticket.place }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <img
-        v-for="img in ticket.images"
-        :key="img"
-        :src="img"
-        alt="image"
-        class="ticket-user__img"
-        @click="showImage(img)"
-      />
-      <div class="ticket-user__conversation">
-        <Comment v-for="cmt in ticket.comment" :key="cmt" :id="cmt"></Comment>
-        <div class="ticket-user__box">
-          <form @submit.prevent="addNewComment">
-            <textarea
-              cols="30"
-              rows="3"
-              placeholder="Type here"
-              v-model="newComment"
-              required
-              :disabled="isClose"
-            ></textarea>
-            <input
-              type="submit"
-              value="Comment"
-              class="btn btn-success"
-              :disabled="isClose"
-            />
-            <button class="btn btn-secondary" type="button" @click="back">
-              Back
-            </button>
-            <button
-              class="btn btn-light"
-              type="button"
-              @click="closeTicket"
-              :disabled="isClose"
-            >
-              <img src="@/assets/icon/error_red.png" alt="" width="20px" />
-              Close this
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <TicketContainer class="user" :role="userRole"></TicketContainer>
 </template>
 
 <script>
-import Comment from "@/components/Comment";
-export default {
-  data() {
-    return {
-      ticket: null,
-      imgOverlay: false,
-      img: "",
-      newComment: "",
-      isFetching: true,
-      isClose: false,
-    };
-  },
-  methods: {
-    async getData() {
-      this.isFetching = true;
-      this.$swal({
-        title: "Please wait",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        onOpen: () => {
-          this.$swal.showLoading();
-        },
-      });
-      try {
-        this.interval = setInterval(async () => {
-          const ticket = await this.$http.get(
-            "/ticket/" + this.$route.params.id
-          );
-          this.ticket = ticket.data;
-          this.isClose =
-            this.ticket.status[this.ticket.status.length - 1].name === "Closed";
-          this.isFetching = false;
-        }, 500);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async closeTicket() {
-      try {
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#3085d6",
-          confirmButtonText: "Close",
-        });
-        if (chose.isConfirmed) {
-          const status = {
-            name: "Closed",
-            time: new Date().toISOString(),
-          };
-          this.ticket.status.push(status);
-          this.ticket.modifiedBy = this.$store.getters[
-            "userModule/getUser"
-          ].data.id;
-          this.$swal({
-            title: "Please wait",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            onOpen: () => {
-              this.$swal.showLoading();
-            },
-          });
-          await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
-          await this.$swal("Closed!", "", "success");
-          await this.back();
-        }
-      } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
-      }
-    },
-    async addNewComment() {
-      try {
-        this.$swal({
-          title: "Please wait",
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          onOpen: () => {
-            this.$swal.showLoading();
-          },
-        });
-        const comment = {
-          fullName: this.$store.getters["userModule/getUser"].data.fullName,
-          userId: this.$store.getters["userModule/getUser"].data.id,
-          content: this.newComment,
-        };
-        this.newComment = "";
+import TicketContainer from "@/components/TicketContainer";
 
-        await this.$http.put(
-          "/comment/ticket/" + this.$route.params.id,
-          comment
-        );
-        this.$swal("Updated!", "", "success");
-        await this.getData();
-      } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
-      }
-    },
-    back() {
-      this.$router.back();
-    },
-    showImage(img) {
-      this.imgOverlay = true;
-      this.img = img;
-    },
-  },
-  watch: {
-    isFetching() {
-      this.$swal.close();
-    },
-  },
-  filters: {
-    changeDate(value) {
-      return value ? new Date(value).toLocaleString() : "";
-    },
-    getStatusTime(value) {
-      return value
-        ? new Date(value[value.length - 1].time).toLocaleString()
-        : "";
-    },
-    getStatusName(value) {
-      return value ? value[value.length - 1].name : "";
+export default {
+  computed: {
+    userRole() {
+      return this.$store.getters["userModule/getUser"].data.role;
     },
   },
   components: {
-    Comment,
+    TicketContainer,
   },
   mounted() {
     this.$helpers.importBoostrap();
   },
-  created() {
-    this.getData();
-  },
-
   beforeDestroy() {
-    clearInterval(this.interval);
     this.$helpers.removeBoostrap();
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.ticket-user {
-  overflow-x: hidden;
-  &__container {
-    position: absolute;
-    width: 80%;
-    top: 15%;
-    left: 10%;
-    bottom: 5%;
-    overflow: auto;
-    background: white;
-    padding: 20px 30px;
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
-    z-index: 0;
-  }
-  &__information {
-    line-height: 1.5;
-    background-color: white;
-    table {
-      width: 100%;
-      th {
-        padding: 10px;
-        font-size: 22px;
-        border-bottom: 1px dashed rgb(51, 51, 51);
-      }
-      td {
-        padding: 5px;
-      }
+<style lang="scss">
+.user {
+  color: black;
+  .ticket {
+    &__container {
+      position: absolute;
+      width: 80%;
+      height: 80vh;
+      left: 10%;
+      bottom: 5%;
+      overflow: auto;
+      background: white;
+      padding: 20px 30px;
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
+      z-index: 0;
     }
-  }
-  &__conversation {
-    position: relative;
-    margin-top: 20px;
-  }
-  &__box {
-    margin-top: 50px;
-    form {
-      width: 100%;
-      textarea {
+    &__information {
+      line-height: 1.5;
+      background-color: white;
+      table {
         width: 100%;
-        padding: 20px 10px;
-        border: 1px solid rgba(107, 107, 107, 0.295);
-      }
-      button {
-        margin-left: 20px;
-        img {
-          margin-top: -5px;
+        th {
+          text-align: left;
+          padding: 10px;
+          font-size: 22px;
+          border-bottom: 1px dashed rgb(51, 51, 51);
+        }
+        td {
+          padding: 5px;
         }
       }
     }
-  }
+    &__conversation {
+      position: relative;
+      margin-top: 20px;
+    }
+    &__box {
+      margin-top: 50px;
+      form {
+        width: 100%;
+        textarea {
+          width: 100%;
+          padding: 20px 10px;
+          border: 1px solid rgba(107, 107, 107, 0.295);
+        }
+        button {
+          margin-left: 20px;
+          img {
+            margin-top: -5px;
+          }
+        }
+      }
+    }
 
-  #imgOverlay {
+    &__img {
+      margin: 10px;
+      max-width: 250px;
+      cursor: pointer;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+  }
+  .overlay {
     animation-duration: 0.3s;
     position: absolute;
     top: 0;
@@ -299,16 +105,6 @@ export default {
       transform: translate(-50%, -50%);
       z-index: 10000;
     }
-  }
-
-  &__img {
-    margin: 10px;
-    max-width: 250px;
-    cursor: pointer;
-  }
-
-  .label {
-    font-weight: bold;
   }
 }
 </style>

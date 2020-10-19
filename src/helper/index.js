@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 export default {
   importBoostrap() {
     let bootstrapStyle = document.createElement("link");
@@ -26,5 +27,15 @@ export default {
 
     let bootstrap = document.getElementById("bootstrap");
     document.body.removeChild(bootstrap);
+  },
+  loading() {
+    Swal.fire({
+      title: "Please wait",
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      onOpen: () => {
+        this.$swal.showLoading();
+      },
+    });
   },
 };
