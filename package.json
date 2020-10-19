@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "compressorjs": "^1.0.6",
     "core-js": "^3.6.5",
     "global": "^4.4.0",
     "register-service-worker": "^1.7.1",

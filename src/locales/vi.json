@@ -1,0 +1,38 @@
+{
+    "login": {
+        "username": "Tên đăng nhập",
+        "password": "Mật khẩu",
+        "loginBtn": "Đăng nhập",
+        "clearBtn": "Xoá"
+    },
+    "admin": {},
+    "user": {},
+    "technician": {
+        "allTicket": {
+            "noTicket": "Không có yêu cầu",
+            "id": "Mã yêu cầu",
+            "employee": "Chủ sở hữu",
+            "title": "Tiêu đề",
+            "status": "Trạng thái",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc"
+        }
+    },
+    "ticket": {
+        "header": "Thông tin cơ bản",
+        "id": "Mã",
+        "employee": "Chủ sở hữu",
+        "title": "Tiêu đề",
+        "status": "Trạng thái",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc",
+        "assign": "Chỉ định",
+        "place": "Địa điểm",
+        "at": "lúc",
+        "assignTo": "Chỉ định cho",
+        "comment": "Bình luận",
+        "back": "Quay lại",
+        "close": "Đóng yêu cầu này",
+        "typeHere": "Điền ở đây"
+    }
+}

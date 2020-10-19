@@ -3,11 +3,11 @@
   <div>
     <div class="login__container" v-if="!isMobile">
       <form class="login__form" @submit.prevent="submitForm">
-        <label for="username">Username</label>
+        <label for="username">{{ $t("login.username") }}</label>
         <br />
         <input id="username" type="text" v-model="login.username" required />
         <br />
-        <label for="password">Password</label>
+        <label for="password">{{ $t("login.password") }}</label>
         <br />
         <input
           id="password"
@@ -23,8 +23,8 @@
         </span>
         <br />
         <div class="buttons">
-          <input type="submit" value="Login" />
-          <button @click="init">Clear</button>
+          <input type="submit" :value="$t('login.loginBtn')" />
+          <button @click="init">{{ $t("login.clearBtn") }}</button>
         </div>
       </form>
     </div>

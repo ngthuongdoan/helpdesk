@@ -1,3 +1,38 @@
 {
-  "message": "hello i18n !!"
+  "login": {
+    "username": "Username",
+    "password": "Password",
+    "loginBtn": "Login",
+    "clearBtn": "Clear"
+  },
+  "admin": {},
+  "user": {},
+  "technician": {
+    "allTicket": {
+      "noTicket": "No ticket",
+      "id": "ID",
+      "employee": "Employee",
+      "title": "Ticket Title",
+      "status": "Status",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "ticket": {
+      "header": "Basic Information",
+      "id": "ID",
+      "employee": "Employee",
+      "title": "Title",
+      "status": "Status",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "assign": "Assigned",
+      "place": "Place",
+      "at": "at",
+      "typeHere": "Type here",
+      "assignTo": "Assign to",
+      "comment": "Comment",
+      "back": "Back",
+      "close": "Close this"
+    }
+  }
 }

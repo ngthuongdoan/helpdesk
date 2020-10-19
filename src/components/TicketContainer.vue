@@ -12,23 +12,37 @@
       <div class="ticket__information">
         <table>
           <thead>
-            <th colspan="2">Basic Information</th>
+            <th colspan="2">{{ $t("ticket.header") }}</th>
           </thead>
           <tbody>
             <tr>
-              <td><b>Tilte:</b> {{ ticket.title.toUpperCase() }}</td>
-              <td><b>Assigned:</b> {{ technicianName }}</td>
+              <td>
+                <b>{{ $t("ticket.title") }}:</b>
+                {{ ticket.title.toUpperCase() }}
+              </td>
+              <td>
+                <b>{{ $t("ticket.assign") }}:</b> {{ technicianName }}
+              </td>
             </tr>
             <tr>
-              <td><b>Start Date:</b> {{ ticket.startDate | changeDate }}</td>
               <td>
-                <b>Status:</b> {{ ticket.status | getStatusName }} at
+                <b>{{ $t("ticket.startDate") }}:</b>
+                {{ ticket.startDate | changeDate }}
+              </td>
+              <td>
+                <b>{{ $t("ticket.status") }}:</b>
+                {{ ticket.status | getStatusName }} {{ $t("ticket.at") }}
                 {{ ticket.status | getStatusTime }}
               </td>
             </tr>
             <tr>
-              <td><b>End Date:</b> {{ ticket.endDate | changeDate }}</td>
-              <td><b>Place:</b> {{ ticket.place }}</td>
+              <td>
+                <b>{{ $t("ticket.endDate") }}:</b>
+                {{ ticket.endDate | changeDate }}
+              </td>
+              <td>
+                <b>{{ $t("ticket.place") }}:</b> {{ ticket.place }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -48,13 +62,15 @@
             <textarea
               cols="30"
               rows="3"
-              placeholder="Type here"
+              :placeholder="$t('ticket.typeHere')"
               v-model="newComment"
               required
               :disabled="isClose"
             ></textarea>
             <div class="form-group" v-if="isAdmin">
-              <label for="exampleFormControlSelect1">Assign to</label>
+              <label for="exampleFormControlSelect1">{{
+                $t("ticket.assignTo")
+              }}</label>
               <select
                 id="exampleFormControlSelect1"
                 v-model="technicianId"
@@ -73,12 +89,12 @@
             </div>
             <input
               type="submit"
-              value="Comment"
+              :value="$t('ticket.comment')"
               class="btn btn-success"
               :disabled="isClose"
             />
             <button class="btn btn-secondary" type="button" @click="back">
-              Back
+              {{ $t("ticket.back") }}
             </button>
             <button
               class="btn btn-light"
@@ -87,7 +103,7 @@
               :disabled="isClose"
             >
               <img src="@/assets/icon/error_red.png" alt="" width="20px" />
-              Close this
+              {{ $t("ticket.close") }}
             </button>
           </form>
         </div>

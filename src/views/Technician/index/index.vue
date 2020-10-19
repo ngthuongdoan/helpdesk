@@ -10,17 +10,17 @@
       @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
-      <p id="noTicket">No ticket</p>
+      <p id="noTicket">{{ $t("technician.allTicket.noTicket") }}</p>
     </div>
     <table v-else>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Employee</th>
-          <th>Ticket Title</th>
-          <th>Status</th>
-          <th>Start Date</th>
-          <th>End Date</th>
+          <th>{{ $t("technician.allTicket.id") }}</th>
+          <th>{{ $t("technician.allTicket.employee") }}</th>
+          <th>{{ $t("technician.allTicket.title") }}</th>
+          <th>{{ $t("technician.allTicket.status") }}</th>
+          <th>{{ $t("technician.allTicket.startDate") }}</th>
+          <th>{{ $t("technician.allTicket.endDate") }}</th>
         </tr>
       </thead>
       <Ticket

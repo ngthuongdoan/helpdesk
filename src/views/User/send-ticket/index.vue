@@ -3,35 +3,36 @@
     <form class="ticket__form" @submit.prevent="submitForm">
       <div class="ticket__info">
         <label for="title">Title</label>
-        <br/>
-        <input id="title" v-model="ticket.title" required type="text"/>
-        <br/>
+        <br />
+        <input id="title" v-model="ticket.title" required type="text" />
+        <br />
         <label for="place">Place</label>
-        <br/>
-        <input id="place" v-model="ticket.place" required type="text"/>
-        <br/>
+        <br />
+        <input id="place" v-model="ticket.place" required type="text" />
+        <br />
       </div>
       <div class="ticket__description">
         <label for="problem">Your problems</label>
-        <br/>
-        <textarea id="problem" v-model="ticket.description" required rows="8"/>
-        <br/>
+        <br />
+        <textarea id="problem" v-model="ticket.description" required rows="8" />
+        <br />
         <input
-            ref="fileInput"
-            accept="image/*"
-            multiple
-            required
-            type="file"
-            @change="uploadImage"
+          ref="fileInput"
+          accept="image/*"
+          multiple
+          required
+          type="file"
+          @change="uploadImage"
         />
       </div>
-      <input type="submit" value="Submit"/>
+      <input type="submit" value="Submit" />
       <button @click="init">Clear</button>
     </form>
   </div>
 </template>
 
 <script>
+import Compressor from "compressorjs";
 export default {
   data() {
     return {
@@ -57,13 +58,26 @@ export default {
     },
     uploadImage(e) {
       const images = e.target.files;
+      //compress
       images.forEach((i) => {
-        let reader = new FileReader();
-        reader.readAsDataURL(i);
-        reader.onload = (evt) => {
-          let img = evt.target.result;
-          this.ticket.images.push(img);
-        };
+        console.log(i.size);
+        new Compressor(i, {
+          quality: 0.3,
+          maxWidth: 640,
+          maxHeight: 360,
+          success: (result) => {
+            console.log(result.size);
+            let reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onload = (evt) => {
+              let img = evt.target.result;
+              this.ticket.images.push(img);
+            };
+          },
+          error(e) {
+            console.error(e.message);
+          },
+        });
       });
     },
     submitForm() {
@@ -78,24 +92,25 @@ export default {
           this.$swal.showLoading();
         },
       });
+      console.log(this.ticket);
       this.$http
-          .post("/ticket", this.ticket)
-          .then(() => {
-            this.$swal.close();
-            this.$swal({
-              title: "Success",
-              icon: "success",
-              allowOutsideClick: false,
-            });
-            this.init();
-          })
-          .catch((err) => {
-            this.$swal({
-              title: "Error",
-              icon: "error",
-              text: err,
-            });
+        .post("/ticket", this.ticket)
+        .then(() => {
+          this.$swal.close();
+          this.$swal({
+            title: "Success",
+            icon: "success",
+            allowOutsideClick: false,
           });
+          this.init();
+        })
+        .catch((err) => {
+          this.$swal({
+            title: "Error",
+            icon: "error",
+            text: err,
+          });
+        });
     },
   },
 };
