@@ -2,7 +2,7 @@
   <div class="sidebar">
     <nav>
       <div class="sidebar__header">
-        <h4>{{ user.role.toUpperCase() }}</h4>
+        <h4>{{ user.role[$i18n.locale].toUpperCase() }}</h4>
       </div>
       <transition enter-active-class="animate__animated animate__fadeInLeft">
         <ul class="nav flex-column sidebar__menu">
@@ -14,7 +14,7 @@
               class="nav-item"
               tag="li"
           >
-            <a class="nav-link">{{ value.name }}</a>
+            <a class="nav-link">{{ value.name[$i18n.locale] }}</a>
           </router-link>
         </ul>
       </transition>
@@ -32,43 +32,36 @@ export default {
     },
   },
   data() {
-    let menu;
-    switch (this.user.role) {
-      case "admin":
-        menu = [
+    return {
+      menu: [
           {
             id: "dashboard",
-            name: "Dashboard",
+            name: {
+              en: "Dashboard",
+              vi: "Trang chủ"
+            },
             url: "/admin/dashboard",
             check: true,
           },
           {
             id: "tickets",
-            name: "Tickets",
+            name: {
+              en: "Tickets",
+              vi: "Yêu cầu"
+            },
             url: "/admin/tickets",
             check: true,
           },
           {
             id: "technicians",
-            name: "Technicians",
+            name: {
+              en: "Technicians",
+              vi: "Kỹ thuật viên"
+            },,
             url: "/admin/technicians",
             check: true,
           },
-        ];
-        break;
-      case "technician":
-        menu = [
-          {
-            id: "dashboard",
-            name: "Dashboard",
-            url: "/technician",
-            check: true,
-          },
-        ];
-        break;
-    }
-    return {
-      menu: menu,
+        ],
     };
   },
 };
