@@ -39,7 +39,13 @@
     "faq": {
       "typeHere": "Type here"
     },
-    "sendTicket": {}
+    "sendTicket": {
+      "title": "Title",
+      "place":"Place",
+      "yourProblem":"Your Problem",
+      "submitBtn":"Submit",
+      "clearBtn": "Clear"
+    }
   },
   "technician": {
     "allTicket": {
