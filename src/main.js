@@ -10,7 +10,9 @@ import axios from "axios";
 
 import helpers from "./helper";
 import i18n from './i18n'
+import VueFlags from "@growthbunker/vueflags";
 
+Vue.use(VueFlags);
 Vue.use(VueSuggestion);
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios);

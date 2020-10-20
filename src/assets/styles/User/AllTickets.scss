@@ -1,0 +1,17 @@
+.ticket {
+  &__container {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    height: 80vh;
+    background: none;
+    box-shadow: none;
+  }
+}
+
+#noTicket {
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
+}

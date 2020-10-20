@@ -1,39 +1,60 @@
 <!--suppress ALL -->
 <template>
   <div>
-    <div class="login__container" v-if="!isMobile">
+    <div v-if="!isMobile" class="login__container">
+      <div v-if="isChoose" class="chooseLanguage">
+        <div class="flags__container">
+          <h1>Choose your language</h1>
+          <div class="flags" @click="chooseLanguage('en')">
+            <gb-flag
+                code="us"
+                height="200px"
+            />
+          </div>
+          <div class="flags" @click="chooseLanguage('vi')">
+            <gb-flag
+                code="vn"
+                height="200px"
+            />
+          </div>
+        </div>
+
+      </div>
       <form class="login__form" @submit.prevent="submitForm">
         <label for="username">{{ $t("login.username") }}</label>
-        <br />
-        <input id="username" type="text" v-model="login.username" required />
-        <br />
+        <br/>
+        <input id="username" v-model="login.username" required type="text"/>
+        <br/>
         <label for="password">{{ $t("login.password") }}</label>
-        <br />
+        <br/>
         <input
-          id="password"
-          type="password"
-          v-model="login.password"
-          required
+            id="password"
+            v-model="login.password"
+            required
+            type="password"
         />
         <span id="eye">
           <img
-            src="https://img.icons8.com/android/24/000000/visible.png"
-            alt="show-password"
+              alt="show-password"
+              src="https://img.icons8.com/android/24/000000/visible.png"
           />
         </span>
-        <br />
+        <br/>
         <div class="buttons">
-          <input type="submit" :value="$t('login.loginBtn')" />
+          <input :value="$t('login.loginBtn')" type="submit"/>
           <button @click="init">{{ $t("login.clearBtn") }}</button>
         </div>
       </form>
     </div>
+    <!-- Giao diện cho mobile -->
     <Mobile v-else></Mobile>
+    <!--  -->
   </div>
 </template>
 
 <script>
 import Mobile from "@/components/Mobile";
+
 export default {
   data() {
     return {
@@ -42,8 +63,12 @@ export default {
         password: "",
       },
       isMobile: false,
+      isChoose: true,
     };
   },
+  /**
+   * Show/Hide password
+   */
   mounted() {
     if (!this.isMobile) {
       const eye = document.getElementById("eye");
@@ -62,16 +87,30 @@ export default {
       });
     }
   },
+  /**
+   * Xét điều kiện hiển thị Mobile (width < 800px)
+   */
   created() {
     if (window.innerWidth < 800) this.isMobile = true;
   },
   methods: {
+    /**
+     * Tạo mới đối tượng login
+     */
     init() {
       this.login = {
         username: "",
         password: "",
       };
     },
+    chooseLanguage(lang) {
+      this.$i18n.locale = lang;
+      this.isChoose = false;
+    },
+    /**
+     * Điều hướng dựa trên quyền
+     * @param {String} role - Quyền của người dùng
+     */
     changeRoute(role) {
       switch (role) {
         case "admin":
@@ -88,7 +127,12 @@ export default {
           break;
       }
     },
+    /**
+     * Login user
+     * @async
+     */
     async submitForm() {
+      this.$helpers.loading();
       try {
         if (this.login.username === "") throw new Error("Username blank");
         if (this.login.password === "") throw new Error("Password blank");
@@ -97,14 +141,10 @@ export default {
         await this.$swal({
           title: "Success",
           icon: "success",
-        }).then();
-        this.changeRoute(user.data.role.toLowerCase());
-      } catch (err) {
-        await this.$swal({
-          title: "Error",
-          icon: "error",
-          text: err,
         });
+        this.changeRoute(user.data.role.toLowerCase());
+      } catch (error) {
+        this.$helpers.showError(error);
       }
     },
   },

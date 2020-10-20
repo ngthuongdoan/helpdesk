@@ -1,108 +1,108 @@
 <template>
-  <div class="ticket" v-if="!isFetching">
+  <div class="ticket">
     <transition
-      enter-active-class="animate__animated animate__fadeIn"
-      leave-active-class="animate__animated animate__fadeOut"
+        enter-active-class="animate__animated animate__fadeIn"
+        leave-active-class="animate__animated animate__fadeOut"
     >
       <div v-if="overlay" class="overlay" @click="overlay = !overlay">
-        <img :src="img" alt="imgOverlay" />
+        <img :src="img" alt="imgOverlay"/>
       </div>
     </transition>
     <div class="ticket__container custom-scrollbar">
       <div class="ticket__information">
         <table>
           <thead>
-            <th colspan="2">{{ $t("ticket.header") }}</th>
+          <th colspan="2">{{ $t("ticket.header") }}<span id="ticketId">#{{ticket.id}}</span></th>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <b>{{ $t("ticket.title") }}:</b>
-                {{ ticket.title.toUpperCase() }}
-              </td>
-              <td>
-                <b>{{ $t("ticket.assign") }}:</b> {{ technicianName }}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <b>{{ $t("ticket.startDate") }}:</b>
-                {{ ticket.startDate | changeDate }}
-              </td>
-              <td>
-                <b>{{ $t("ticket.status") }}:</b>
-                {{ ticket.status | getStatusName }} {{ $t("ticket.at") }}
-                {{ ticket.status | getStatusTime }}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <b>{{ $t("ticket.endDate") }}:</b>
-                {{ ticket.endDate | changeDate }}
-              </td>
-              <td>
-                <b>{{ $t("ticket.place") }}:</b> {{ ticket.place }}
-              </td>
-            </tr>
+          <tr>
+            <td>
+              <b>{{ $t("ticket.title") }}:</b>
+              {{ ticket.title.toUpperCase() }}
+            </td>
+            <td>
+              <b>{{ $t("ticket.assign") }}:</b> {{ technicianName }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>{{ $t("ticket.startDate") }}:</b>
+              {{ ticket.startDate | changeDate }}
+            </td>
+            <td>
+              <b>{{ $t("ticket.status") }}:</b>
+              {{ ticket.status[$i18n.locale]  | getStatusName }} {{ $t("ticket.at") }}
+              {{ ticket.status[$i18n.locale]  | getStatusTime }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>{{ $t("ticket.endDate") }}:</b>
+              {{ ticket.endDate | changeDate }}
+            </td>
+            <td>
+              <b>{{ $t("ticket.place") }}:</b> {{ ticket.place }}
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
       <img
-        v-for="img in ticket.images"
-        :key="img"
-        :src="img"
-        alt="image"
-        class="ticket__img"
-        @click="showImage(img)"
+          v-for="img in ticket.images"
+          :key="img"
+          :src="img"
+          alt="image"
+          class="ticket__img"
+          @click="showImage(img)"
       />
       <div class="ticket__conversation">
-        <Comment v-for="id in ticket.comment" :key="id" :id="id"></Comment>
+        <Comment v-for="id in ticket.comment" :id="id" :key="id"></Comment>
         <div class="ticket__box">
           <form @submit.prevent="addNewComment">
             <textarea
-              cols="30"
-              rows="3"
-              :placeholder="$t('ticket.typeHere')"
-              v-model="newComment"
-              required
-              :disabled="isClose"
-            ></textarea>
-            <div class="form-group" v-if="isAdmin">
-              <label for="exampleFormControlSelect1">{{
-                $t("ticket.assignTo")
-              }}</label>
-              <select
-                id="exampleFormControlSelect1"
-                v-model="technicianId"
-                @change="assignTo"
-                class="form-control"
+                v-model="newComment"
                 :disabled="isClose"
+                :placeholder="$t('ticket.typeHere')"
+                cols="30"
+                required
+                rows="3"
+            ></textarea>
+            <div v-if="isAdmin" class="form-group">
+              <label for="exampleFormControlSelect1">{{
+                  $t("ticket.assignTo")
+                }}</label>
+              <select
+                  id="exampleFormControlSelect1"
+                  :value="technicianId"
+                  :disabled="isClose"
+                  class="form-control"
+                  @change="assignTo"
               >
                 <option
-                  v-for="technician in technicians"
-                  :key="technician.id"
-                  :value="technician.id"
+                    v-for="technician in technicians"
+                    :key="technician.id"
+                    :value="technician.id"
                 >
                   {{ technician.fullName }}
                 </option>
               </select>
             </div>
             <input
-              type="submit"
-              :value="$t('ticket.comment')"
-              class="btn btn-success"
-              :disabled="isClose"
+                :disabled="isClose"
+                :value="$t('ticket.comment')"
+                class="btn btn-success"
+                type="submit"
             />
             <button class="btn btn-secondary" type="button" @click="back">
               {{ $t("ticket.back") }}
             </button>
             <button
-              class="btn btn-light"
-              type="button"
-              @click="closeTicket"
-              :disabled="isClose"
+                :disabled="isClose"
+                class="btn btn-light"
+                type="button"
+                @click="closeTicket"
             >
-              <img src="@/assets/icon/error_red.png" alt="" width="20px" />
+              <img alt="" src="@/assets/icon/error_red.png" width="20px"/>
               {{ $t("ticket.close") }}
             </button>
           </form>
@@ -115,6 +115,7 @@
 <!--suppress ES6MissingAwait -->
 <script>
 import Comment from "@/components/Comment";
+
 export default {
   data() {
     return {
@@ -139,43 +140,35 @@ export default {
   methods: {
     async getData() {
       this.isFetching = true;
-      this.$swal({
-        title: "Please wait",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        onOpen: () => {
-          this.$swal.showLoading();
-        },
-      });
       try {
+        // this.$helpers.loading();
+
         this.interval = setInterval(async () => {
           const tickets = await this.$http.get(
-            "/ticket/" + this.$route.params.id
+              "/ticket/" + this.$route.params.id
           );
           this.ticket = tickets.data;
           this.technicianName =
-            this.ticket.technicianName === ""
-              ? "Not Assigned"
-              : this.ticket.technicianName;
+              this.ticket.technicianName === ""
+                  ? "Not Assigned"
+                  : this.ticket.technicianName;
           this.isClose =
-            this.ticket.status[this.ticket.status.length - 1].name === "Closed";
-          this.isFetching = false;
+              this.ticket.status[this.ticket.status.length - 1].name === "Closed";
           //Dành cho admin
           if (this.role === "admin") {
             this.isAdmin = true;
             const technicians = await this.$http.get("/user/role/technician");
             this.technicianId = this.ticket.technicianId
-              ? this.ticket.technicianId
-              : "";
+                ? this.ticket.technicianId
+                : "";
             this.technicians = technicians.data;
           }
           //----
+
+          this.isFetching = false;
         }, 2000);
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err)
       }
     },
     /**
@@ -184,15 +177,8 @@ export default {
      */
     async closeTicket() {
       try {
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#3085d6",
-          confirmButtonText: "Close",
-        });
+        const chose = await this.$helpers.confirmSwal("Close");
+
         if (chose.isConfirmed) {
           const status = {
             name: "Closed",
@@ -200,26 +186,16 @@ export default {
           };
           this.ticket.status.push(status);
           this.ticket.modifiedBy = this.$store.getters[
-            "userModule/getUser"
-          ].data.id;
-          // this.$swal({
-          //   title: "Please wait",
-          //   showConfirmButton: false,
-          //   allowOutsideClick: false,
-          //   onOpen: () => {
-          //     this.$swal.showLoading();
-          //   },
-          // });
+              "userModule/getUser"
+              ].data.id;
+
           this.$helpers.loading();
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
           await this.$swal("Closed!", "", "success");
           await this.back();
         }
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err)
       }
     },
     /**
@@ -227,14 +203,7 @@ export default {
      */
     async addNewComment() {
       try {
-        this.$swal({
-          title: "Please wait",
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          onOpen: () => {
-            this.$swal.showLoading();
-          },
-        });
+        // this.$helpers.loading();
         const comment = {
           fullName: this.$store.getters["userModule/getUser"].data.fullName,
           userId: this.$store.getters["userModule/getUser"].data.id,
@@ -242,45 +211,53 @@ export default {
         };
         this.newComment = "";
         await this.$http.put(
-          "/comment/ticket/" + this.$route.params.id,
-          comment
+            "/comment/ticket/" + this.$route.params.id,
+            comment
         );
-        this.$swal("Updated!", "", "success");
+        // this.$swal("Updated!", "", "success");
         await this.getData();
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err);
       }
     },
+    /**
+     * Trở về trang chính
+     */
     back() {
       this.$router.back();
     },
+    /**
+     * Lấy tên technician để assign
+     * @param {Array} technicians - Danh sách technician
+     * @param {String} technicianId - Mã technician
+     * @returns {string} - Tên của technician
+     */
     getTechniciansName(technicians, technicianId) {
       const name = technicians.filter((tech) => tech.id === technicianId);
       return name.length !== 0 ? name[0].fullName : "Not Assigned";
     },
+    /**
+     * Hiển thị hình ảnh
+     * @param {String} img - Đường link ảnh được hiển thị
+     */
     showImage(img) {
       this.overlay = true;
       this.img = img;
     },
+    /**
+     * Chỉ định cho một technician
+     * @returns {Promise<void>}
+     */
     async assignTo() {
+      clearInterval(this.interval);
+
       try {
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Update",
-        });
+        const chose = await this.$helpers.confirmSwal("Assign")
         if (chose.isConfirmed) {
           this.ticket.technicianId = this.technicianId;
           this.ticket.technicianName = this.getTechniciansName(
-            this.technicians,
-            this.technicianId
+              this.technicians,
+              this.technicianId
           );
           const status = {
             name: "Assigned",
@@ -288,35 +265,26 @@ export default {
           };
           this.ticket.status.push(status);
           this.ticket.modifiedBy = this.$store.getters[
-            "userModule/getUser"
-          ].data.id;
-          console.log(this.ticket);
-          this.$swal({
-            title: "Please wait",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            onOpen: () => {
-              this.$swal.showLoading();
-            },
-          });
+              "userModule/getUser"
+              ].data.id;
+          this.$helpers.loading()
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
-          this.$swal("Updated!", "", "success");
+          await this.$swal("Updated!", "", "success");
+          await this.getData();
+        }else{
           await this.getData();
         }
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err)
       }
     },
   },
   watch: {
     technicianId() {
-      clearInterval(this.interval);
+      // clearInterval(this.interval);
     },
     isFetching() {
-      this.$swal.close();
+      if(!this.isFetching) this.$swal.close();
     },
   },
   filters: {
@@ -325,14 +293,15 @@ export default {
     },
     getStatusTime(value) {
       return value
-        ? new Date(value[value.length - 1].time).toLocaleString()
-        : "";
+          ? new Date(value[value.length - 1].time).toLocaleString()
+          : "";
     },
     getStatusName(value) {
       return value ? value[value.length - 1].name : "";
     },
   },
   async created() {
+    this.$helpers.loading();
     this.getData();
   },
   beforeDestroy() {

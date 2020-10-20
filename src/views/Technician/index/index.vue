@@ -5,10 +5,12 @@
       v-if="isOnePage"
       :page="page"
       :pages="pages"
+      :per-page="perPage"
+      :data-length="tickets.length"
       @changePage="page = $event"
       @next="page++"
       @previous="page--"
-    ></Pagination>
+     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">{{ $t("technician.allTicket.noTicket") }}</p>
     </div>
@@ -50,34 +52,15 @@ export default {
     this.getData();
   },
   beforeDestroy() {
-    this.clearInterval(this.interval);
+    clearInterval(this.interval);
   },
 
   methods: {
-    setPages() {
-      if (this.tickets.length === 0) return;
-      this.pages = [];
-      let numberOfPages = Math.ceil(this.tickets.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(tickets) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return tickets.slice(from, to);
-    },
+    /**
+     * Hàm lấy dữ liệu từ server, cứ 2s lấy 1 lần
+     */
     async getData() {
-      this.$swal({
-        title: "Please wait",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        onOpen: () => {
-          this.$swal.showLoading();
-        },
-      });
+      this.$helpers.loading();
       try {
         this.interval = setInterval(async () => {
           const uid = await this.$store.getters["userModule/getUser"].data.id;
@@ -86,24 +69,31 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        console.log(err);
+        this.$helpers.showError(err);
       }
-    },
-    clearInterval(interval) {
-      clearInterval(interval);
     },
   },
   computed: {
+    /**
+     * Số yêu cầu sẽ hiện trong 1 trang
+     * @returns {Array} - Số dữ liệu sẽ hiện thị
+     */
     displayedTickets() {
-      return this.tickets.length !== 0 ? this.paginate(this.tickets) : [];
+      return this.tickets.length !== 0
+          ? this.$helpers.paginate(this.tickets, this.page, this.perPage)
+          : [];
     },
+    /**
+     * Kiểm tra để tắt phân trang khi chỉ có 1 trang
+     * @returns {Boolean} - Có phải là 1 trang hay không
+     */
     isOnePage() {
       return this.pages.length > 1;
     },
   },
   watch: {
     tickets() {
-      this.setPages();
+      this.pages = this.$helpers.setPages(this.tickets.length, this.perPage);
     },
     isFetching() {
       this.$swal.close();

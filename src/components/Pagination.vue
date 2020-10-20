@@ -33,7 +33,7 @@
         </button>
       </li>
       <li class="totalPage">
-        <p>{{ (perPage * page) > ticketLength ? ticketLength : perPage * page }}/{{ ticketLength }}</p>
+        <p>{{ (perPage * page) > dataLength ? dataLength : perPage * page }}/{{ dataLength }}</p>
       </li>
     </ul>
   </nav>
@@ -57,7 +57,7 @@ export default {
       type: Array,
       required: true,
     },
-    ticketLength: {
+    dataLength: {
       type: Number,
       required: true,
     },

@@ -23,11 +23,17 @@ export default {
       searchItems: [],
     };
   },
+  /**
+   * Lầy FAQ từ trong store
+   */
   async created() {
     this.faqs = await this.$store.getters["userModule/getFaq"];
     this.searchItems = this.faqs;
   },
   watch: {
+    /**
+     * Hiện FAQ mỗi khi user nhập
+     */
     input() {
       this.searchItems = this.faqs.filter((faq) =>
         faq.question.includes(this.input)

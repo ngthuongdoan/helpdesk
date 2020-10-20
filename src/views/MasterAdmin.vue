@@ -38,7 +38,7 @@ export default {
   mounted() {
     this.$helpers.importBoostrap();
   },
-  destroyed() {
+  beforeDestroy() {
     this.$helpers.removeBoostrap();
   },
   methods: {

@@ -2,7 +2,7 @@
 <template>
   <form style="padding: 30px" @submit.prevent="addInformation">
     <div class="form-group">
-      <label for="full-name">Full name</label>
+      <label for="full-name">{{ $t('admin.addTechnician.fullName') }}</label>
       <input
           id="full-name"
           v-model="technician.fullName"
@@ -12,7 +12,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
+      <label for="exampleInputEmail1">{{ $t('admin.addTechnician.email') }}</label>
       <input
           id="exampleInputEmail1"
           v-model="technician.email"
@@ -23,7 +23,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username">{{ $t('admin.addTechnician.username') }}</label>
       <input
           id="username"
           v-model="technician.username"
@@ -33,7 +33,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="password">Password</label>
+      <label for="password">{{ $t('admin.addTechnician.password') }}</label>
       <input
           id="password"
           v-model="technician.password"
@@ -43,7 +43,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="confirm-password">Confirm Password</label>
+      <label for="confirm-password">{{ $t('admin.addTechnician.confirmPassword') }}</label>
       <input
           id="confirm-password"
           ref="confirmPassword"
@@ -53,14 +53,14 @@
           type="password"
       />
     </div>
-    <input class="btn btn-primary" type="submit" value="Add new"/>
+    <input class="btn btn-primary" type="submit" :value="$t('admin.addTechnician.add')"/>
     <button
         class="btn btn-secondary"
         style="margin-left: 20px"
         type="button"
         @click="turnOffOverlay"
     >
-      Cancel
+      {{ $t('admin.addTechnician.back') }}
     </button>
   </form>
 </template>
@@ -81,38 +81,27 @@ export default {
   },
   methods: {
     init() {
-      this.technician = {
+      this.technician = Object.assign({},{
         fullName: "",
         username: "",
         email: "",
         password: "",
         role: "technician",
-      };
+      });
       this.confirm = "";
     },
     async addInformation() {
       try {
         if (this.technician.password !== this.confirm)
           throw new Error("Password not match");
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Add",
-        });
+        const chose = await this.$helpers.confirmSwal("Add")
         if (chose.isConfirmed) {
           await this.$http.post("/user", this.technician);
           this.$swal("Added!", "", "success");
-
           this.turnOffOverlay();
         }
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err)
       }
     },
     turnOffOverlay() {

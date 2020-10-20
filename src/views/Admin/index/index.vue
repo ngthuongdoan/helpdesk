@@ -1,7 +1,7 @@
 <template>
   <div class="logger__container custom-scrollbar">
     <div v-if="logs.length === 0">
-      <p id="noLog">No log</p>
+      <p id="noLog">{{ $t("admin.noLog")}}</p>
     </div>
     <Log v-for="log in logs" :key="log.id" :log="log"></Log>
   </div>
@@ -20,7 +20,7 @@ export default {
     this.getData();
   },
   beforeDestroy() {
-    this.clearInterval(this.interval);
+    clearInterval(this.interval);
   },
   methods: {
     async getData() {
@@ -29,13 +29,10 @@ export default {
         this.interval = setInterval(async () => {
           const res = await that.$http.get("/log");
           if (res.data.length !== that.logs.length) that.logs = res.data;
-        }, 1000);
+        }, 2000);
       } catch (err) {
-        console.log(err);
+        this.$helpers.showError(err)
       }
-    },
-    clearInterval(interval) {
-      clearInterval(interval);
     },
   },
   components: {

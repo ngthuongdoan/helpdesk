@@ -2,24 +2,25 @@
   <div class="sidebar">
     <nav>
       <div class="sidebar__header">
-        <h4>{{ user.role[$i18n.locale].toUpperCase() }}</h4>
+<!--        <h4>{{ // user.role[$i18n.locale].toUpperCase() }}</h4>-->
+        <h4>{{ user.role.toUpperCase() }}</h4>
       </div>
       <transition enter-active-class="animate__animated animate__fadeInLeft">
         <ul class="nav flex-column sidebar__menu">
           <router-link
-              v-for="value in menu"
-              :key="value.id"
-              :to="value.url"
-              active-class="active"
-              class="nav-item"
-              tag="li"
+            v-for="value in menu"
+            :key="value.id"
+            :to="value.url"
+            active-class="active"
+            class="nav-item"
+            tag="li"
           >
             <a class="nav-link">{{ value.name[$i18n.locale] }}</a>
           </router-link>
         </ul>
       </transition>
     </nav>
-    <div id="logo"><img src="~@/assets/logo.png" alt="logo"></div>
+    <div id="logo"><img src="~@/assets/logo.png" alt="logo" /></div>
   </div>
 </template>
 
@@ -34,34 +35,34 @@ export default {
   data() {
     return {
       menu: [
-          {
-            id: "dashboard",
-            name: {
-              en: "Dashboard",
-              vi: "Trang chủ"
-            },
-            url: "/admin/dashboard",
-            check: true,
+        {
+          id: "dashboard",
+          name: {
+            en: "Dashboard",
+            vi: "Trang chủ",
           },
-          {
-            id: "tickets",
-            name: {
-              en: "Tickets",
-              vi: "Yêu cầu"
-            },
-            url: "/admin/tickets",
-            check: true,
+          url: "/admin/dashboard",
+          check: true,
+        },
+        {
+          id: "tickets",
+          name: {
+            en: "Tickets",
+            vi: "Yêu cầu",
           },
-          {
-            id: "technicians",
-            name: {
-              en: "Technicians",
-              vi: "Kỹ thuật viên"
-            },,
-            url: "/admin/technicians",
-            check: true,
+          url: "/admin/tickets",
+          check: true,
+        },
+        {
+          id: "technicians",
+          name: {
+            en: "Technicians",
+            vi: "Kỹ thuật viên",
           },
-        ],
+          url: "/admin/technicians",
+          check: true,
+        },
+      ],
     };
   },
 };
@@ -117,7 +118,7 @@ export default {
     justify-self: flex-start;
     align-self: center;
     background: #c8c8c8;
-    img{
+    img {
       width: 80px;
     }
   }

@@ -861,6 +861,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@growthbunker/vueflags@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@growthbunker/vueflags/-/vueflags-0.1.10.tgz#6853e1619e2cb5cbf8d149c6b7fa9b4e4da7f4f3"
+  integrity sha512-P7bHYFdl3ra5fjTXBV7LkB54RiS+Bdabs7p7dDRDJTIczVOF+CsMIbdEZ6+NOFlIRjfdBgJQBVNMxJb/vR+4LA==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"

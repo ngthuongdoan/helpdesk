@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ item.question }}</p>
+    <p>{{ item.question[$i18n.locale] }}</p>
   </div>
 </template>
 

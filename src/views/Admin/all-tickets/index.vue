@@ -1,34 +1,41 @@
 <template>
   <div class="all-ticket__container custom-scrollbar">
     <Pagination
-      v-if="isOnePage"
-      :page="page"
-      :pages="pages"
-      :per-page="perPage"
-      :ticket-length="tickets.length"
-      @changePage="page = $event"
-      @next="page++"
-      @previous="page--"
+        v-if="isOnePage"
+        :data-length="tickets.length"
+        :page="page"
+        :pages="pages"
+        :per-page="perPage"
+        @changePage="page = $event"
+        @next="page++"
+        @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
-      <p id="noTicket">No ticket</p>
+      <p id="noTicket">{{ $t("admin.allTicket.noTicket") }}</p>
     </div>
     <table v-else>
       <thead>
-        <tr>
-          <th>ID</th>
-          <th @click="sorted = 'fullName'">Employee</th>
-          <th>Ticket Title</th>
-          <th @click="sorted = 'technicianName'">Technician</th>
-          <th @click="sorted = 'status'">Status</th>
-          <th @click="sorted = 'startDate'">Start Date</th>
-          <th @click="sorted = 'endDate'">End Date</th>
-        </tr>
+      <tr>
+        <!--          <th>ID</th>-->
+        <!--          <th @click="sorted = 'fullName'">Employee</th>-->
+        <!--          <th>Ticket Title</th>-->
+        <!--          <th @click="sorted = 'technicianName'">Technician</th>-->
+        <!--          <th @click="sorted = 'status'">Status</th>-->
+        <!--          <th @click="sorted = 'startDate'">Start Date</th>-->
+        <!--          <th @click="sorted = 'endDate'">End Date</th>-->
+        <th>{{ $t("admin.allTicket.id") }}</th>
+        <th>{{ $t("admin.allTicket.employee") }}</th>
+        <th>{{ $t("admin.allTicket.title") }}</th>
+        <th>{{ $t("admin.allTicket.technician") }}</th>
+        <th>{{ $t("admin.allTicket.status") }}</th>
+        <th>{{ $t("admin.allTicket.startDate") }}</th>
+        <th>{{ $t("admin.allTicket.endDate") }}</th>
+      </tr>
       </thead>
       <Ticket
-        v-for="ticket in displayedTickets"
-        :key="ticket.id"
-        :ticket="ticket"
+          v-for="ticket in displayedTickets"
+          :key="ticket.id"
+          :ticket="ticket"
       ></Ticket>
     </table>
   </div>
@@ -55,33 +62,11 @@ export default {
     this.getData();
   },
   beforeDestroy() {
-    this.clearInterval(this.interval);
+    clearInterval(this.interval);
   },
   methods: {
-    setPages() {
-      if (this.tickets.length === 0) return;
-      this.pages = [];
-      let numberOfPages = Math.ceil(this.tickets.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(tickets) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return tickets.slice(from, to);
-    },
     async getData() {
-      this.$swal({
-        title: "Please wait",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        onOpen: () => {
-          this.$swal.showLoading();
-        },
-      });
+      this.$helpers.loading();
       try {
         this.interval = setInterval(async () => {
           const res = await this.$http.get(this.url);
@@ -89,16 +74,19 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        console.log(err);
+        this.$helpers.showError(err)
       }
-    },
-    clearInterval(interval) {
-      clearInterval(interval);
     },
   },
   computed: {
+    /**
+     * Số yêu cầu sẽ hiện trong 1 trang
+     * @returns {Array} - Số dữ liệu sẽ hiện thị
+     */
     displayedTickets() {
-      return this.tickets.length !== 0 ? this.paginate(this.tickets) : [];
+      return this.tickets.length !== 0
+          ? this.$helpers.paginate(this.tickets, this.page, this.perPage)
+          : [];
     },
     isOnePage() {
       return this.pages.length > 1;
@@ -106,13 +94,12 @@ export default {
   },
   watch: {
     tickets() {
-      this.setPages();
+      this.pages = this.$helpers.setPages(this.tickets.length, this.perPage);
     },
     isFetching() {
       this.$swal.close();
     },
     sorted() {
-      console.log(this.sorted);
       if (this.sorted) {
         this.url = "/ticket/sort/desc/" + this.sorted;
       }

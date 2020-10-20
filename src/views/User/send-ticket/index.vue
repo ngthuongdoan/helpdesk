@@ -2,31 +2,34 @@
   <div class="ticket__container">
     <form class="ticket__form" @submit.prevent="submitForm">
       <div class="ticket__info">
-        <label for="title">{{ $t("user.sendTicket.title")}}</label>
+        <label for="title">{{ $t("user.sendTicket.title") }}</label>
         <br />
         <input id="title" v-model="ticket.title" required type="text" />
         <br />
-        <label for="place">{{ $t("user.sendTicket.place")}}</label>
+        <label for="place">{{ $t("user.sendTicket.place") }}</label>
         <br />
         <input id="place" v-model="ticket.place" required type="text" />
         <br />
       </div>
       <div class="ticket__description">
-        <label for="problem">{{ $t("user.sendTicket.yourProblem")}}</label>
+        <label for="problem">{{ $t("user.sendTicket.yourProblem") }}</label>
         <br />
         <textarea id="problem" v-model="ticket.description" required rows="8" />
         <br />
+        <label for="file-upload" class="custom-file-upload">
+          {{ uploadLabel }}
+        </label>
         <input
+          id="file-upload"
           ref="fileInput"
           accept="image/*"
           multiple
-          required
           type="file"
           @change="uploadImage"
         />
       </div>
-      <input type="submit" :value='$t("user.sendTicket.submitBtn")' />
-      <button @click="init">{{ $t("user.sendTicket.clearBtn")}}</button>
+      <input type="submit" :value="$t('user.sendTicket.submitBtn')" />
+      <button @click="init">{{ $t("user.sendTicket.clearBtn") }}</button>
     </form>
   </div>
 </template>
@@ -43,6 +46,7 @@ export default {
         description: "",
         images: [],
       },
+      uploadLabel: this.$tc("user.sendTicket.upload", 0),
     };
   },
   methods: {
@@ -57,6 +61,8 @@ export default {
         images: [],
       };
       const input = this.$refs.fileInput;
+      this.uploadLabel = this.$tc("user.sendTicket.upload", 0);
+
       input.type = "text";
       input.type = "file";
     },
@@ -65,6 +71,7 @@ export default {
      */
     uploadImage(e) {
       const images = e.target.files;
+      this.uploadLabel = this.$tc("user.sendTicket.upload", images.length);
       images.forEach((i) => {
         new Compressor(i, {
           quality: 0.3,
@@ -83,13 +90,13 @@ export default {
           },
         });
       });
-      //----
     },
     /**
      * Hàm dùng để gửi ticket lên server
      * 1. Lấy thông tin về user gửi.
      * 2. Thực hiện gửi.
      * 3. Init lại các trường
+     * @async
      */
     async submitForm() {
       try {
@@ -113,11 +120,7 @@ export default {
         });
         this.init();
       } catch (err) {
-        this.$swal({
-          title: "Error",
-          icon: "error",
-          text: err,
-        });
+        this.$helpers.showError(err);
       }
     },
   },

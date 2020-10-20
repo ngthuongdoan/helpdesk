@@ -8,6 +8,7 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
+    "@growthbunker/vueflags": "^0.1.10",
     "axios": "^0.20.0",
     "compressorjs": "^1.0.6",
     "core-js": "^3.6.5",

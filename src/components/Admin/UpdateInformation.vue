@@ -2,7 +2,7 @@
 <template>
   <form @submit.prevent="updateInformation">
     <div class="form-group">
-      <label for="full-name">Full name:</label>
+      <label for="full-name">{{ $t("admin.updateInformation.fullName")}}</label>
       <input
           id="full-name"
           v-model="newUser.fullName"
@@ -13,7 +13,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
+      <label for="exampleInputEmail1">{{ $t("admin.updateInformation.email")}}</label>
       <input
           id="exampleInputEmail1"
           v-model="newUser.email"
@@ -25,7 +25,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="password">New Password</label>
+      <label for="password">{{ $t("admin.updateInformation.newPassword")}}</label>
       <input
           id="password"
           v-model="newUser.password"
@@ -36,7 +36,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="confirm-password">Confirm Password</label>
+      <label for="confirm-password">{{ $t("admin.updateInformation.confirmPassword")}}</label>
       <input
           id="confirm-password"
           ref="confirmPassword"
@@ -53,13 +53,13 @@
         type="button"
         @click="isChangeInformation = !isChangeInformation"
     >
-      Change Information
+      {{ $t("admin.updateInformation.changeInformation")}}
     </button>
     <input
         v-if="isChangeInformation"
         class="btn btn-primary"
         type="submit"
-        value="Update"
+        :value="$t('admin.updateInformation.update')"
     />
     <button
         class="btn btn-secondary"
@@ -67,7 +67,7 @@
         type="button"
         @click="turnOffOverlay"
     >
-      Cancel
+      {{ $t("admin.updateInformation.back")}}
     </button>
   </form>
 </template>

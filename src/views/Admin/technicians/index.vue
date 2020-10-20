@@ -3,108 +3,112 @@
     <div v-if="overlay" class="overlay">
       <form @submit.prevent="updateInformation">
         <div class="form-group">
-          <label for="full-name">Full name:</label>
+          <label for="full-name">{{ $t('admin.technicians.updateInformation.fullName') }}</label>
           <input
-            id="full-name"
-            v-model="newTechnician.fullName"
-            :disabled="!isChangeInformation"
-            class="form-control"
-            required
-            type="text"
+              id="full-name"
+              v-model="newTechnician.fullName"
+              :disabled="!isChangeInformation"
+              class="form-control"
+              required
+              type="text"
           />
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Email address</label>
+          <label for="exampleInputEmail1">{{ $t('admin.technicians.updateInformation.email') }}</label>
           <input
-            id="exampleInputEmail1"
-            v-model="newTechnician.email"
-            :disabled="!isChangeInformation"
-            aria-describedby="emailHelp"
-            class="form-control"
-            required
-            type="email"
+              id="exampleInputEmail1"
+              v-model="newTechnician.email"
+              :disabled="!isChangeInformation"
+              aria-describedby="emailHelp"
+              class="form-control"
+              required
+              type="email"
           />
         </div>
         <div class="form-group">
-          <label for="password">New Password</label>
+          <label for="password">{{
+              $t('admin.technicians.updateInformation.newPassword')
+            }}</label>
           <input
-            id="password"
-            v-model="newTechnician.password"
-            :disabled="!isChangeInformation"
-            class="form-control"
-            required
-            type="password"
+              id="password"
+              v-model="newTechnician.password"
+              :disabled="!isChangeInformation"
+              class="form-control"
+              required
+              type="password"
           />
         </div>
         <div class="form-group">
-          <label for="confirm-password">Confirm Password</label>
+          <label for="confirm-password">{{ $t('admin.technicians.updateInformation.confirmPassword') }}</label>
           <input
-            id="confirm-password"
-            ref="confirmPassword"
-            v-model="confirm"
-            :disabled="!isChangeInformation"
-            class="form-control"
-            required
-            type="password"
+              id="confirm-password"
+              ref="confirmPassword"
+              v-model="confirm"
+              :disabled="!isChangeInformation"
+              class="form-control"
+              required
+              type="password"
           />
         </div>
         <button
-          v-if="!isChangeInformation"
-          class="btn btn-primary"
-          type="button"
-          @click="isChangeInformation = !isChangeInformation"
+            v-if="!isChangeInformation"
+            class="btn btn-primary"
+            type="button"
+            @click="isChangeInformation = !isChangeInformation"
         >
-          Change Information
+          {{ $t('admin.technicians.updateInformation.changeInformation') }}
         </button>
         <input
-          v-if="isChangeInformation"
-          class="btn btn-primary"
-          type="submit"
-          value="Update"
+            v-if="isChangeInformation"
+            :value="$t('admin.technicians.updateInformation.update')"
+            class="btn btn-primary"
+            type="submit"
         />
         <button
-          class="btn btn-secondary"
-          style="margin-left: 20px"
-          type="button"
-          @click="turnOffOverlay"
+            class="btn btn-secondary"
+            style="margin-left: 20px"
+            type="button"
+            @click="turnOffOverlay"
         >
-          Back
+          {{ $t('admin.technicians.updateInformation.back') }}
         </button>
         <button
-          class="btn btn-danger"
-          style="margin-left: 20px"
-          type="button"
-          @click="deleteTechnician"
+            class="btn btn-danger"
+            style="margin-left: 20px"
+            type="button"
+            @click="deleteTechnician"
         >
-          Delete
+          {{ $t('admin.technicians.updateInformation.delete') }}
         </button>
       </form>
     </div>
     <Pagination
-      v-if="isOnePage"
-      :page="page"
-      :pages="pages"
-      @changePage="page = $event"
-      @next="page++"
-      @previous="page--"
+        v-if="isOnePage"
+        :data-length="technicians.length"
+        :page="page"
+        :pages="pages"
+        :per-page="perPage"
+        @changePage="page = $event"
+        @next="page++"
+        @previous="page--"
     ></Pagination>
     <div v-if="displayedTechnicians.length === 0">
-      <p id="noTechnician">No technician</p>
+      <p id="noTechnician">{{ $t("admin.technicians.noTechnician") }}</p>
     </div>
     <table v-else>
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Full name</th>
-          <th>Username</th>
-          <th>Email</th>
-        </tr>
+      <tr>
+        <th>{{ $t("admin.technicians.id") }}</th>
+        <th>{{ $t("admin.technicians.fullName") }}</th>
+        <th>{{ $t("admin.technicians.username") }}</th>
+        <th>{{ $t("admin.technicians.email") }}</th>
+      </tr>
       </thead>
       <Technician
-        v-for="technician in displayedTechnicians"
-        :key="technician.id"
-        :technician="technician"
-        @change-information="changeInformation"
+          v-for="technician in displayedTechnicians"
+          :key="technician.id"
+          :technician="technician"
+          @change-information="changeInformation"
       ></Technician>
     </table>
   </div>
@@ -134,21 +138,6 @@ export default {
     Pagination,
   },
   methods: {
-    setPages() {
-      if (this.technicians.length === 0) return;
-      this.pages = [];
-      let numberOfPages = Math.ceil(this.technicians.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(technicians) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return technicians.slice(from, to);
-    },
     changeInformation(event) {
       this.overlay = true;
       this.newTechnician = Object.assign({}, event);
@@ -162,59 +151,27 @@ export default {
       try {
         if (this.newTechnician.password !== this.confirm)
           throw new Error("Password not match");
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Update",
-        });
+        const chose = await this.$helpers.confirmSwal("Update");
+
         if (chose.isConfirmed) {
-          this.$swal({
-            title: "Please wait",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            onOpen: () => {
-              this.$swal.showLoading();
-            },
-          });
+          this.$helpers.loading();
           await this.$http.put(
-            "/user/" + this.newTechnician.id,
-            this.newTechnician
+              "/user/" + this.newTechnician.id,
+              this.newTechnician
           );
           this.$swal("Updated!", "", "success");
           this.overlay = false;
           this.technician = {};
         }
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err)
       }
     },
     async deleteTechnician() {
       try {
-        const chose = await this.$swal({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Delete",
-        });
+        const chose = await this.$helpers.confirmSwal("Delete");
         if (chose.isConfirmed) {
-          this.$swal({
-            title: "Please wait",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            onOpen: () => {
-              this.$swal.showLoading();
-            },
-          });
+          this.$helpers.loading();
           await this.$http.delete("/user/" + this.technician.id);
 
           this.$swal("Deleted!", "", "success");
@@ -223,41 +180,27 @@ export default {
           this.$forceUpdate();
         }
       } catch (err) {
-        this.$swal({
-          icon: "error",
-          title: err.message,
-        });
+        this.$helpers.showError(err)
       }
     },
     async getData() {
-      this.$swal({
-        title: "Please wait",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        onOpen: () => {
-          this.$swal.showLoading();
-        },
-      });
+      this.$helpers.loading();
       try {
         this.interval = setInterval(async () => {
           const res = await this.$http.get("/user/role/technician");
           this.technicians = res.data;
-          this.setPages();
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        console.log(err);
+        this.$helpers.showError(err);
       }
-    },
-    clearInterval(interval) {
-      clearInterval(interval);
     },
   },
   computed: {
     displayedTechnicians() {
       return this.technicians.length !== 0
-        ? this.paginate(this.technicians)
-        : [];
+          ? this.$helpers.paginate(this.technicians, this.page, this.perPage)
+          : [];
     },
     isOnePage() {
       return this.pages.length > 1;
@@ -265,7 +208,7 @@ export default {
   },
   watch: {
     technicians() {
-      this.setPages();
+      this.$helpers.setPages(this.technicians.length, this.perPage);
     },
     isFetching() {
       this.$swal.close();
@@ -275,7 +218,7 @@ export default {
     this.getData();
   },
   beforeDestroy() {
-    this.clearInterval(this.interval);
+    clearInterval(this.interval);
   },
   filters: {
     trimWords(value) {

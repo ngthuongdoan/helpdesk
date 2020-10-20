@@ -5,7 +5,55 @@
     "loginBtn": "Đăng nhập",
     "clearBtn": "Xoá"
   },
-  "admin": {},
+  "admin": {
+    "noLog": "Không có log",
+    "updateInformation": {
+      "fullName": "Họ tên",
+      "email": "Email",
+      "newPassword": "Mật khẩu mới",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "changeInformation": "Thay đổi thông tin",
+      "update": "Cập nhật",
+      "back": "Trở về",
+      "delete": "Xoá"
+    },
+    "addTechnician": {
+      "fullName": "Họ tên",
+      "email": "Email",
+      "username": "Tên đăng nhập",
+      "password": "Mật khẩu",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "back": "Trở về",
+      "add": "Thêm"
+    },
+    "allTicket": {
+      "noTicket": "Không có yêu cầu",
+      "id": "Mã yêu cầu",
+      "employee": "Chủ sở hữu",
+      "title": "Tiêu đề",
+      "status": "Trạng thái",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "technician": "Kỹ thuật viên"
+    },
+    "technicians": {
+      "updateInformation": {
+        "fullName": "Họ tên",
+        "email": "Email",
+        "newPassword": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "changeInformation": "Thay đổi thông tin",
+        "update": "Cập nhật",
+        "back": "Trở về",
+        "delete": "Xoá"
+      },
+      "noTechnician": "Không có kỹ thuật viên",
+      "id": "Mã",
+      "fullName": "Họ tên",
+      "username": "Tên đăng nhập",
+      "email": "Email"
+    }
+  },
   "user": {
     "index": {
       "header": {
@@ -41,10 +89,11 @@
     },
     "sendTicket": {
       "title": "Tiêu đề",
-      "place":"Địa điểm",
-      "yourProblem":"Vấn đề của bạn",
-      "submitBtn":"Gửi",
-      "clearBtn": "Xoá"
+      "place": "Địa điểm",
+      "yourProblem": "Vấn đề của bạn",
+      "submitBtn": "Gửi",
+      "clearBtn": "Xoá",
+      "upload": "Thêm vài hình ảnh... | Có 1 hình | Có {n} hình"
     }
   },
   "technician": {

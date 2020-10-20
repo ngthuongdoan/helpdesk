@@ -5,7 +5,55 @@
     "loginBtn": "Login",
     "clearBtn": "Clear"
   },
-  "admin": {},
+  "admin": {
+    "updateInformation": {
+      "fullName": "Full name:",
+      "email": "Email address",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm Password",
+      "changeInformation": "Change Information",
+      "update": "Update",
+      "back": "Back",
+      "delete": "Delete"
+    },
+    "addTechnician": {
+      "fullName": "Full name:",
+      "email": "Email address",
+      "password": "Password",
+      "username": "Username",
+      "confirmPassword": "Confirm Password",
+      "add": "Add",
+      "back": "Back"
+    },
+    "noLog": "No log",
+    "allTicket": {
+      "noTicket": "No ticket",
+      "id": "ID",
+      "employee": "Employee",
+      "title": "Ticket Title",
+      "status": "Status",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "technician": "Technician"
+    },
+    "technicians": {
+      "updateInformation": {
+        "fullName": "Full name:",
+        "email": "Email address",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm Password",
+        "changeInformation": "Change Information",
+        "update": "Update",
+        "back": "Back",
+        "delete": "Delete"
+      },
+      "noTechnician": "No Technician",
+      "id": "ID",
+      "fullName": "Full name",
+      "username": "Username",
+      "email": "Email"
+    }
+  },
   "user": {
     "index": {
       "header": {
@@ -41,10 +89,11 @@
     },
     "sendTicket": {
       "title": "Title",
-      "place":"Place",
-      "yourProblem":"Your Problem",
-      "submitBtn":"Submit",
-      "clearBtn": "Clear"
+      "place": "Place",
+      "yourProblem": "Your Problem",
+      "submitBtn": "Submit",
+      "clearBtn": "Clear",
+      "upload": "Give us some images... | Have a image |Have {n} images"
     }
   },
   "technician": {
