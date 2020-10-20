@@ -2,17 +2,17 @@
   <div class="ticket__container">
     <form class="ticket__form" @submit.prevent="submitForm">
       <div class="ticket__info">
-        <label for="title">Title</label>
+        <label for="title">{{ $t("user.sendTicket.title")}}</label>
         <br />
         <input id="title" v-model="ticket.title" required type="text" />
         <br />
-        <label for="place">Place</label>
+        <label for="place">{{ $t("user.sendTicket.place")}}</label>
         <br />
         <input id="place" v-model="ticket.place" required type="text" />
         <br />
       </div>
       <div class="ticket__description">
-        <label for="problem">Your problems</label>
+        <label for="problem">{{ $t("user.sendTicket.yourProblem")}}</label>
         <br />
         <textarea id="problem" v-model="ticket.description" required rows="8" />
         <br />
@@ -25,8 +25,8 @@
           @change="uploadImage"
         />
       </div>
-      <input type="submit" value="Submit" />
-      <button @click="init">Clear</button>
+      <input type="submit" :value='$t("user.sendTicket.submitBtn")' />
+      <button @click="init">{{ $t("user.sendTicket.clearBtn")}}</button>
     </form>
   </div>
 </template>
