@@ -39,7 +39,13 @@
     "faq": {
       "typeHere": "Cho chúng tôi vài gợi ý..."
     },
-    "sendTicket": {}
+    "sendTicket": {
+      "title": "Tiêu đề",
+      "place":"Địa điểm",
+      "yourProblem":"Vấn đề của bạn",
+      "submitBtn":"Gửi",
+      "clearBtn": "Xoá"
+    }
   },
   "technician": {
     "allTicket": {
