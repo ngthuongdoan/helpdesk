@@ -7,7 +7,7 @@
       {{ ticket.technicianName }}
     </td>
     <td class="ticket__data">
-      {{ ticket.status[ticket.status.length - 1].name }}
+      {{ ticket.status[ticket.status.length - 1].name[$i18n.locale] }}
     </td>
     <td class="ticket__data">
       {{ new Date(ticket.startDate).toLocaleString() }}

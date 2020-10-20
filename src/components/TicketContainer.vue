@@ -169,7 +169,7 @@ export default {
               : "";
             this.technicians = technicians.data;
           }
-          //End dành cho admin
+          //----
         }, 2000);
       } catch (err) {
         this.$swal({

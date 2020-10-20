@@ -2,17 +2,25 @@
   <header>
     <h1 id="logo" @click="home">
       <!--suppress CheckImageSize -->
-      <img alt="logo" src="@/assets/logo.png" srcset="" width="50px"/>
+      <img alt="logo" src="@/assets/logo.png" srcset="" width="50px" />
     </h1>
     <nav>
       <ul>
-        <router-link tag="li" to="/tickets">Your Tickets</router-link>
-        <router-link tag="li" to="/faq">FAQ</router-link>
+        <router-link tag="li" to="/tickets">{{
+          $t("user.header.yourTicket")
+        }}</router-link>
+        <router-link tag="li" to="/faq">{{
+          $t("user.header.faq")
+        }}</router-link>
       </ul>
     </nav>
     <div class="buttons">
-      <button id="sendBtn" @click="send">Send Ticket</button>
-      <button id="logoutBtn" @click="logout">Log Out</button>
+      <button id="sendBtn" @click="send">
+        {{ $t("user.header.sendTicket") }}
+      </button>
+      <button id="logoutBtn" @click="logout">
+        {{ $t("user.header.logout") }}
+      </button>
     </div>
   </header>
 </template>

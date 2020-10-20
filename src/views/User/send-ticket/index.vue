@@ -33,6 +33,7 @@
 
 <script>
 import Compressor from "compressorjs";
+
 export default {
   data() {
     return {
@@ -45,6 +46,9 @@ export default {
     };
   },
   methods: {
+    /**
+     * Tạo mới lại các data
+     */
     init() {
       this.ticket = {
         title: "",
@@ -56,17 +60,17 @@ export default {
       input.type = "text";
       input.type = "file";
     },
+    /**
+     * Nén hình ảnh lại dùng CompressorJS
+     */
     uploadImage(e) {
       const images = e.target.files;
-      //compress
       images.forEach((i) => {
-        console.log(i.size);
         new Compressor(i, {
           quality: 0.3,
           maxWidth: 640,
           maxHeight: 360,
           success: (result) => {
-            console.log(result.size);
             let reader = new FileReader();
             reader.readAsDataURL(result);
             reader.onload = (evt) => {
@@ -79,38 +83,42 @@ export default {
           },
         });
       });
+      //----
     },
-    submitForm() {
-      const user = this.$store.getters["userModule/getUser"];
-      this.ticket.userId = user.data.id;
-      this.ticket.fullName = user.data.fullName;
-      this.$swal({
-        title: "Please wait",
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        onOpen: () => {
-          this.$swal.showLoading();
-        },
-      });
-      console.log(this.ticket);
-      this.$http
-        .post("/ticket", this.ticket)
-        .then(() => {
-          this.$swal.close();
-          this.$swal({
-            title: "Success",
-            icon: "success",
-            allowOutsideClick: false,
-          });
-          this.init();
-        })
-        .catch((err) => {
-          this.$swal({
-            title: "Error",
-            icon: "error",
-            text: err,
-          });
+    /**
+     * Hàm dùng để gửi ticket lên server
+     * 1. Lấy thông tin về user gửi.
+     * 2. Thực hiện gửi.
+     * 3. Init lại các trường
+     */
+    async submitForm() {
+      try {
+        const user = this.$store.getters["userModule/getUser"];
+        this.ticket.userId = user.data.id;
+        this.ticket.fullName = user.data.fullName;
+        this.$swal({
+          title: "Please wait",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          onOpen: () => {
+            this.$swal.showLoading();
+          },
         });
+        await this.$http.post("/ticket", this.ticket);
+        await this.$swal.close();
+        await this.$swal({
+          title: "Success",
+          icon: "success",
+          allowOutsideClick: false,
+        });
+        this.init();
+      } catch (err) {
+        this.$swal({
+          title: "Error",
+          icon: "error",
+          text: err,
+        });
+      }
     },
   },
 };

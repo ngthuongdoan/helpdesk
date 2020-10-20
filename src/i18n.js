@@ -9,6 +9,7 @@ function loadLocaleMessages() {
     true,
     /[A-Za-z0-9-_,\s]+\.json$/i
   );
+  console.log(locales);
   const messages = {};
   locales.keys().forEach((key) => {
     const matched = key.match(/([A-Za-z0-9-_]+)\./i);
@@ -17,11 +18,12 @@ function loadLocaleMessages() {
       messages[locale] = locales(key);
     }
   });
+  console.log(messages);
   return messages;
 }
 
 export default new VueI18n({
   locale: "vi",
-  fallbackLocale: "vi",
+  fallbackLocale: "en",
   messages: loadLocaleMessages(),
 });

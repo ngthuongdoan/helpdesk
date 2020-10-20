@@ -1,13 +1,15 @@
 <template>
   <div class="faq">
-    <h3 class="faq__question" @click="showAnswer">{{ faq.question }}</h3>
+    <h3 class="faq__question" @click="showAnswer">
+      {{ faq.question[$i18n.locale] }}
+    </h3>
     <transition
-        enter-active-class="animate__animated animate__flipInX"
-        leave-active-class="animate__animated animate__flipOutX"
+      enter-active-class="animate__animated animate__flipInX"
+      leave-active-class="animate__animated animate__flipOutX"
     >
-      <p v-show="isShown" class="faq__answer">{{ faq.answer }}</p>
+      <p v-show="isShown" class="faq__answer">{{ faq.answer[$i18n.locale] }}</p>
     </transition>
-    <hr/>
+    <hr />
   </div>
 </template>
 

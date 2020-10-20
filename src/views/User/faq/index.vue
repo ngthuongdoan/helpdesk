@@ -2,10 +2,10 @@
   <div class="faq__container">
     <!--suppress HtmlFormInputWithoutLabel -->
     <input
-        v-model="input"
-        class="vs__input custom-searchbar"
-        placeholder="Search here..."
-        type="text"
+      v-model="input"
+      class="vs__input custom-searchbar"
+      :placeholder="$t('user.faq.typeHere')"
+      type="text"
     />
     <div class="faq__inner-container custom-scrollbar">
       <FAQ v-for="faq in searchItems" :key="faq.id" :faq="faq"></FAQ>
@@ -30,7 +30,7 @@ export default {
   watch: {
     input() {
       this.searchItems = this.faqs.filter((faq) =>
-          faq.question.includes(this.input)
+        faq.question.includes(this.input)
       );
     },
   },

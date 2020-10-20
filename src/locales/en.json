@@ -6,7 +6,41 @@
     "clearBtn": "Clear"
   },
   "admin": {},
-  "user": {},
+  "user": {
+    "index": {
+      "header": {
+        "h1": "How can we",
+        "span": "help you?"
+      },
+      "typeHere": "Type here",
+      "cardHeader-1": "Quality over cost",
+      "cardContent-1": "Quality maintenance is a sustainable approach.",
+      "cardHeader-2": "Fast. Fresh. Convenient",
+      "cardContent-2": "Give us the honour to serve you",
+      "cardHeader-3": "Communicate With Tomorrow",
+      "cardContent-3": "Work as a team to help your customers get all the answers."
+    },
+    "allTicket": {
+      "noTicket": "No ticket",
+      "id": "ID",
+      "employee": "Employee",
+      "title": "Ticket Title",
+      "status": "Status",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "technician": "Technician"
+    },
+    "header": {
+      "yourTicket": "Your ticket",
+      "faq": "FAQ",
+      "sendTicket": "Send Ticket",
+      "logout": "Log Out"
+    },
+    "faq": {
+      "typeHere": "Type here"
+    },
+    "sendTicket": {}
+  },
   "technician": {
     "allTicket": {
       "noTicket": "No ticket",
@@ -16,23 +50,23 @@
       "status": "Status",
       "startDate": "Start Date",
       "endDate": "End Date"
-    },
-    "ticket": {
-      "header": "Basic Information",
-      "id": "ID",
-      "employee": "Employee",
-      "title": "Title",
-      "status": "Status",
-      "startDate": "Start Date",
-      "endDate": "End Date",
-      "assign": "Assigned",
-      "place": "Place",
-      "at": "at",
-      "typeHere": "Type here",
-      "assignTo": "Assign to",
-      "comment": "Comment",
-      "back": "Back",
-      "close": "Close this"
     }
+  },
+  "ticket": {
+    "header": "Basic Information",
+    "id": "ID",
+    "employee": "Employee",
+    "title": "Title",
+    "status": "Status",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "assign": "Assigned",
+    "place": "Place",
+    "at": "at",
+    "typeHere": "Type here",
+    "assignTo": "Assign to",
+    "comment": "Comment",
+    "back": "Back",
+    "close": "Close this"
   }
 }

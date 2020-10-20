@@ -2,35 +2,35 @@
   <div class="main-content">
     <div class="header">
       <h1 class="title">
-        How can we
-        <span id="highlight">help you?</span>
+        {{ $t("user.index.header.h1") }}
+        <span id="highlight"> {{ $t("user.index.header.span") }} </span>
       </h1>
       <vue-suggestion
-          v-model="item"
-          :itemTemplate="itemTemplate"
-          :items="searchItems"
-          :setLabel="setLabel"
-          placeholder="Input here..."
-          @changed="inputChange"
-          @enter="showAnswer"
-          @selected="itemSelected"
+        v-model="item"
+        :itemTemplate="itemTemplate"
+        :items="searchItems"
+        :setLabel="setLabel"
+        :placeholder="$t('user.index.typeHere')"
+        @changed="inputChange"
+        @enter="showAnswer"
+        @selected="itemSelected"
       ></vue-suggestion>
     </div>
     <div class="card__container">
       <div class="card__items">
-        <img alt src="~@/assets/technical-support.svg" width="20%"/>
-        <h3 class="card__header">Quality over cost</h3>
-        <p>Quality maintenance is a sustainable approach.</p>
+        <img alt src="~@/assets/technical-support.svg" width="20%" />
+        <h3 class="card__header">{{ $t("user.index.cardHeader-1") }}</h3>
+        <p>{{ $t("user.index.cardContent-1") }}</p>
       </div>
       <div class="card__items">
-        <img alt src="~@/assets/bolt.svg" width="20%"/>
-        <h3 class="card__header">Fast. Fresh. Convenient</h3>
-        <p>Give us the honour to serve you.</p>
+        <img alt src="~@/assets/bolt.svg" width="20%" />
+        <h3 class="card__header">{{ $t("user.index.cardHeader-2") }}</h3>
+        <p>{{ $t("user.index.cardContent-2") }}</p>
       </div>
       <div class="card__items">
-        <img alt src="~@/assets/conversation.svg" width="20%"/>
-        <h3 class="card__header">Communicate With Tomorrow</h3>
-        <p>Work as a team to help your customers get all the answers.</p>
+        <img alt src="~@/assets/conversation.svg" width="20%" />
+        <h3 class="card__header">{{ $t("user.index.cardHeader-3") }}</h3>
+        <p>{{ $t("user.index.cardContent-3") }}</p>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@ export default {
     },
     inputChange(text) {
       this.searchItems = this.items.filter((item) =>
-          item.question.includes(text)
+        item.question.includes(text)
       );
     },
     showAnswer() {
@@ -67,7 +67,7 @@ export default {
         icon: "info",
         title: this.item.question,
         text: this.item.answer,
-      }).then(this.item = Object.assign({}));
+      }).then((this.item = Object.assign({})));
     },
   },
   created() {
