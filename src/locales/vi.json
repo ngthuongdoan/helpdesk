@@ -1,4 +1,13 @@
 {
+  "sweetalert": {
+    "error": "Lỗi",
+    "loading": "Đợi một chút",
+    "success": "Thành công",
+    "confirm": {
+      "header": "Bạn có chắc không?",
+      "title": "Bạn sẽ không thể hoàn tác!"
+    }
+  },
   "login": {
     "username": "Tên đăng nhập",
     "password": "Mật khẩu",

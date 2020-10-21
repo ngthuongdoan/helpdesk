@@ -103,14 +103,7 @@ export default {
         const user = this.$store.getters["userModule/getUser"];
         this.ticket.userId = user.data.id;
         this.ticket.fullName = user.data.fullName;
-        this.$swal({
-          title: "Please wait",
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          onOpen: () => {
-            this.$swal.showLoading();
-          },
-        });
+        this.$helpers.loading();
         await this.$http.post("/ticket", this.ticket);
         await this.$swal.close();
         await this.$swal({

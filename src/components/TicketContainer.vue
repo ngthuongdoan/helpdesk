@@ -77,7 +77,7 @@
               }}</label>
               <select
                 id="exampleFormControlSelect1"
-                :value="technicianId"
+                v-model="technicianId"
                 :disabled="isClose"
                 class="form-control"
                 @change="assignTo"
@@ -145,8 +145,6 @@ export default {
     async getData() {
       this.isFetching = true;
       try {
-        // this.$helpers.loading();
-
         this.interval = setInterval(async () => {
           const tickets = await this.$http.get(
             "/ticket/" + this.$route.params.id
@@ -156,15 +154,16 @@ export default {
             this.ticket.technicianName === ""
               ? "Not Assigned"
               : this.ticket.technicianName;
+          this.technicianId = this.ticket.technicianId
+            ? this.ticket.technicianId
+            : "";
           this.isClose =
-            this.ticket.status[this.ticket.status.length - 1].name === "Closed";
+            this.ticket.status[this.ticket.status.length - 1].name.en ===
+            "Closed";
           //Dành cho admin
           if (this.role === "admin") {
             this.isAdmin = true;
             const technicians = await this.$http.get("/user/role/technician");
-            this.technicianId = this.ticket.technicianId
-              ? this.ticket.technicianId
-              : "";
             this.technicians = technicians.data;
           }
           //----
@@ -236,9 +235,10 @@ export default {
      * @param {String} technicianId - Mã technician
      * @returns {string} - Tên của technician
      */
-    getTechniciansName(technicians, technicianId) {
-      const name = technicians.filter((tech) => tech.id === technicianId);
-      return name.length !== 0 ? name[0].fullName : "Not Assigned";
+    getTechniciansName(technicianId) {
+      const name = this.technicians.filter((tech) => tech.id === technicianId);
+      console.log(this.technicians, technicianId, name);
+      return name.length !== 0 ? name[0].fullName : "";
     },
     /**
      * Hiển thị hình ảnh
@@ -260,8 +260,7 @@ export default {
         if (chose.isConfirmed) {
           this.ticket.technicianId = this.technicianId;
           this.ticket.technicianName = this.getTechniciansName(
-            this.technicians,
-            this.technicianId
+            this.ticket.technicianId
           );
           const status = {
             name: "Assigned",
@@ -284,9 +283,6 @@ export default {
     },
   },
   watch: {
-    technicianId() {
-      // clearInterval(this.interval);
-    },
     isFetching() {
       if (!this.isFetching) this.$swal.close();
     },
