@@ -18,6 +18,7 @@
     "vue-axios": "^2.1.5",
     "vue-i18n": "^8.17.3",
     "vue-intellisense": "^0.0.2",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.2.0",
     "vue-suggestion": "^1.1.0",
     "vue-sweetalert2": "^3.0.8",

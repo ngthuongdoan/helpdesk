@@ -8,8 +8,8 @@
         }}</span>
       </h4>
     </div>
-    <div class="comment__content">
-      <p>{{ comment.content }}</p>
+    <div class="comment__content" v-html="comment.content">
+      <!-- <p>{{ comment.content }}</p> -->
     </div>
   </div>
 </template>

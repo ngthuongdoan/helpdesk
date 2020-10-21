@@ -63,14 +63,23 @@
         <Comment v-for="id in ticket.comment" :id="id" :key="id"></Comment>
         <div class="ticket__box">
           <form @submit.prevent="addNewComment">
-            <textarea
+            <!-- <textarea
               v-model="newComment"
               :disabled="isClose"
               :placeholder="$t('ticket.typeHere')"
               cols="30"
               required
               rows="3"
-            ></textarea>
+            ></textarea> -->
+            <div class="editor"></div>
+
+            <quill-editor
+              v-model="newComment"
+              ref="myQuillEditor"
+              :options="editorOption"
+              @change="onEditorChange($event)"
+            >
+            </quill-editor>
             <div v-if="isAdmin" class="form-group">
               <label for="exampleFormControlSelect1">{{
                 $t("ticket.assignTo")
@@ -119,10 +128,18 @@
 <!--suppress ES6MissingAwait -->
 <script>
 import Comment from "@/components/Comment";
+// require styles
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 
+import { quillEditor } from "vue-quill-editor";
 export default {
   data() {
     return {
+      editorOption: {
+        // The configuration of the editor.
+      },
       ticket: null,
       technicians: [],
       isClose: false,
@@ -142,6 +159,19 @@ export default {
     },
   },
   methods: {
+    // onEditorBlur(quill) {
+    //   console.log("editor blur!", quill);
+    // },
+    // onEditorFocus(quill) {
+    //   console.log("editor focus!", quill);
+    // },
+    // onEditorReady(quill) {
+    //   console.log("editor ready!", quill);
+    // },
+    onEditorChange({ quill, html, text }) {
+      // console.log("editor change!", quill, html, text);
+      this.newComment = html;
+    },
     async getData() {
       this.isFetching = true;
       try {
@@ -285,6 +315,11 @@ export default {
       }
     },
   },
+  computed: {
+    editor() {
+      return this.$refs.myQuillEditor.quill;
+    },
+  },
   watch: {
     isFetching() {
       if (!this.isFetching) this.$swal.close();
@@ -312,6 +347,7 @@ export default {
   },
   components: {
     Comment,
+    quillEditor,
   },
 };
 </script>
