@@ -64,7 +64,7 @@ export default {
      */
     async getData() {
       // noinspection ES6MissingAwait
-      this.$helpers.loading();
+      this.$helpers.loading(this.$i18n.locale);
       try {
         this.interval = setInterval(async () => {
           const uid = await this.$store.getters["userModule/getUser"].data.id;
@@ -73,7 +73,7 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (error) {
-        this.$helpers.showError(error);
+        this.$helpers.showError(error, this.$i18n.locale);
       }
     },
   },

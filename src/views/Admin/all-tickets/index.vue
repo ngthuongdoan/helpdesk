@@ -1,41 +1,41 @@
 <template>
   <div class="all-ticket__container custom-scrollbar">
     <Pagination
-        v-if="isOnePage"
-        :data-length="tickets.length"
-        :page="page"
-        :pages="pages"
-        :per-page="perPage"
-        @changePage="page = $event"
-        @next="page++"
-        @previous="page--"
+      v-if="isOnePage"
+      :data-length="tickets.length"
+      :page="page"
+      :pages="pages"
+      :per-page="perPage"
+      @changePage="page = $event"
+      @next="page++"
+      @previous="page--"
     ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">{{ $t("admin.allTicket.noTicket") }}</p>
     </div>
     <table v-else>
       <thead>
-      <tr>
-        <!--          <th>ID</th>-->
-        <!--          <th @click="sorted = 'fullName'">Employee</th>-->
-        <!--          <th>Ticket Title</th>-->
-        <!--          <th @click="sorted = 'technicianName'">Technician</th>-->
-        <!--          <th @click="sorted = 'status'">Status</th>-->
-        <!--          <th @click="sorted = 'startDate'">Start Date</th>-->
-        <!--          <th @click="sorted = 'endDate'">End Date</th>-->
-        <th>{{ $t("admin.allTicket.id") }}</th>
-        <th>{{ $t("admin.allTicket.employee") }}</th>
-        <th>{{ $t("admin.allTicket.title") }}</th>
-        <th>{{ $t("admin.allTicket.technician") }}</th>
-        <th>{{ $t("admin.allTicket.status") }}</th>
-        <th>{{ $t("admin.allTicket.startDate") }}</th>
-        <th>{{ $t("admin.allTicket.endDate") }}</th>
-      </tr>
+        <tr>
+          <!--          <th>ID</th>-->
+          <!--          <th @click="sorted = 'fullName'">Employee</th>-->
+          <!--          <th>Ticket Title</th>-->
+          <!--          <th @click="sorted = 'technicianName'">Technician</th>-->
+          <!--          <th @click="sorted = 'status'">Status</th>-->
+          <!--          <th @click="sorted = 'startDate'">Start Date</th>-->
+          <!--          <th @click="sorted = 'endDate'">End Date</th>-->
+          <th>{{ $t("admin.allTicket.id") }}</th>
+          <th>{{ $t("admin.allTicket.employee") }}</th>
+          <th>{{ $t("admin.allTicket.title") }}</th>
+          <th>{{ $t("admin.allTicket.technician") }}</th>
+          <th>{{ $t("admin.allTicket.status") }}</th>
+          <th>{{ $t("admin.allTicket.startDate") }}</th>
+          <th>{{ $t("admin.allTicket.endDate") }}</th>
+        </tr>
       </thead>
       <Ticket
-          v-for="ticket in displayedTickets"
-          :key="ticket.id"
-          :ticket="ticket"
+        v-for="ticket in displayedTickets"
+        :key="ticket.id"
+        :ticket="ticket"
       ></Ticket>
     </table>
   </div>
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     async getData() {
-      this.$helpers.loading();
+      this.$helpers.loading(this.$i18n.locale);
       try {
         this.interval = setInterval(async () => {
           const res = await this.$http.get(this.url);
@@ -74,7 +74,7 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        this.$helpers.showError(err)
+        this.$helpers.showError(err);
       }
     },
   },
@@ -85,8 +85,8 @@ export default {
      */
     displayedTickets() {
       return this.tickets.length !== 0
-          ? this.$helpers.paginate(this.tickets, this.page, this.perPage)
-          : [];
+        ? this.$helpers.paginate(this.tickets, this.page, this.perPage)
+        : [];
     },
     isOnePage() {
       return this.pages.length > 1;

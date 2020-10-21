@@ -103,17 +103,17 @@ export default {
         const user = this.$store.getters["userModule/getUser"];
         this.ticket.userId = user.data.id;
         this.ticket.fullName = user.data.fullName;
-        this.$helpers.loading();
+        this.$helpers.loading(this.$i18n.locale);
         await this.$http.post("/ticket", this.ticket);
         await this.$swal.close();
         await this.$swal({
-          title: "Success",
+          title: this.$t("success"),
           icon: "success",
           allowOutsideClick: false,
         });
         this.init();
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
   },

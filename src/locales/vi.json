@@ -1,13 +1,15 @@
 {
-  "sweetalert": {
-    "error": "Lỗi",
-    "loading": "Đợi một chút",
-    "success": "Thành công",
-    "confirm": {
-      "header": "Bạn có chắc không?",
-      "title": "Bạn sẽ không thể hoàn tác!"
-    }
-  },
+  "success": "Thành công!",
+  "updated": "Đã cập nhật!",
+  "assigned": "Đã chỉ định!",
+  "closed": "Đã đóng!",
+  "deleted": "Đã xoá!",
+  "added": "Đã thêm!",
+  "update": "Cập nhật",
+  "assign": "Chỉ định",
+  "close": "Đóng",
+  "delete": "Xoá",
+  "add": "Thêm",
   "login": {
     "username": "Tên đăng nhập",
     "password": "Mật khẩu",

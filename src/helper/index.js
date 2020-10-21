@@ -1,4 +1,25 @@
 import Swal from "sweetalert2";
+
+const en = {
+  error: "Error",
+  loading: "Please wait",
+  confirm: {
+    title: "Are you sure about this?",
+    content: "You won't be able to revert this!",
+  },
+  cancel: "Cancel",
+};
+const vi = {
+  error: "Lỗi",
+  loading: "Đợi một chút",
+  confirm: {
+    title: "Bạn có chắc không?",
+    content: "Bạn sẽ không thể hoàn tác!",
+  },
+  cancel: "Trở về",
+};
+
+const language = { en, vi };
 export default {
   /**
    * Import Bootstrap vào page
@@ -37,9 +58,9 @@ export default {
   /**
    * Hiển thị popup loading data
    */
-  loading() {
+  loading(lang) {
     Swal.fire({
-      title: "Please wait",
+      title: language[lang].loading,
       showConfirmButton: false,
       allowOutsideClick: false,
       onOpen: () => {
@@ -51,9 +72,9 @@ export default {
    * Hiển thị lỗi
    * @param {Error} error - Object lỗi gặp phải
    */
-  showError(error) {
+  showError(error, lang) {
     Swal.fire({
-      title: "Error",
+      title: language[lang].error,
       icon: "error",
       text: error.message,
     });
@@ -64,15 +85,16 @@ export default {
    * @param {String} confirmText
    * @returns {Promise<SweetAlertResult<Awaited<unknown>>>}
    */
-  confirmSwal(confirmText){
+  confirmSwal(confirmText, lang) {
     return Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: language[lang].confirm.title,
+      text: language[lang].confirm.content,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: confirmText,
+      cancelButtonText: language[lang].cancel,
     });
   },
   /**

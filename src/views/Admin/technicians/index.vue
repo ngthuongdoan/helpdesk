@@ -3,112 +3,118 @@
     <div v-if="overlay" class="overlay">
       <form @submit.prevent="updateInformation">
         <div class="form-group">
-          <label for="full-name">{{ $t('admin.technicians.updateInformation.fullName') }}</label>
+          <label for="full-name">{{
+            $t("admin.technicians.updateInformation.fullName")
+          }}</label>
           <input
-              id="full-name"
-              v-model="newTechnician.fullName"
-              :disabled="!isChangeInformation"
-              class="form-control"
-              required
-              type="text"
+            id="full-name"
+            v-model="newTechnician.fullName"
+            :disabled="!isChangeInformation"
+            class="form-control"
+            required
+            type="text"
           />
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">{{ $t('admin.technicians.updateInformation.email') }}</label>
+          <label for="exampleInputEmail1">{{
+            $t("admin.technicians.updateInformation.email")
+          }}</label>
           <input
-              id="exampleInputEmail1"
-              v-model="newTechnician.email"
-              :disabled="!isChangeInformation"
-              aria-describedby="emailHelp"
-              class="form-control"
-              required
-              type="email"
+            id="exampleInputEmail1"
+            v-model="newTechnician.email"
+            :disabled="!isChangeInformation"
+            aria-describedby="emailHelp"
+            class="form-control"
+            required
+            type="email"
           />
         </div>
         <div class="form-group">
           <label for="password">{{
-              $t('admin.technicians.updateInformation.newPassword')
-            }}</label>
+            $t("admin.technicians.updateInformation.newPassword")
+          }}</label>
           <input
-              id="password"
-              v-model="newTechnician.password"
-              :disabled="!isChangeInformation"
-              class="form-control"
-              required
-              type="password"
+            id="password"
+            v-model="newTechnician.password"
+            :disabled="!isChangeInformation"
+            class="form-control"
+            required
+            type="password"
           />
         </div>
         <div class="form-group">
-          <label for="confirm-password">{{ $t('admin.technicians.updateInformation.confirmPassword') }}</label>
+          <label for="confirm-password">{{
+            $t("admin.technicians.updateInformation.confirmPassword")
+          }}</label>
           <input
-              id="confirm-password"
-              ref="confirmPassword"
-              v-model="confirm"
-              :disabled="!isChangeInformation"
-              class="form-control"
-              required
-              type="password"
+            id="confirm-password"
+            ref="confirmPassword"
+            v-model="confirm"
+            :disabled="!isChangeInformation"
+            class="form-control"
+            required
+            type="password"
           />
         </div>
         <button
-            v-if="!isChangeInformation"
-            class="btn btn-primary"
-            type="button"
-            @click="isChangeInformation = !isChangeInformation"
+          v-if="!isChangeInformation"
+          class="btn btn-primary"
+          type="button"
+          @click="isChangeInformation = !isChangeInformation"
         >
-          {{ $t('admin.technicians.updateInformation.changeInformation') }}
+          {{ $t("admin.technicians.updateInformation.changeInformation") }}
         </button>
         <input
-            v-if="isChangeInformation"
-            :value="$t('admin.technicians.updateInformation.update')"
-            class="btn btn-primary"
-            type="submit"
+          v-if="isChangeInformation"
+          :value="$t('admin.technicians.updateInformation.update')"
+          class="btn btn-primary"
+          type="submit"
         />
         <button
-            class="btn btn-secondary"
-            style="margin-left: 20px"
-            type="button"
-            @click="turnOffOverlay"
+          class="btn btn-secondary"
+          style="margin-left: 20px"
+          type="button"
+          @click="turnOffOverlay"
         >
-          {{ $t('admin.technicians.updateInformation.back') }}
+          {{ $t("admin.technicians.updateInformation.back") }}
         </button>
         <button
-            class="btn btn-danger"
-            style="margin-left: 20px"
-            type="button"
-            @click="deleteTechnician"
+          class="btn btn-danger"
+          style="margin-left: 20px"
+          type="button"
+          @click="deleteTechnician"
         >
-          {{ $t('admin.technicians.updateInformation.delete') }}
+          {{ $t("admin.technicians.updateInformation.delete") }}
         </button>
       </form>
     </div>
     <Pagination
-        v-if="isOnePage"
-        :data-length="technicians.length"
-        :page="page"
-        :pages="pages"
-        :per-page="perPage"
-        @changePage="page = $event"
-        @next="page++"
-        @previous="page--"
+      v-if="isOnePage"
+      :data-length="technicians.length"
+      :page="page"
+      :pages="pages"
+      :per-page="perPage"
+      @changePage="page = $event"
+      @next="page++"
+      @previous="page--"
     ></Pagination>
     <div v-if="displayedTechnicians.length === 0">
       <p id="noTechnician">{{ $t("admin.technicians.noTechnician") }}</p>
     </div>
     <table v-else>
       <thead>
-      <tr>
-        <th>{{ $t("admin.technicians.id") }}</th>
-        <th>{{ $t("admin.technicians.fullName") }}</th>
-        <th>{{ $t("admin.technicians.username") }}</th>
-        <th>{{ $t("admin.technicians.email") }}</th>
-      </tr>
+        <tr>
+          <th>{{ $t("admin.technicians.id") }}</th>
+          <th>{{ $t("admin.technicians.fullName") }}</th>
+          <th>{{ $t("admin.technicians.username") }}</th>
+          <th>{{ $t("admin.technicians.email") }}</th>
+        </tr>
       </thead>
       <Technician
-          v-for="technician in displayedTechnicians"
-          :key="technician.id"
-          :technician="technician"
-          @change-information="changeInformation"
+        v-for="technician in displayedTechnicians"
+        :key="technician.id"
+        :technician="technician"
+        @change-information="changeInformation"
       ></Technician>
     </table>
   </div>
@@ -151,40 +157,46 @@ export default {
       try {
         if (this.newTechnician.password !== this.confirm)
           throw new Error("Password not match");
-        const chose = await this.$helpers.confirmSwal("Update");
+        const chose = await this.$helpers.confirmSwal(
+          this.$t("update"),
+          this.$i18n.locale
+        );
 
         if (chose.isConfirmed) {
-          this.$helpers.loading();
+          this.$helpers.loading(this.$i18n.locale);
           await this.$http.put(
-              "/user/" + this.newTechnician.id,
-              this.newTechnician
+            "/user/" + this.newTechnician.id,
+            this.newTechnician
           );
-          this.$swal("Updated!", "", "success");
+          this.$swal(this.$t("updated"), "", "success");
           this.overlay = false;
           this.technician = {};
         }
       } catch (err) {
-        this.$helpers.showError(err)
+        this.$helpers.showError(err);
       }
     },
     async deleteTechnician() {
       try {
-        const chose = await this.$helpers.confirmSwal("Delete");
+        const chose = await this.$helpers.confirmSwal(
+          this.$t("delete"),
+          this.$i18n.locale
+        );
         if (chose.isConfirmed) {
-          this.$helpers.loading();
+          this.$helpers.loading(this.$i18n.locale);
           await this.$http.delete("/user/" + this.technician.id);
 
-          this.$swal("Deleted!", "", "success");
+          this.$swal(this.$t("deleted"), "", "success");
           this.overlay = false;
           this.technician = {};
           this.$forceUpdate();
         }
       } catch (err) {
-        this.$helpers.showError(err)
+        this.$helpers.showError(err);
       }
     },
     async getData() {
-      this.$helpers.loading();
+      this.$helpers.loading(this.$i18n.locale);
       try {
         this.interval = setInterval(async () => {
           const res = await this.$http.get("/user/role/technician");
@@ -192,15 +204,15 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
   },
   computed: {
     displayedTechnicians() {
       return this.technicians.length !== 0
-          ? this.$helpers.paginate(this.technicians, this.page, this.perPage)
-          : [];
+        ? this.$helpers.paginate(this.technicians, this.page, this.perPage)
+        : [];
     },
     isOnePage() {
       return this.pages.length > 1;

@@ -171,7 +171,7 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
     /**
@@ -180,7 +180,10 @@ export default {
      */
     async closeTicket() {
       try {
-        const chose = await this.$helpers.confirmSwal("Close");
+        const chose = await this.$helpers.confirmSwal(
+          this.$t("close"),
+          this.$i18n.locale
+        );
 
         if (chose.isConfirmed) {
           const status = {
@@ -192,13 +195,13 @@ export default {
             "userModule/getUser"
           ].data.id;
 
-          this.$helpers.loading();
+          this.$helpers.loading(this.$i18n.locale);
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
-          await this.$swal("Closed!", "", "success");
+          await this.$swal(this.$t("closed"), "", "success");
           await this.back();
         }
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
     /**
@@ -206,7 +209,6 @@ export default {
      */
     async addNewComment() {
       try {
-        // this.$helpers.loading();
         const comment = {
           fullName: this.$store.getters["userModule/getUser"].data.fullName,
           userId: this.$store.getters["userModule/getUser"].data.id,
@@ -217,10 +219,9 @@ export default {
           "/comment/ticket/" + this.$route.params.id,
           comment
         );
-        // this.$swal("Updated!", "", "success");
         await this.getData();
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
     /**
@@ -237,7 +238,6 @@ export default {
      */
     getTechniciansName(technicianId) {
       const name = this.technicians.filter((tech) => tech.id === technicianId);
-      console.log(this.technicians, technicianId, name);
       return name.length !== 0 ? name[0].fullName : "";
     },
     /**
@@ -256,7 +256,10 @@ export default {
       clearInterval(this.interval);
 
       try {
-        const chose = await this.$helpers.confirmSwal("Assign");
+        const chose = await this.$helpers.confirmSwal(
+          this.$t("assign"),
+          this.$i18n.locale
+        );
         if (chose.isConfirmed) {
           this.ticket.technicianId = this.technicianId;
           this.ticket.technicianName = this.getTechniciansName(
@@ -270,15 +273,15 @@ export default {
           this.ticket.modifiedBy = this.$store.getters[
             "userModule/getUser"
           ].data.id;
-          this.$helpers.loading();
+          this.$helpers.loading(this.$i18n.locale);
           await this.$http.put("/ticket/" + this.$route.params.id, this.ticket);
-          await this.$swal("Updated!", "", "success");
+          await this.$swal(this.$t("updated"), "", "success");
           await this.getData();
         } else {
           await this.getData();
         }
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
   },
@@ -301,7 +304,7 @@ export default {
     },
   },
   async created() {
-    this.$helpers.loading();
+    this.$helpers.loading(this.$i18n.locale);
     this.getData();
   },
   beforeDestroy() {

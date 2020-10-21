@@ -1,5 +1,11 @@
 .user {
   color: black;
+  #ticketId {
+    margin-left: 30px;
+    font-weight: 400;
+    color: #444444;
+    font-size: 18px;
+  }
   .ticket {
     &__container {
       position: absolute;

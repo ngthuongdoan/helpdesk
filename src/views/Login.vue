@@ -6,42 +6,35 @@
         <div class="flags__container">
           <h1>Choose your language</h1>
           <div class="flags" @click="chooseLanguage('en')">
-            <gb-flag
-                code="us"
-                height="200px"
-            />
+            <gb-flag code="us" height="200px" />
           </div>
           <div class="flags" @click="chooseLanguage('vi')">
-            <gb-flag
-                code="vn"
-                height="200px"
-            />
+            <gb-flag code="vn" height="200px" />
           </div>
         </div>
-
       </div>
       <form class="login__form" @submit.prevent="submitForm">
         <label for="username">{{ $t("login.username") }}</label>
-        <br/>
-        <input id="username" v-model="login.username" required type="text"/>
-        <br/>
+        <br />
+        <input id="username" v-model="login.username" required type="text" />
+        <br />
         <label for="password">{{ $t("login.password") }}</label>
-        <br/>
+        <br />
         <input
-            id="password"
-            v-model="login.password"
-            required
-            type="password"
+          id="password"
+          v-model="login.password"
+          required
+          type="password"
         />
         <span id="eye">
           <img
-              alt="show-password"
-              src="https://img.icons8.com/android/24/000000/visible.png"
+            alt="show-password"
+            src="https://img.icons8.com/android/24/000000/visible.png"
           />
         </span>
-        <br/>
+        <br />
         <div class="buttons">
-          <input :value="$t('login.loginBtn')" type="submit"/>
+          <input :value="$t('login.loginBtn')" type="submit" />
           <button @click="init">{{ $t("login.clearBtn") }}</button>
         </div>
       </form>
@@ -132,19 +125,19 @@ export default {
      * @async
      */
     async submitForm() {
-      this.$helpers.loading();
+      this.$helpers.loading(this.$i18n.locale);
       try {
         if (this.login.username === "") throw new Error("Username blank");
         if (this.login.password === "") throw new Error("Password blank");
         const user = await this.$http.post("/login", this.login);
         await this.$store.dispatch("userModule/logIn", user.data);
         await this.$swal({
-          title: "Success",
+          title: this.$t("success"),
           icon: "success",
         });
         this.changeRoute(user.data.role.toLowerCase());
       } catch (error) {
-        this.$helpers.showError(error);
+        this.$helpers.showError(error, this.$i18n.locale);
       }
     },
   },

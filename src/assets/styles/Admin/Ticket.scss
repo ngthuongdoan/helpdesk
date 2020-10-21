@@ -1,7 +1,7 @@
-#ticketId{
+#ticketId {
   margin-left: 30px;
   font-weight: 400;
-  color: #cccccc;
+  color: #444444;
   font-size: 18px;
 }
 .ticket {
@@ -16,10 +16,6 @@
     height: 100%;
     overflow: auto;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
-  }
-  #ticketId{
-    font-weight: 400;
-    color: #3f414f;
   }
   &__information {
     line-height: 1.5;

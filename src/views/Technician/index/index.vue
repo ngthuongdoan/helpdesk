@@ -10,7 +10,7 @@
       @changePage="page = $event"
       @next="page++"
       @previous="page--"
-     ></Pagination>
+    ></Pagination>
     <div v-if="displayedTickets.length === 0">
       <p id="noTicket">{{ $t("technician.allTicket.noTicket") }}</p>
     </div>
@@ -60,7 +60,7 @@ export default {
      * Hàm lấy dữ liệu từ server, cứ 2s lấy 1 lần
      */
     async getData() {
-      this.$helpers.loading();
+      this.$helpers.loading(this.$i18n.locale);
       try {
         this.interval = setInterval(async () => {
           const uid = await this.$store.getters["userModule/getUser"].data.id;
@@ -69,7 +69,7 @@ export default {
           this.isFetching = false;
         }, 2000);
       } catch (err) {
-        this.$helpers.showError(err);
+        this.$helpers.showError(err, this.$i18n.locale);
       }
     },
   },
@@ -80,8 +80,8 @@ export default {
      */
     displayedTickets() {
       return this.tickets.length !== 0
-          ? this.$helpers.paginate(this.tickets, this.page, this.perPage)
-          : [];
+        ? this.$helpers.paginate(this.tickets, this.page, this.perPage)
+        : [];
     },
     /**
      * Kiểm tra để tắt phân trang khi chỉ có 1 trang

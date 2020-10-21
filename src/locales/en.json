@@ -1,13 +1,15 @@
 {
-  "sweetalert": {
-    "error": "Error",
-    "loading": "Please wait",
-    "success": "Success",
-    "confirm": {
-      "header": "Are you sure about this?",
-      "title": "You won't be able to revert this!"
-    }
-  },
+  "success": "Success",
+  "updated": "Updated!",
+  "assigned": "Assigned!",
+  "closed": "Closed!",
+  "deleted": "Deleted!",
+  "added": "Added!",
+  "update": "Update",
+  "assign": "Assign",
+  "close": "Close",
+  "delete": "Delete",
+  "add": "Add",
   "login": {
     "username": "Username",
     "password": "Password",
