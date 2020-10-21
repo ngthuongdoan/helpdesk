@@ -63,23 +63,15 @@
         <Comment v-for="id in ticket.comment" :id="id" :key="id"></Comment>
         <div class="ticket__box">
           <form @submit.prevent="addNewComment">
-            <!-- <textarea
-              v-model="newComment"
-              :disabled="isClose"
-              :placeholder="$t('ticket.typeHere')"
-              cols="30"
-              required
-              rows="3"
-            ></textarea> -->
-            <div class="editor"></div>
-
-            <quill-editor
-              v-model="newComment"
-              ref="myQuillEditor"
-              :options="editorOption"
-              @change="onEditorChange($event)"
-            >
-            </quill-editor>
+            <div class="editor">
+              <quill-editor
+                v-model="newComment"
+                ref="myQuillEditor"
+                :options="editorOption"
+                @change="onEditorChange($event)"
+              >
+              </quill-editor>
+            </div>
             <div v-if="isAdmin" class="form-group">
               <label for="exampleFormControlSelect1">{{
                 $t("ticket.assignTo")
@@ -136,9 +128,24 @@ import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
 export default {
   data() {
+    const toolbarOptions = [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+
+      [{ list: "ordered" }, { list: "bullet" }],
+
+      [{ size: [] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+    ];
     return {
       editorOption: {
-        // The configuration of the editor.
+        placeholder: this.$t("ticket.typeHere"),
+        modules: {
+          toolbar: toolbarOptions,
+        },
       },
       ticket: null,
       technicians: [],
@@ -159,17 +166,7 @@ export default {
     },
   },
   methods: {
-    // onEditorBlur(quill) {
-    //   console.log("editor blur!", quill);
-    // },
-    // onEditorFocus(quill) {
-    //   console.log("editor focus!", quill);
-    // },
-    // onEditorReady(quill) {
-    //   console.log("editor ready!", quill);
-    // },
     onEditorChange({ quill, html, text }) {
-      // console.log("editor change!", quill, html, text);
       this.newComment = html;
     },
     async getData() {
