@@ -32,7 +32,7 @@ export default {
       this.$router.push("/");
     },
     send() {
-      this.$router.push("/send-ticket");
+      this.$emit("send-ticket");
     },
     logout() {
       this.$store.dispatch("userModule/signOut");

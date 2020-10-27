@@ -104,6 +104,7 @@
       "yourProblem": "Vấn đề của bạn",
       "submitBtn": "Gửi",
       "clearBtn": "Xoá",
+      "closeBtn": "Đóng",
       "upload": "Thêm vài hình ảnh... | Có 1 hình | Có {n} hình"
     }
   },

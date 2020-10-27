@@ -65,12 +65,19 @@
           <form @submit.prevent="addNewComment">
             <div class="editor">
               <quill-editor
-                v-model="newComment"
                 ref="myQuillEditor"
+                v-model="newComment"
                 :options="editorOption"
                 @change="onEditorChange($event)"
+                @ready="onEditorReady($event)"
               >
               </quill-editor>
+              <input
+                type="file"
+                accept="image/*"
+                ref="imageInput"
+                style="display: none"
+              />
             </div>
             <div v-if="isAdmin" class="form-group">
               <label for="exampleFormControlSelect1">{{
@@ -124,8 +131,9 @@ import Comment from "@/components/Comment";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
-
 import { quillEditor } from "vue-quill-editor";
+import Compressor from "compressorjs";
+
 export default {
   data() {
     const toolbarOptions = [
@@ -139,6 +147,7 @@ export default {
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       [{ font: [] }],
       [{ align: [] }],
+      ["image"],
     ];
     return {
       editorOption: {
@@ -166,6 +175,49 @@ export default {
     },
   },
   methods: {
+    /**
+     * Kích hoạt chọn hình
+     *
+     */
+    selectLocalImage() {
+      const input = this.$refs.imageInput;
+      input.click();
+      input.onchange = () => {
+        const file = input.files[0];
+        // Nén hình
+        new Compressor(file, {
+          quality: 0.3,
+          maxWidth: 640,
+          maxHeight: 360,
+          success: (result) => {
+            let reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onload = (evt) => {
+              let img = evt.target.result;
+              this.insertToEditor(img);
+              input.type = "text";
+              input.type = "file";
+            };
+          },
+          error(e) {
+            console.error(e.message);
+          },
+        });
+      };
+    },
+    /**
+     * Thêm image vào editor.
+     *
+     * @param {String} img - Base64
+     */
+    insertToEditor(img) {
+      const range = this.$refs.myQuillEditor.quill.getSelection();
+      this.$refs.myQuillEditor.quill.insertEmbed(range.index, "image", img);
+    },
+    onEditorReady(quill) {
+      let toolbar = quill.getModule("toolbar");
+      toolbar.addHandler("image", this.selectLocalImage);
+    },
     onEditorChange({ quill, html, text }) {
       this.newComment = html;
     },

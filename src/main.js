@@ -11,7 +11,9 @@ import axios from "axios";
 import helpers from "./helper";
 import i18n from './i18n'
 import VueFlags from "@growthbunker/vueflags";
-
+// import VueNativeSock from 'vue-native-websocket';
+//
+// Vue.use(VueNativeSock, 'ws://10.3.65.133:8081/chat')
 Vue.use(VueFlags);
 Vue.use(VueSuggestion);
 Vue.use(VueSweetalert2);

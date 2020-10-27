@@ -1,35 +1,35 @@
 <template>
-  <div v-if="!isFetching" class="main-content">
+  <div v-if="!isFetching && items" class="main-content">
     <div class="header">
       <h1 class="title">
         {{ $t("user.index.header.h1") }}
         <span id="highlight"> {{ $t("user.index.header.span") }} </span>
       </h1>
       <vue-suggestion
-          v-if="items"
-          v-model="item"
-          :itemTemplate="itemTemplate"
-          :items="searchItems"
-          :placeholder="$t('user.index.typeHere')"
-          :setLabel="setLabel"
-          @changed="inputChange"
-          @enter="showAnswer"
-          @selected="itemSelected"
+        v-if="items"
+        v-model="item"
+        :itemTemplate="itemTemplate"
+        :items="searchItems"
+        :placeholder="$t('user.index.typeHere')"
+        :setLabel="setLabel"
+        @changed="inputChange"
+        @enter="showAnswer"
+        @selected="itemSelected"
       ></vue-suggestion>
     </div>
     <div class="card__container">
       <div class="card__items">
-        <img alt src="~@/assets/technical-support.svg" width="20%"/>
+        <img alt src="~@/assets/technical-support.svg" width="20%" />
         <h3 class="card__header">{{ $t("user.index.cardHeader-1") }}</h3>
         <p>{{ $t("user.index.cardContent-1") }}</p>
       </div>
       <div class="card__items">
-        <img alt src="~@/assets/bolt.svg" width="20%"/>
+        <img alt src="~@/assets/bolt.svg" width="20%" />
         <h3 class="card__header">{{ $t("user.index.cardHeader-2") }}</h3>
         <p>{{ $t("user.index.cardContent-2") }}</p>
       </div>
       <div class="card__items">
-        <img alt src="~@/assets/conversation.svg" width="20%"/>
+        <img alt src="~@/assets/conversation.svg" width="20%" />
         <h3 class="card__header">{{ $t("user.index.cardHeader-3") }}</h3>
         <p>{{ $t("user.index.cardContent-3") }}</p>
       </div>
@@ -52,14 +52,14 @@ export default {
         {
           question: {
             en: "Sorry, please send us a new ticket",
-            vi: "Xin lỗi, hãy gửi cho chúng tôi một ticket mới"
+            vi: "Xin lỗi, hãy gửi cho chúng tôi một ticket mới",
           },
           answer: {
             en: "",
-            vi: ""
-          }
-        }
-      ]
+            vi: "",
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -77,7 +77,7 @@ export default {
      * @returns {String} - Question của FAQ
      */
     setLabel(item) {
-      return (item.question[this.$i18n.locale]);
+      return item.question[this.$i18n.locale];
     },
     /**
      * Lấy FAQ khi user nhập
@@ -85,9 +85,9 @@ export default {
      */
     inputChange(text) {
       const faq = this.items.filter((item) =>
-          item.question[this.$i18n.locale].includes(text)
+        item.question[this.$i18n.locale].includes(text)
       );
-      this.searchItems = (faq.length !== 0) ? faq : this.noFaq;
+      this.searchItems = faq.length !== 0 ? faq : this.noFaq;
     },
     /**
      * Hiển thị câu trả lời khi user click vào question sau đó trả FAQ về trạng thái ban đầu
@@ -102,7 +102,7 @@ export default {
     },
   },
   async created() {
-    this.items = await this.$store.getters["userModule/getFaq"];
+    this.items = this.$store.getters["userModule/getFaq"];
     this.isFetching = false;
   },
 };

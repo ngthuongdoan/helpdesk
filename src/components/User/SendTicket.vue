@@ -1,6 +1,6 @@
 <template>
-  <div class="ticket__container">
-    <form class="ticket__form" @submit.prevent="submitForm">
+  <div class="ticket__container custom-scrollbar">
+    <form class="ticket__form" @submit.prevent="submit">
       <div class="ticket__info">
         <label for="title">{{ $t("user.sendTicket.title") }}</label>
         <br />
@@ -25,7 +25,7 @@
       </div>
       <div class="button-group">
         <input type="submit" :value="$t('user.sendTicket.submitBtn')" />
-        <button @click="init">{{ $t("user.sendTicket.clearBtn") }}</button>
+        <button @click="close">{{ $t("user.sendTicket.closeBtn") }}</button>
       </div>
     </form>
   </div>
@@ -50,7 +50,7 @@ export default {
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       [{ font: [] }],
       [{ align: [] }],
-        ["image"],
+      ["image"],
     ];
     return {
       editorOption: {
@@ -77,33 +77,15 @@ export default {
         description: "",
       };
     },
+    close() {
+      this.init();
+      this.$emit("close");
+    },
+    submit() {
+      this.$emit("submit", this.ticket);
+    },
     onEditorChange({ quill, html, text }) {
       this.ticket.description = html;
-    },
-    /**
-     * Hàm dùng để gửi ticket lên server
-     * 1. Lấy thông tin về user gửi.
-     * 2. Thực hiện gửi.
-     * 3. Init lại các trường
-     * @async
-     */
-    async submitForm() {
-      try {
-        const user = this.$store.getters["userModule/getUser"];
-        this.ticket.userId = user.data.id;
-        this.ticket.fullName = user.data.fullName;
-        this.$helpers.loading(this.$i18n.locale);
-        await this.$http.post("/ticket", this.ticket);
-        await this.$swal.close();
-        await this.$swal({
-          title: this.$t("success"),
-          icon: "success",
-          allowOutsideClick: false,
-        });
-        this.init();
-      } catch (err) {
-        this.$helpers.showError(err, this.$i18n.locale);
-      }
     },
   },
   components: {

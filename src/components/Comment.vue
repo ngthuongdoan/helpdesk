@@ -42,6 +42,7 @@ export default {
   border: 1px solid rgba(107, 107, 107, 0.295);
   border-radius: 5px;
   margin: 20px auto;
+  overflow: auto;
   &__name {
     width: 100%;
     padding: 10px 20px;

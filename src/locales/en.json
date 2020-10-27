@@ -104,6 +104,7 @@
       "yourProblem": "Your Problem",
       "submitBtn": "Submit",
       "clearBtn": "Clear",
+      "closeBtn": "Close",
       "upload": "Give us some images... | Have a image |Have {n} images"
     }
   },

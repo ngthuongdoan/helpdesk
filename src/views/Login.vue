@@ -57,6 +57,7 @@ export default {
       },
       isMobile: false,
       isChoose: true,
+      connection: null,
     };
   },
   /**
@@ -104,7 +105,7 @@ export default {
      * Điều hướng dựa trên quyền
      * @param {String} role - Quyền của người dùng
      */
-    changeRoute(role) {
+    async changeRoute(role) {
       switch (role) {
         case "admin":
           this.$router.replace("/admin/dashboard");
@@ -113,8 +114,9 @@ export default {
           this.$router.replace("/technician");
           break;
         case "user":
+          await this.$store.dispatch("userModule/fetchFaq");
           this.$router.replace("/");
-          this.$store.dispatch("userModule/fetchFaq");
+
           break;
         default:
           break;
@@ -131,11 +133,12 @@ export default {
         if (this.login.password === "") throw new Error("Password blank");
         const user = await this.$http.post("/login", this.login);
         await this.$store.dispatch("userModule/logIn", user.data);
-        await this.$swal({
+        await this.changeRoute(user.data.role.toLowerCase());
+
+        this.$swal({
           title: this.$t("success"),
           icon: "success",
         });
-        this.changeRoute(user.data.role.toLowerCase());
       } catch (error) {
         this.$helpers.showError(error, this.$i18n.locale);
       }
