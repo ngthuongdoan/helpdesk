@@ -1,13 +1,5 @@
 <template>
   <div class="ticket">
-    <transition
-      enter-active-class="animate__animated animate__fadeIn"
-      leave-active-class="animate__animated animate__fadeOut"
-    >
-      <div v-if="overlay" class="overlay" @click="overlay = !overlay">
-        <img :src="img" alt="imgOverlay" />
-      </div>
-    </transition>
     <div class="ticket__container custom-scrollbar">
       <div class="ticket__information">
         <table>
@@ -161,8 +153,6 @@ export default {
       isClose: false,
       technicianId: "",
       technicianName: "",
-      overlay: false,
-      img: "",
       newComment: "",
       isFetching: true,
       isAdmin: false,
@@ -194,9 +184,11 @@ export default {
             reader.readAsDataURL(result);
             reader.onload = (evt) => {
               let img = evt.target.result;
-              this.insertToEditor(img);
-              input.type = "text";
-              input.type = "file";
+              this.uploadImage(img).then((url) => {
+                this.insertToEditor(url);
+                input.type = "text";
+                input.type = "file";
+              });
             };
           },
           error(e) {
@@ -210,9 +202,9 @@ export default {
      *
      * @param {String} img - Base64
      */
-    insertToEditor(img) {
+    insertToEditor(url) {
       const range = this.$refs.myQuillEditor.quill.getSelection();
-      this.$refs.myQuillEditor.quill.insertEmbed(range.index, "image", img);
+      this.$refs.myQuillEditor.quill.insertEmbed(range.index, "image", url);
     },
     onEditorReady(quill) {
       let toolbar = quill.getModule("toolbar");
@@ -220,6 +212,11 @@ export default {
     },
     onEditorChange({ quill, html, text }) {
       this.newComment = html;
+    },
+    async uploadImage(img) {
+      const url = await this.$http.post("/image", { image: img });
+      console.log(url);
+      return url.data;
     },
     async getData() {
       this.isFetching = true;
@@ -254,7 +251,7 @@ export default {
       }
     },
     /**
-     * Hàm dùng để đóng ticket, chuyển trạng thái ticket sang "Closed"]
+     * Hàm dùng để đóng ticket, chuyển trạng thái ticket sang "Closed"
      * và thêm end date cho ticket
      */
     async closeTicket() {
@@ -318,14 +315,6 @@ export default {
     getTechniciansName(technicianId) {
       const name = this.technicians.filter((tech) => tech.id === technicianId);
       return name.length !== 0 ? name[0].fullName : "";
-    },
-    /**
-     * Hiển thị hình ảnh
-     * @param {String} img - Đường link ảnh được hiển thị
-     */
-    showImage(img) {
-      this.overlay = true;
-      this.img = img;
     },
     /**
      * Chỉ định cho một technician

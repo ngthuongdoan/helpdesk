@@ -19,8 +19,15 @@
             ref="myQuillEditor"
             :options="editorOption"
             @change="onEditorChange($event)"
+            @ready="onEditorReady($event)"
           >
           </quill-editor>
+          <input
+            type="file"
+            accept="image/*"
+            ref="imageInput"
+            style="display: none"
+          />
         </div>
       </div>
       <div class="button-group">
@@ -37,6 +44,8 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 
 import { quillEditor } from "vue-quill-editor";
+import Compressor from "compressorjs";
+
 export default {
   data() {
     const toolbarOptions = [
@@ -84,8 +93,58 @@ export default {
     submit() {
       this.$emit("submit", this.ticket);
     },
+    /**
+     * Kích hoạt chọn hình
+     *
+     */
+    selectLocalImage() {
+      const input = this.$refs.imageInput;
+      input.click();
+      input.onchange = () => {
+        const file = input.files[0];
+        // Nén hình
+        new Compressor(file, {
+          quality: 0.3,
+          maxWidth: 640,
+          maxHeight: 360,
+          success: (result) => {
+            let reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onload = (evt) => {
+              let img = evt.target.result;
+              this.uploadImage(img).then((url) => {
+                this.insertToEditor(url.data);
+                input.type = "text";
+                input.type = "file";
+              });
+            };
+          },
+          error(e) {
+            console.error(e.message);
+          },
+        });
+      };
+    },
+    /**
+     * Thêm image vào editor.
+     *
+     * @param {String} img - Base64
+     */
+    insertToEditor(img) {
+      const range = this.$refs.myQuillEditor.quill.getSelection();
+      this.$refs.myQuillEditor.quill.insertEmbed(range.index, "image", img);
+    },
+    onEditorReady(quill) {
+      let toolbar = quill.getModule("toolbar");
+      toolbar.addHandler("image", this.selectLocalImage);
+    },
     onEditorChange({ quill, html, text }) {
       this.ticket.description = html;
+    },
+    async uploadImage(img) {
+      const url = await this.$http.post("/image", { image: img });
+      console.log(url, img);
+      return url;
     },
   },
   components: {
