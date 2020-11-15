@@ -1,24 +1,18 @@
 <template>
   <div class="sidebar">
     <nav>
-      <div class="sidebar__header">
-<!--        <h4>{{ // user.role[$i18n.locale].toUpperCase() }}</h4>-->
-        <h4>{{ user.role.toUpperCase() }}</h4>
-      </div>
-      <transition enter-active-class="animate__animated animate__fadeInLeft">
-        <ul class="nav flex-column sidebar__menu">
-          <router-link
-            v-for="value in menu"
-            :key="value.id"
-            :to="value.url"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link">{{ value.name[$i18n.locale] }}</a>
-          </router-link>
-        </ul>
-      </transition>
+      <ul class="nav flex-column sidebar__menu">
+        <router-link
+          v-for="value in menu"
+          :key="value.id"
+          :to="value.url"
+          active-class="active"
+          class="nav-item"
+          tag="li"
+        >
+          <a class="nav-link">{{ value.name[$i18n.locale] }}</a>
+        </router-link>
+      </ul>
     </nav>
     <div id="logo"><img src="~@/assets/logo.png" alt="logo" /></div>
   </div>
@@ -77,35 +71,28 @@ export default {
   height: 100%;
   min-width: 200px;
   text-align: center;
-  background: rgb(49, 49, 49);
-  &__header {
-    background: rgb(31, 30, 30);
-    text-align: center;
-    h4 {
-      padding: 50px 0;
-      display: block;
-      width: 100%;
-      height: 100%;
-      font-size: 20px;
-    }
-  }
+  background: #ffffff;
+  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: 0.6);
   .active {
     background-color: rgb(250, 250, 122);
-    a {
-      color: black;
-    }
   }
   &__menu {
     text-align: left;
     li {
+      transition: 0.3s all ease-in-out;
       &:hover {
-        background-color: rgb(66, 66, 66);
+        background-color: rgb(148, 148, 51);
+        a {
+          margin-left: 40px;
+        }
       }
       a {
+        transition: 0.3s all ease-in-out;
+
         margin-left: 30px;
         padding: 10px;
         font-size: 16px;
-        color: white;
+        color: black;
       }
     }
   }
@@ -117,7 +104,7 @@ export default {
     text-align: center;
     justify-self: flex-start;
     align-self: center;
-    background: #c8c8c8;
+    background: #f0f0f0;
     img {
       width: 80px;
     }

@@ -35,12 +35,13 @@ export default {
 </script>
 <style lang="scss">
 .faq {
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
+  // box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
 
   &__question {
     background: rgb(228, 228, 228);
     padding: 10px;
     width: 100%;
+    border: 1px solid rgb(206, 206, 206);
     position: relative;
     cursor: pointer;
 
@@ -54,6 +55,7 @@ export default {
   }
 
   &__answer {
+    transition: 0.3s all ease-in-out;
     padding: 10px;
     background: white;
     width: 100%;

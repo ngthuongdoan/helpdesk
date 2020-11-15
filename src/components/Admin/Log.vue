@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss">
 .logger {
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.61);
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.61);
   width: 100%;
   background-color: white;
   display: flex;
