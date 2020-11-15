@@ -5,11 +5,13 @@
       <div v-if="isChoose" class="chooseLanguage">
         <div class="flags__container">
           <h1>Choose your language</h1>
-          <div class="flags" @click="chooseLanguage('en')">
-            <gb-flag code="us" height="200px" />
-          </div>
-          <div class="flags" @click="chooseLanguage('vi')">
-            <gb-flag code="vn" height="200px" />
+          <div>
+            <div class="flags" @click="chooseLanguage('en')">
+              <gb-flag code="us" height="200px" />
+            </div>
+            <div class="flags" @click="chooseLanguage('vi')">
+              <gb-flag code="vn" height="200px" />
+            </div>
           </div>
         </div>
       </div>
