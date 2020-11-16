@@ -3,6 +3,9 @@
   height: 100vh;
   color: #3f414f;
 }
+html {
+  scroll-behavior: smooth;
+}
 body {
   background-size: cover;
   background-repeat: no-repeat;
@@ -64,6 +67,7 @@ body {
     position: relative;
     .vs__list-item {
       background-color: #fff;
+
       cursor: pointer;
       padding: 10px;
       &:last-child {

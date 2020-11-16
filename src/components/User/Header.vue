@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header ref="header">
     <h1 id="logo" @click="home">
       <!--suppress CheckImageSize -->
       <img alt="logo" src="@/assets/logo.png" srcset="" width="50px" />
@@ -37,6 +37,21 @@ export default {
     logout() {
       this.$store.dispatch("userModule/signOut");
     },
+    handleScroll(event) {
+      var header = this.$refs.header;
+
+      if (window.scrollY >= 200) {
+        header.style.background = "#f7f7f7";
+      } else {
+        header.style.background = "transparent";
+      }
+    },
+  },
+  created() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>
@@ -53,6 +68,7 @@ header {
   grid-template-columns: 1fr 1fr 1fr;
   padding: 0 80px;
   position: fixed;
+  transition: 0.3s all ease-in-out;
 }
 
 #logo {

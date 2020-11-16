@@ -1,45 +1,102 @@
 <template>
-  <div v-if="!isFetching && items" class="main-content">
-    <div class="header">
-      <h1 class="title">
-        {{ $t("user.index.header.h1") }}
-        <span id="highlight"> {{ $t("user.index.header.span") }} </span>
+  <div v-if="!isFetching && items">
+    <a class="back-to-top" href="#welcome" ref="btt">
+      <img src="~@/assets/img/up-arrow.svg" width="20px" />
+    </a>
+    <section id="welcome">
+      <div class="header">
+        <h1 class="title">
+          {{ $t("user.index.header.h1") }}
+          <span id="highlight"> {{ $t("user.index.header.span") }} </span>
+        </h1>
+        <vue-suggestion
+          v-if="items"
+          v-model="item"
+          :itemTemplate="itemTemplate"
+          :items="searchItems"
+          :placeholder="$t('user.index.typeHere')"
+          :setLabel="setLabel"
+          @changed="inputChange"
+          @enter="showAnswer"
+          @selected="itemSelected"
+        ></vue-suggestion>
+      </div>
+      <div class="card__container">
+        <a href="#quality">
+          <div class="card__items">
+            <img alt src="~@/assets/technical-support.svg" width="20%" />
+            <h3 class="card__header">{{ $t("user.index.cardHeader-1") }}</h3>
+            <p>{{ $t("user.index.cardContent-1") }}</p>
+          </div>
+        </a>
+        <a href="#fast">
+          <div class="card__items">
+            <img alt src="~@/assets/bolt.svg" width="20%" />
+            <h3 class="card__header">{{ $t("user.index.cardHeader-2") }}</h3>
+            <p>{{ $t("user.index.cardContent-2") }}</p>
+          </div>
+        </a>
+        <a href="#communicate">
+          <div class="card__items">
+            <img alt src="~@/assets/conversation.svg" width="20%" />
+            <h3 class="card__header">{{ $t("user.index.cardHeader-3") }}</h3>
+            <p>{{ $t("user.index.cardContent-3") }}</p>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section id="quality">
+      <div style="text-align: center">
+        <img src="~@/assets/img/quality.svg" width="50%" />
+      </div>
+      <div class="quality__content">
+        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit</h1>
+        <p>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id in iste
+          libero facere dicta odio officiis labore cumque, ipsum eaque ab
+          suscipit consequatur quidem rem sit ea consequuntur minima saepe.
+        </p>
+      </div>
+    </section>
+    <section id="fast">
+      <div class="fast__content">
+        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit</h1>
+        <p>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id in iste
+          libero facere dicta odio officiis labore cumque, ipsum eaque ab
+          suscipit consequatur quidem rem sit ea consequuntur minima saepe.
+        </p>
+      </div>
+      <div style="text-align: center">
+        <img src="~@/assets/img/fast.svg" width="50%" />
+      </div>
+    </section>
+    <section id="communicate">
+      <div class="communicate__information">
+        <h3>Thanks for using our services</h3>
+        <ul>
+          <li>
+            Location: Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+          </li>
+          <li>Phone: 0123456789</li>
+          <li>
+            Email:
+            <a href="mailto:unicornhelpdesk@gmail.com"
+              >unicornhelpdesk@gmail.com</a
+            >
+          </li>
+        </ul>
+      </div>
+      <h1 id="logo" @click="home">
+        <!--suppress CheckImageSize -->
+        <img alt="logo" src="~@/assets/logo.png" srcset="" width="100px" />
       </h1>
-      <vue-suggestion
-        v-if="items"
-        v-model="item"
-        :itemTemplate="itemTemplate"
-        :items="searchItems"
-        :placeholder="$t('user.index.typeHere')"
-        :setLabel="setLabel"
-        @changed="inputChange"
-        @enter="showAnswer"
-        @selected="itemSelected"
-      ></vue-suggestion>
-    </div>
-    <div class="card__container">
-      <div class="card__items">
-        <img alt src="~@/assets/technical-support.svg" width="20%" />
-        <h3 class="card__header">{{ $t("user.index.cardHeader-1") }}</h3>
-        <p>{{ $t("user.index.cardContent-1") }}</p>
-      </div>
-      <div class="card__items">
-        <img alt src="~@/assets/bolt.svg" width="20%" />
-        <h3 class="card__header">{{ $t("user.index.cardHeader-2") }}</h3>
-        <p>{{ $t("user.index.cardContent-2") }}</p>
-      </div>
-      <div class="card__items">
-        <img alt src="~@/assets/conversation.svg" width="20%" />
-        <h3 class="card__header">{{ $t("user.index.cardHeader-3") }}</h3>
-        <p>{{ $t("user.index.cardContent-3") }}</p>
-      </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script>
 import itemTemplate from "@/components/User/ItemTemplate.vue";
-
 // noinspection JSUnresolvedVariable
 export default {
   data() {
@@ -100,10 +157,22 @@ export default {
         text: this.item.answer[this.$i18n.locale],
       }).then((this.item = Object.assign({})));
     },
+    handleScroll(event) {
+      var btt = this.$refs.btt;
+      if (window.scrollY >= 200) {
+        btt.style.display = "block";
+      } else {
+        btt.style.display = "none";
+      }
+    },
   },
   async created() {
     this.items = this.$store.getters["userModule/getFaq"];
     this.isFetching = false;
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>
