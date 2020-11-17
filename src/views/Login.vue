@@ -2,7 +2,7 @@
 <template>
   <div>
     <div v-if="!isMobile" class="login__container">
-      <div v-if="isChoose" class="chooseLanguage">
+      <div v-if="isChoose" id="chooseLanguage">
         <div class="flags__container">
           <h1>Choose your language</h1>
           <div>
@@ -66,6 +66,12 @@ export default {
    * Show/Hide password
    */
   mounted() {
+    gsap.from(".flags__container", {
+      opacity: 0,
+      y: 70,
+      duration: 1.5,
+    });
+
     if (!this.isMobile) {
       const eye = document.getElementById("eye");
       const password = document.querySelector("input[type='password']");

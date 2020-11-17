@@ -100,7 +100,7 @@
   }
 }
 
-.chooseLanguage {
+#chooseLanguage {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.6);
@@ -121,21 +121,9 @@
       padding: 50px;
       transform: translate(-50%, -50%);
       text-align: center;
-      animation: fadedInUp 1s;
       h1 {
         display: block;
       }
     }
-  }
-}
-
-@keyframes fadedInUp {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -30%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
   }
 }

@@ -50,22 +50,14 @@
         <img src="~@/assets/img/quality.svg" width="50%" />
       </div>
       <div class="quality__content">
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id in iste
-          libero facere dicta odio officiis labore cumque, ipsum eaque ab
-          suscipit consequatur quidem rem sit ea consequuntur minima saepe.
-        </p>
+        <h1>{{ $t("user.index.quality.title") }}</h1>
+        <p>{{ $t("user.index.quality.content") }}</p>
       </div>
     </section>
     <section id="fast">
       <div class="fast__content">
-        <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id in iste
-          libero facere dicta odio officiis labore cumque, ipsum eaque ab
-          suscipit consequatur quidem rem sit ea consequuntur minima saepe.
-        </p>
+        <h1>{{ $t("user.index.fast.title") }}</h1>
+        <p>{{ $t("user.index.fast.content") }}</p>
       </div>
       <div style="text-align: center">
         <img src="~@/assets/img/fast.svg" width="50%" />
@@ -73,12 +65,9 @@
     </section>
     <section id="communicate">
       <div class="communicate__information">
-        <h3>Thanks for using our services</h3>
+        <h3>{{ $t("user.index.communicate.title") }}</h3>
         <ul>
-          <li>
-            Location: Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-          </li>
-          <li>Phone: 0123456789</li>
+          <li>{{ $t("user.index.communicate.phone") }}: 0123456789</li>
           <li>
             Email:
             <a href="mailto:unicornhelpdesk@gmail.com"
@@ -170,6 +159,28 @@ export default {
     this.items = this.$store.getters["userModule/getFaq"];
     this.isFetching = false;
     window.addEventListener("scroll", this.handleScroll);
+  },
+  mounted() {
+    let qualityTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#quality",
+        start: "top center",
+        toggleActions: "restart none none none",
+      },
+    });
+    qualityTL
+      .from("#quality img", { opacity: 0, x: -100, duration: 1 })
+      .from(".quality__content", { opacity: 0, y: -100, duration: 1 }, "-=0.5");
+    let fastTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#fast",
+        start: "top top",
+        toggleActions: "restart none none none",
+      },
+    });
+    qualityTL
+      .from(".fast__content", { opacity: 0, x: -100, duration: 1 })
+      .from("#fast img", { opacity: 0, y: -100, duration: 1 }, "-=0.5");
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);

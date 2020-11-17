@@ -77,7 +77,19 @@
       "cardHeader-2": "Fast. Fresh. Convenient",
       "cardContent-2": "Give us the honour to serve you",
       "cardHeader-3": "Communicate With Tomorrow",
-      "cardContent-3": "Work as a team to help your customers get all the answers."
+      "cardContent-3": "Work as a team to help your customers get all the answers.",
+      "quality": {
+        "title": "Quality over cost",
+        "content": "We strive for excellence in all that we do. We set high personal and company standards, and then consistently try to exceed them. We try to provide you the services that much better than you expected."
+      },
+      "fast": {
+        "title": "Fast. Fresh. Convenient",
+        "content": "All you need is a smart device to send us a ticket for your problems. We have experts to help you solve this as soon as possible."
+      },
+      "communicate": {
+        "title": "Thanks for using our services",
+        "phone": "Phone"
+      }
     },
     "allTicket": {
       "noTicket": "No ticket",
