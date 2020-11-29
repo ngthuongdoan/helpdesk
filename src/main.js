@@ -9,7 +9,7 @@ import store from "./store";
 import axios from "axios";
 
 import helpers from "./helper";
-import i18n from './i18n'
+import i18n from "./i18n";
 import VueFlags from "@growthbunker/vueflags";
 // import VueNativeSock from 'vue-native-websocket';
 //
@@ -19,7 +19,7 @@ Vue.use(VueSuggestion);
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios);
 
-axios.defaults.baseURL = "https://helpdesk-v2.herokuapp.com/v1";
+axios.defaults.baseURL = "https://helpdesk-v2-demo.herokuapp.com/v1";
 // axios.defaults.baseURL = "http://10.3.65.28:8081/v1";
 // noinspection JSUnusedGlobalSymbols
 Vue.prototype.$helpers = helpers;
@@ -29,5 +29,5 @@ new Vue({
   router,
   store,
   i18n,
-  render: (h) => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
