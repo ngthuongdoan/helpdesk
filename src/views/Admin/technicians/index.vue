@@ -184,7 +184,7 @@ export default {
         );
         if (chose.isConfirmed) {
           this.$helpers.loading(this.$i18n.locale);
-          await this.$http.delete("/user/" + this.technician.id);
+          await this.$http.delete("/user/" + this.newTechnician.id);
 
           this.$swal(this.$t("deleted"), "", "success");
           this.overlay = false;

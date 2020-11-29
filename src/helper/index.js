@@ -63,6 +63,7 @@ export default {
       title: language[lang].loading,
       showConfirmButton: false,
       allowOutsideClick: false,
+      timer: 10000,
       onOpen: () => {
         Swal.showLoading();
       },
