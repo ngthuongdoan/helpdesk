@@ -43,7 +43,7 @@ export const actions = {
     router.push("/login").then();
   },
   async fetchFaq({ commit }) {
-    const res = await axios.get("https://helpdesk-v2.herokuapp.com/v1/faq");
+    const res = await axios.get("/faq");
     commit("SET_FAQ", res.data);
   },
 };
