@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isFetching && items">
+  <div v-if="!isFetching && items.length !== 0">
     <a class="back-to-top" href="#welcome" ref="btt">
       <img src="~@/assets/img/up-arrow.svg" width="20px" />
     </a>
@@ -76,7 +76,7 @@
           </li>
         </ul>
       </div>
-      <h1 id="logo" @click="home">
+      <h1 id="logo">
         <!--suppress CheckImageSize -->
         <img alt="logo" src="~@/assets/logo.png" srcset="" width="100px" />
       </h1>
@@ -90,6 +90,7 @@ import itemTemplate from "@/components/User/ItemTemplate.vue";
 export default {
   data() {
     return {
+      items: [],
       item: {},
       searchItems: [],
       itemTemplate,
