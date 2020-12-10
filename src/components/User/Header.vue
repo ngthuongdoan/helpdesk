@@ -15,6 +15,11 @@
       </ul>
     </nav>
     <div class="buttons">
+      <!-- <img
+      @click="changeLanguage"
+        id="changeLanguage"
+        src="https://img.icons8.com/material-outlined/24/000000/globe--v2.png"
+      /> -->
       <button id="sendBtn" @click="send">
         {{ $t("user.header.sendTicket") }}
       </button>
@@ -125,7 +130,12 @@ nav {
   align-self: center;
   display: inline-flex;
 }
-
+#changeLanguage {
+  height: 25px;
+  align-self: center;
+  margin-right: 20px;
+  cursor: pointer;
+}
 #sendBtn,
 #logoutBtn {
   width: 120px;
